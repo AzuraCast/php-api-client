@@ -6,7 +6,7 @@ namespace Vaalyn\AzuraCastApiClient\Dto;
 
 class RequestableSongDto {
 	/**
-	 * @var int
+	 * @var string
 	 */
 	protected $requestableSongId;
 
@@ -21,29 +21,29 @@ class RequestableSongDto {
 	protected $song;
 
 	/**
-	 * @param int $requestableSongId
+	 * @param string $requestableSongId
 	 * @param string $requestUrl
 	 * @param SongDto $song
 	 */
-	public function __construct(int $requestableSongId, string $requestUrl, SongDto $song) {
+	public function __construct(string $requestableSongId, string $requestUrl, SongDto $song) {
 		$this->setRequestableSongId($requestableSongId)
 			->setRequestUrl($requestUrl)
 			->setSong($song);
 	}
 
 	/**
-	 * @return int
+	 * @return string
 	 */
-	public function getRequestableSongId(): int {
+	public function getRequestableSongId(): string {
 		return $this->requestableSongId;
 	}
 
 	/**
-	 * @param int $requestableSongId
+	 * @param string $requestableSongId
 	 *
 	 * @return RequestableSongDto
 	 */
-	public function setRequestableSongId(int $requestableSongId): RequestableSongDto {
+	public function setRequestableSongId(string $requestableSongId): RequestableSongDto {
 		$this->requestableSongId = $requestableSongId;
 
 		return $this;
