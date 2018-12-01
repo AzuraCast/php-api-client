@@ -4,7 +4,9 @@ declare(strict_types = 1);
 
 namespace Vaalyn\AzuraCastApiClient;
 
+use GuzzleHttp\Pool;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use Vaalyn\AzuraCastApiClient\Dto\ListenerDto;
 use Vaalyn\AzuraCastApiClient\Dto\NowPlayingDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationDto;
@@ -173,6 +175,44 @@ class AzuraCastApiClient {
 		$requestableSongsDtoTransformer = new RequestableSongsDtoTransformer();
 
 		return $requestableSongsDtoTransformer->arrayToDto($requestableSongsData);
+	}
+
+	/**
+	 * @param int $stationId
+	 *
+	 * @return RequestableSongsDto[]
+	 */
+	public function allRequestableSongs(int $stationId): array
+	{
+		$requestableSongsDto = $this->requestableSongs($stationId, 1, 50);
+
+		$requests = function (int $stationId) use($requestableSongsDto) {
+			for ($page = 1; $page <= $requestableSongsDto->getPagesTotal(); $page++) {
+				$uri = sprintf('station/%s/requests?per_page=50&page=%s', $stationId, $page);
+				yield new Request('GET', $uri);
+			}
+		};
+
+		$requestableSongs = [];
+
+		$requestableSongsDtoTransformer = new RequestableSongsDtoTransformer();
+
+		$pool = new Pool($this->httpClient, $requests($stationId), [
+			'concurrency' => 5,
+			'fulfilled' => function ($response, $index) use(&$requestableSongs, $requestableSongsDtoTransformer) {
+				if ($response->getStatusCode() !== 200) {
+					return;
+				}
+
+				$requestableSongsData = json_decode($response->getBody()->getContents(), true);
+				$requestableSongs[] = $requestableSongsDtoTransformer->arrayToDto($requestableSongsData);
+			}
+		]);
+
+		$promise = $pool->promise();
+		$promise->wait();
+
+		return $requestableSongs;
 	}
 
 	/**
