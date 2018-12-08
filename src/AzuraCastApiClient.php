@@ -381,6 +381,7 @@ class AzuraCastApiClient {
 		$options = [
 			'base_uri' => $baseUri . '/api/',
 			'allow_redirects' => true,
+			'http_errors' => false
 		];
 
 		if ($apiKey !== null) {
