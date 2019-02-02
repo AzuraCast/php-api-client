@@ -10,12 +10,14 @@ use GuzzleHttp\Psr7\Request;
 use Vaalyn\AzuraCastApiClient\Dto\ListenerDto;
 use Vaalyn\AzuraCastApiClient\Dto\NowPlayingDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationDto;
+use Vaalyn\AzuraCastApiClient\Dto\StationStatusDto;
 use Vaalyn\AzuraCastApiClient\Dto\RequestableSongsDto;
 use Vaalyn\AzuraCastApiClient\Exception\AzuraCastApiAccessDeniedException;
 use Vaalyn\AzuraCastApiClient\Exception\AzuraCastApiClientRequestException;
 use Vaalyn\AzuraCastApiClient\Exception\AzuraCastRequestsDisabledException;
 use Vaalyn\AzuraCastApiClient\Transformer\ListenerDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\NowPlayingDtoTransformer;
+use Vaalyn\AzuraCastApiClient\Transformer\StationStatusDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\RequestableSongsDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\StationDtoTransformer;
 
@@ -143,13 +145,46 @@ class AzuraCastApiClient {
 
 	/**
 	 * @param int $stationId
+	 *
+	 * @return StationStatusDto
+	 */
+	public function stationStatus(int $stationId): StationStatusDto {
+		$response = $this->httpClient->get(sprintf(
+			'station/%s/status',
+			$stationId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/station/%s" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$stationStatusData = json_decode($response->getBody()->getContents(), true);
+
+		$stationStatusDtoTransformer = new StationStatusDtoTransformer();
+
+		return $stationStatusDtoTransformer->arrayToDto($stationStatusData);
+	}
+
+	/**
+	 * @param int $stationId
 	 * @param int $page
 	 *
 	 * @return RequestableSongsDto
 	 */
 	public function requestableSongs(int $stationId, int $page = 1): RequestableSongsDto {
 		$response = $this->httpClient->get(sprintf(
-			'station/%s/requests?page=%s',
+			'station/%s/requests?per_page=50&page=%s',
 			$stationId,
 			$page
 		));
@@ -377,7 +412,7 @@ class AzuraCastApiClient {
 	 *
 	 * @return Client
 	 */
-	protected function createHttpClient(string $baseUri, ?string $apiKey): Client {
+	public function createHttpClient(string $baseUri, ?string $apiKey): Client {
 		$options = [
 			'base_uri' => $baseUri . '/api/',
 			'allow_redirects' => true,

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit
+	bootstrap="tests/bootstrap.php"
+	colors="true"
+	convertWarningsToExceptions="true">
+
+	<testsuites>
+		<testsuite name="AzuraCast Api Client Test Suite">
+			<directory>tests/AzuraCastApiClient/</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
