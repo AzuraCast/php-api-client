@@ -4,9 +4,18 @@ declare(strict_types=1);
 
 namespace Vaalyn\AzuraCastApiClient;
 
+use Dotenv\Dotenv;
 use PHPUnit\Framework\TestCase;
 
 class AzuraCastApiClientTest extends TestCase {
+	/**
+	 * @return void
+	 */
+	public static function setUpBeforeClass(): void {
+		$dotenv = Dotenv::create(__DIR__ . '/../..');
+		$dotenv->load();
+    }
+
 	/**
 	 * @return void
 	 */
@@ -112,6 +121,39 @@ class AzuraCastApiClientTest extends TestCase {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function testRestartStationSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$azuraCastApiClient->restartStation(1);
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testPerformFrontendActionSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$azuraCastApiClient->performFrontendAction(1, 'restart');
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testPerformBackendActionSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$azuraCastApiClient->performBackendAction(1, 'restart');
+
+		$this->assertTrue(true);
+	}
+
+	/**
 	 * @return AzuraCastApiClient
 	 */
 	private function createApiClient(): AzuraCastApiClient {
@@ -122,13 +164,13 @@ class AzuraCastApiClientTest extends TestCase {
 	 * @return string
 	 */
 	private function getHost(): string {
-		return 'http://demo.azuracast.com';
+		return getenv('AZURACAST_HOST') ?? '';
 	}
 
 	/**
 	 * @return string
 	 */
 	private function getApiKey(): string {
-		return '';
+		return getenv('AZURACAST_API_KEY') ?? '';
 	}
 }

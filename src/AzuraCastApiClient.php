@@ -397,7 +397,7 @@ class AzuraCastApiClient {
 
 		if ($response->getStatusCode() !== 200) {
 			throw new AzuraCastApiClientRequestException(sprintf(
-				'Call to "/station/%s/frontend/%s" returned non-successful response with code %s and body: %s',
+				'Call to "/station/%s/backend/%s" returned non-successful response with code %s and body: %s',
 				$stationId,
 				$action,
 				$response->getStatusCode(),
