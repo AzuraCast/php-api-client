@@ -10,6 +10,7 @@ use GuzzleHttp\Psr7\Request;
 use Vaalyn\AzuraCastApiClient\Dto\ListenerDto;
 use Vaalyn\AzuraCastApiClient\Dto\NowPlayingDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationDto;
+use Vaalyn\AzuraCastApiClient\Dto\SongHistoryDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationStatusDto;
 use Vaalyn\AzuraCastApiClient\Dto\RequestableSongsDto;
 use Vaalyn\AzuraCastApiClient\Exception\AzuraCastApiAccessDeniedException;
@@ -17,6 +18,7 @@ use Vaalyn\AzuraCastApiClient\Exception\AzuraCastApiClientRequestException;
 use Vaalyn\AzuraCastApiClient\Exception\AzuraCastRequestsDisabledException;
 use Vaalyn\AzuraCastApiClient\Transformer\ListenerDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\NowPlayingDtoTransformer;
+use Vaalyn\AzuraCastApiClient\Transformer\SongHistoryDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\StationStatusDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\RequestableSongsDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\StationDtoTransformer;
@@ -178,6 +180,47 @@ class AzuraCastApiClient {
 
 	/**
 	 * @param int $stationId
+	 * @param \DateTime|null $start
+	 * @param \DateTime|null $end
+	 *
+	 * @return SongHistoryDto[]
+	 */
+	public function stationHistory(int $stationId, ?\DateTime $start = null, ?\DateTime $end = null): array {
+		$response = $this->httpClient->get(sprintf(
+			'station/%s/history',
+			$stationId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/station/%s/history" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$songHistoryDataArray = json_decode($response->getBody()->getContents(), true);
+
+		$songHistoryDtoTransformer = new SongHistoryDtoTransformer();
+
+		$songHistory = [];
+
+		foreach ($songHistoryDataArray as $songHistoryData) {
+			$songHistory[] = $songHistoryDtoTransformer->arrayToDto($songHistoryData);
+		}
+
+		return $songHistory;
+	}
+
+	/**
+	 * @param int $stationId
 	 * @param int $page
 	 *
 	 * @return RequestableSongsDto
@@ -248,6 +291,33 @@ class AzuraCastApiClient {
 		$promise->wait();
 
 		return $requestableSongs;
+	}
+
+	/**
+	 * @param int $stationId
+	 * @param string $uniqueId
+	 *
+	 * @return resource|bool
+	 */
+	public function songAlbumArt(int $stationId, string $uniqueId) {
+		$response = $this->httpClient->get(sprintf(
+			'station/%s/art/%s',
+			$stationId,
+			$uniqueId
+		));
+
+		if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 404) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/station/%s" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$imageData = $response->getBody()->getContents();
+
+		return imagecreatefromstring($imageData);
 	}
 
 	/**

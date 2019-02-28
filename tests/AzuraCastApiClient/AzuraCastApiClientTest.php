@@ -33,7 +33,7 @@ class AzuraCastApiClientTest extends TestCase {
 	public function testNowPlayingOnStationSuccessful(): void {
 		$azuraCastApiClient = $this->createApiClient();
 
-		$azuraCastApiClient->nowPlayingOnStation(1);
+		$azuraCastApiClient->nowPlayingOnStation($this->getStationId());
 
 		$this->assertTrue(true);
 	}
@@ -55,7 +55,7 @@ class AzuraCastApiClientTest extends TestCase {
 	public function testStationSuccessful(): void {
 		$azuraCastApiClient = $this->createApiClient();
 
-		$azuraCastApiClient->station(1);
+		$azuraCastApiClient->station($this->getStationId());
 
 		$this->assertTrue(true);
 	}
@@ -66,7 +66,18 @@ class AzuraCastApiClientTest extends TestCase {
 	public function testStationStatusSuccessful(): void {
 		$azuraCastApiClient = $this->createApiClient();
 
-		$azuraCastApiClient->stationStatus(1);
+		$azuraCastApiClient->stationStatus($this->getStationId());
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testStationHistorySuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$azuraCastApiClient->stationHistory($this->getStationId());
 
 		$this->assertTrue(true);
 	}
@@ -77,7 +88,7 @@ class AzuraCastApiClientTest extends TestCase {
 	public function testRequestableSongsSuccessful(): void {
 		$azuraCastApiClient = $this->createApiClient();
 
-		$azuraCastApiClient->requestableSongs(1);
+		$azuraCastApiClient->requestableSongs($this->getStationId());
 
 		$this->assertTrue(true);
 	}
@@ -88,9 +99,25 @@ class AzuraCastApiClientTest extends TestCase {
 	public function testAllRequestableSongsSuccessful(): void {
 		$azuraCastApiClient = $this->createApiClient();
 
-		$allRequestableSongs = $azuraCastApiClient->allRequestableSongs(1);
+		$allRequestableSongs = $azuraCastApiClient->allRequestableSongs($this->getStationId());
 
 		$this->assertNotCount(0, $allRequestableSongs);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSongAlbumArtSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$requestableSongs = $azuraCastApiClient->requestableSongs($this->getStationId());
+
+		$albumArtResource = $azuraCastApiClient->songAlbumArt(
+			$this->getStationId(),
+			$requestableSongs->getRequestableSongs()[0]->getSong()->getId()
+		);
+
+		$this->assertTrue(is_resource($albumArtResource));
 	}
 
 	/**
@@ -99,10 +126,10 @@ class AzuraCastApiClientTest extends TestCase {
 	public function testRequestSongSuccessful(): void {
 		$azuraCastApiClient = $this->createApiClient();
 
-		$requestableSongs = $azuraCastApiClient->requestableSongs(1);
+		$requestableSongs = $azuraCastApiClient->requestableSongs($this->getStationId());
 
 		$azuraCastApiClient->requestSong(
-			1,
+			$this->getStationId(),
 			$requestableSongs->getRequestableSongs()[0]->getSong()->getId()
 		);
 
@@ -115,7 +142,7 @@ class AzuraCastApiClientTest extends TestCase {
 	public function testListenerDetailsSuccessful(): void {
 		$azuraCastApiClient = $this->createApiClient();
 
-		$azuraCastApiClient->listenerDetails(1);
+		$azuraCastApiClient->listenerDetails($this->getStationId());
 
 		$this->assertTrue(true);
 	}
@@ -126,7 +153,7 @@ class AzuraCastApiClientTest extends TestCase {
 	public function testRestartStationSuccessful(): void {
 		$azuraCastApiClient = $this->createApiClient();
 
-		$azuraCastApiClient->restartStation(1);
+		$azuraCastApiClient->restartStation($this->getStationId());
 
 		$this->assertTrue(true);
 	}
@@ -137,7 +164,7 @@ class AzuraCastApiClientTest extends TestCase {
 	public function testPerformFrontendActionSuccessful(): void {
 		$azuraCastApiClient = $this->createApiClient();
 
-		$azuraCastApiClient->performFrontendAction(1, 'restart');
+		$azuraCastApiClient->performFrontendAction($this->getStationId(), 'restart');
 
 		$this->assertTrue(true);
 	}
@@ -148,7 +175,7 @@ class AzuraCastApiClientTest extends TestCase {
 	public function testPerformBackendActionSuccessful(): void {
 		$azuraCastApiClient = $this->createApiClient();
 
-		$azuraCastApiClient->performBackendAction(1, 'restart');
+		$azuraCastApiClient->performBackendAction($this->getStationId(), 'restart');
 
 		$this->assertTrue(true);
 	}
@@ -172,5 +199,12 @@ class AzuraCastApiClientTest extends TestCase {
 	 */
 	private function getApiKey(): string {
 		return getenv('AZURACAST_API_KEY') ?? '';
+	}
+
+	/**
+	 * @return int
+	 */
+	private function getStationId(): int {
+		return (int) getenv('AZURACAST_STATION_ID') ?? 1;
 	}
 }
