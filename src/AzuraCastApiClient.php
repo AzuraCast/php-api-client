@@ -10,6 +10,7 @@ use GuzzleHttp\Psr7\Request;
 use Vaalyn\AzuraCastApiClient\Dto\ListenerDto;
 use Vaalyn\AzuraCastApiClient\Dto\NowPlayingDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationDto;
+use Vaalyn\AzuraCastApiClient\Dto\CustomFieldDto;
 use Vaalyn\AzuraCastApiClient\Dto\SongHistoryDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationStatusDto;
 use Vaalyn\AzuraCastApiClient\Dto\RequestableSongsDto;
@@ -18,6 +19,7 @@ use Vaalyn\AzuraCastApiClient\Exception\AzuraCastApiClientRequestException;
 use Vaalyn\AzuraCastApiClient\Exception\AzuraCastRequestsDisabledException;
 use Vaalyn\AzuraCastApiClient\Transformer\ListenerDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\NowPlayingDtoTransformer;
+use Vaalyn\AzuraCastApiClient\Transformer\CustomFieldDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\SongHistoryDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\StationStatusDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\RequestableSongsDtoTransformer;
@@ -470,6 +472,166 @@ class AzuraCastApiClient {
 				'Call to "/station/%s/backend/%s" returned non-successful response with code %s and body: %s',
 				$stationId,
 				$action,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+	}
+
+	/**
+	 * @return CustomFieldDto[]
+	 */
+	public function customFields(): array {
+		$response = $this->httpClient->get('admin/custom_fields');
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/admin/custom_fields" returned non-successful response with code %s and body: %s',
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$customFieldsData = json_decode($response->getBody()->getContents(), true);
+
+		$customFieldDtoTransformer = new CustomFieldDtoTransformer();
+
+		$customFields = [];
+
+		foreach ($customFieldsData as $customFieldData) {
+			$customFields[] = $customFieldDtoTransformer->arrayToDto($customFieldData);
+		}
+
+		return $customFields;
+	}
+
+	/**
+	 * @param int $customFieldId
+	 *
+	 * @return CustomFieldDto
+	 */
+	public function customField(int $customFieldId): CustomFieldDto {
+		$response = $this->httpClient->get(sprintf(
+			'admin/custom_field/%s',
+			$customFieldId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/custom_field/%s" returned non-successful response with code %s and body: %s',
+				$customFieldId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$customFieldData = json_decode($response->getBody()->getContents(), true);
+
+		$customFieldDtoTransformer = new CustomFieldDtoTransformer();
+
+		return $customFieldDtoTransformer->arrayToDto($customFieldData);
+	}
+
+	/**
+	 * @param string $name
+	 * @param string $shortName
+	 *
+	 * @return CustomFieldDto
+	 */
+	public function createCustomField(string $name, string $shortName): CustomFieldDto {
+		$customFieldDto = new CustomFieldDto(0, $name, $shortName);
+
+		$response = $this->httpClient->post(
+			'admin/custom_fields',
+			['body' => json_encode($customFieldDto)]
+		);
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/custom_fields" returned non-successful response with code %s and body: %s',
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$customFieldData = json_decode($response->getBody()->getContents());
+
+		$customFieldDtoTransformer = new CustomFieldDtoTransformer();
+
+		return $customFieldDtoTransformer->arrayToDto($customFieldData);
+	}
+
+	/**
+	 * @param int $customFieldId
+	 * @param string $name
+	 * @param string $shortName
+	 *
+	 * @return CustomFieldDto
+	 */
+	public function updateCustomField(int $customFieldId, string $name, string $shortName): CustomFieldDto {
+		$customFieldDto = new CustomFieldDto($customFieldId, $name, $shortName);
+
+		$response = $this->httpClient->put(
+			sprintf('admin/custom_field/%s', $customFieldId),
+			['body' => json_encode($customFieldDto)]
+		);
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/custom_field/%s" returned non-successful response with code %s and body: %s',
+				$customFieldId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		return $customFieldDto;
+	}
+
+	/**
+	 * @param int $customFieldId
+	 *
+	 * @return void
+	 */
+	public function deleteCustomField(int $customFieldId): void {
+		$response = $this->httpClient->delete(sprintf(
+			'admin/custom_field/%s', $customFieldId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/custom_field/%s" returned non-successful response with code %s and body: %s',
+				$customFieldId,
 				$response->getStatusCode(),
 				$response->getBody()->getContents()
 			));

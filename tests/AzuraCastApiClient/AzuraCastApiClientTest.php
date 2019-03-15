@@ -181,6 +181,83 @@ class AzuraCastApiClientTest extends TestCase {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function testCustomFieldsSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$customFields = $azuraCastApiClient->customFields();
+
+		$this->assertNotCount(0, $customFields);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCusomFieldSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$customFields = $azuraCastApiClient->customFields();
+
+		$azuraCastApiClient->customField(
+			$customFields[0]->getId()
+		);
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCreateCustomFieldSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$name = uniqid();
+		$shortName = uniqid();
+
+		$customFieldDto = $azuraCastApiClient->createCustomField($name, $shortName);
+
+		$this->assertSame($name, $customFieldDto->getName());
+		$this->assertSame($shortName, $customFieldDto->getShortName());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testUpdateCustomFieldSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$customFields = $azuraCastApiClient->customFields();
+
+		$name = uniqid();
+		$shortName = uniqid();
+
+		$customFieldDto = $azuraCastApiClient->updateCustomField(
+			$customFields[0]->getId(),
+			$name,
+			$shortName
+		);
+
+		$this->assertSame($name, $customFieldDto->getName());
+		$this->assertSame($shortName, $customFieldDto->getShortName());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testDeleteCustomFieldSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$customFields = $azuraCastApiClient->customFields();
+
+		$azuraCastApiClient->deleteCustomField(
+			$customFields[0]->getId()
+		);
+
+		$this->assertTrue(true);
+	}
+
+	/**
 	 * @return AzuraCastApiClient
 	 */
 	private function createApiClient(): AzuraCastApiClient {
