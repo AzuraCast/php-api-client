@@ -20,6 +20,11 @@ class UserDto implements JsonSerializable {
 	/**
 	 * @var string
 	 */
+	protected $authPassword;
+
+	/**
+	 * @var string
+	 */
 	protected $name;
 
 	/**
@@ -90,6 +95,7 @@ class UserDto implements JsonSerializable {
 	) {
 		$this->setId($id)
 			->setEmail($email)
+			->setAuthPassword('')
 			->setName($name)
 			->setTimezone($timezone)
 			->setLocale($locale)
@@ -133,6 +139,24 @@ class UserDto implements JsonSerializable {
 	 */
 	public function setEmail(string $email): UserDto {
 		$this->email = $email;
+
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAuthPassword(): string {
+		return $this->authPassword;
+	}
+
+	/**
+	 * @param string $authPassword
+	 *
+	 * @return UserDto
+	 */
+	public function setAuthPassword(string $authPassword): UserDto {
+		$this->authPassword = $authPassword;
 
 		return $this;
 	}
@@ -328,14 +352,15 @@ class UserDto implements JsonSerializable {
 		return [
 			'id' => $this->getId(),
 			'email' => $this->getEmail(),
+			'auth_password' => $this->getAuthPassword(),
 			'name' => $this->getName(),
 			'timezone' => $this->getTimezone(),
 			'locale' => $this->getLocale(),
 			'theme' => $this->getTheme(),
-			'createdAt' => $this->getCreatedAt(),
-			'updatedAt' => $this->getUpdatedAt(),
+			'created_at' => $this->getCreatedAt(),
+			'updated_at' => $this->getUpdatedAt(),
 			'roles' => $this->getRoles(),
-			'apiKeys' => $this->getApiKeys(),
+			'api_keys' => $this->getApiKeys(),
 			'links' => $this->getLinks()
 		];
 	}

@@ -558,7 +558,7 @@ class AzuraCastApiClient {
 
 		$response = $this->httpClient->post(
 			'admin/custom_fields',
-			['body' => json_encode($customFieldDto)]
+			['json' => $customFieldDto]
 		);
 
 		if ($response->getStatusCode() === 403) {
@@ -575,7 +575,7 @@ class AzuraCastApiClient {
 			));
 		}
 
-		$customFieldData = json_decode($response->getBody()->getContents());
+		$customFieldData = json_decode($response->getBody()->getContents(), true);
 
 		$customFieldDtoTransformer = new CustomFieldDtoTransformer();
 
@@ -594,7 +594,7 @@ class AzuraCastApiClient {
 
 		$response = $this->httpClient->put(
 			sprintf('admin/custom_field/%s', $customFieldId),
-			['body' => json_encode($customFieldDto)]
+			['json' => $customFieldDto]
 		);
 
 		if ($response->getStatusCode() === 403) {
@@ -709,6 +709,7 @@ class AzuraCastApiClient {
 
 	/**
 	 * @param string $email
+	 * @param string $authPassword
 	 * @param string $name
 	 * @param string $timezone
 	 * @param string $locale
@@ -720,6 +721,7 @@ class AzuraCastApiClient {
 	 */
 	public function createUser(
 		string $email,
+		string $authPassword,
 		string $name,
 		string $timezone,
 		string $locale,
@@ -741,9 +743,11 @@ class AzuraCastApiClient {
 			new LinksDto('')
 		);
 
+		$userDto->setAuthPassword($authPassword);
+
 		$response = $this->httpClient->post(
 			'admin/users',
-			['body' => json_encode($userDto)]
+			['json' => $userDto]
 		);
 
 		if ($response->getStatusCode() === 403) {
@@ -760,7 +764,7 @@ class AzuraCastApiClient {
 			));
 		}
 
-		$userData = json_decode($response->getBody()->getContents());
+		$userData = json_decode($response->getBody()->getContents(), true);
 
 		$userDtoTransformer = new UserDtoTransformer();
 

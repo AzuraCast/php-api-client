@@ -290,6 +290,7 @@ class AzuraCastApiClientTest extends TestCase {
 		$azuraCastApiClient = $this->createApiClient();
 
 		$email = uniqid() . '@example.com';
+		$authPassword = uniqid();
 		$name = uniqid();
 		$timezone = 'Europe/Berlin';
 		$locale = 'de_DE';
@@ -299,6 +300,7 @@ class AzuraCastApiClientTest extends TestCase {
 
 		$userDto = $azuraCastApiClient->createUser(
 			$email,
+			$authPassword,
 			$name,
 			$timezone,
 			$locale,
