@@ -7,6 +7,8 @@ namespace Vaalyn\AzuraCastApiClient;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use Vaalyn\AzuraCastApiClient\Dto\UserDto;
+use Vaalyn\AzuraCastApiClient\Dto\LinksDto;
 use Vaalyn\AzuraCastApiClient\Dto\ListenerDto;
 use Vaalyn\AzuraCastApiClient\Dto\NowPlayingDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationDto;
@@ -24,6 +26,7 @@ use Vaalyn\AzuraCastApiClient\Transformer\SongHistoryDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\StationStatusDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\RequestableSongsDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\StationDtoTransformer;
+use Vaalyn\AzuraCastApiClient\Transformer\UserDtoTransformer;
 
 class AzuraCastApiClient {
 	/**
@@ -636,6 +639,132 @@ class AzuraCastApiClient {
 				$response->getBody()->getContents()
 			));
 		}
+	}
+
+	/**
+	 * @return UserDto[]
+	 */
+	public function users(): array {
+		$response = $this->httpClient->get('admin/users');
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/admin/users" returned non-successful response with code %s and body: %s',
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$usersData = json_decode($response->getBody()->getContents(), true);
+
+		$userDtoTransformer = new UserDtoTransformer();
+
+		$users = [];
+
+		foreach ($usersData as $userData) {
+			$users[] = $userDtoTransformer->arrayToDto($userData);
+		}
+
+		return $users;
+	}
+
+	/**
+	 * @param int $userId
+	 *
+	 * @return UserDto
+	 */
+	public function user(int $userId): UserDto {
+		$response = $this->httpClient->get(sprintf(
+			'admin/user/%s',
+			$userId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/user/%s" returned non-successful response with code %s and body: %s',
+				$customFieldId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$userData = json_decode($response->getBody()->getContents(), true);
+
+		$userDtoTransformer = new UserDtoTransformer();
+
+		return $userDtoTransformer->arrayToDto($userData);
+	}
+
+	/**
+	 * @param string $email
+	 * @param string $name
+	 * @param string $timezone
+	 * @param string $locale
+	 * @param string $theme
+	 * @param array $roles
+	 * @param array $apiKeys
+	 *
+	 * @return UserDto
+	 */
+	public function createUser(
+		string $email,
+		string $name,
+		string $timezone,
+		string $locale,
+		string $theme,
+		array $roles,
+		array $apiKeys
+	): UserDto {
+		$userDto = new UserDto(
+			0,
+			$email,
+			$name,
+			$timezone,
+			$locale,
+			$theme,
+			time(),
+			time(),
+			$roles,
+			$apiKeys,
+			new LinksDto('')
+		);
+
+		$response = $this->httpClient->post(
+			'admin/users',
+			['body' => json_encode($userDto)]
+		);
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/users" returned non-successful response with code %s and body: %s',
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$userData = json_decode($response->getBody()->getContents());
+
+		$userDtoTransformer = new UserDtoTransformer();
+
+		return $userDtoTransformer->arrayToDto($userData);
 	}
 
 	/**

@@ -258,6 +258,63 @@ class AzuraCastApiClientTest extends TestCase {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function testUsersSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$users = $azuraCastApiClient->users();
+
+		$this->assertNotCount(0, $users);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testUserSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$users = $azuraCastApiClient->users();
+
+		$azuraCastApiClient->user(
+			$users[0]->getId()
+		);
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCreateUserSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$email = uniqid() . '@example.com';
+		$name = uniqid();
+		$timezone = 'Europe/Berlin';
+		$locale = 'de_DE';
+		$theme = 'dark';
+		$roles = [];
+		$apiKeys = [];
+
+		$userDto = $azuraCastApiClient->createUser(
+			$email,
+			$name,
+			$timezone,
+			$locale,
+			$theme,
+			$roles,
+			$apiKeys
+		);
+
+		$this->assertSame($email, $userDto->getEmail());
+		$this->assertSame($name, $userDto->getName());
+		$this->assertSame($timezone, $userDto->getTimezone());
+		$this->assertSame($locale, $userDto->getLocale());
+		$this->assertSame($theme, $userDto->getTheme());
+	}
+
+	/**
 	 * @return AzuraCastApiClient
 	 */
 	private function createApiClient(): AzuraCastApiClient {

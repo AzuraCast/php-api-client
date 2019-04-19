@@ -77,3 +77,10 @@ echo $nowPlaying->getCurrentSong()->getSong()->getTitle();
 
 `DELETE` `/admin/custom_fields/{id}`
 - `$azuraCastApiClient->deleteCustomField(int $customFieldId);`
+
+### Administration: Users
+`GET` `/admin/users`
+- `$azuraCastApiClient->users();`
+
+`GET` `/admin/user/{id}`
+- `$azuraCastApiClient->user(int $userId);`
