@@ -7,21 +7,25 @@ namespace Vaalyn\AzuraCastApiClient;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use Vaalyn\AzuraCastApiClient\Dto\RoleDto;
 use Vaalyn\AzuraCastApiClient\Dto\UserDto;
 use Vaalyn\AzuraCastApiClient\Dto\LinksDto;
 use Vaalyn\AzuraCastApiClient\Dto\ListenerDto;
 use Vaalyn\AzuraCastApiClient\Dto\NowPlayingDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationDto;
 use Vaalyn\AzuraCastApiClient\Dto\CustomFieldDto;
+use Vaalyn\AzuraCastApiClient\Dto\PermissionsDto;
 use Vaalyn\AzuraCastApiClient\Dto\SongHistoryDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationStatusDto;
 use Vaalyn\AzuraCastApiClient\Dto\RequestableSongsDto;
 use Vaalyn\AzuraCastApiClient\Exception\AzuraCastApiAccessDeniedException;
 use Vaalyn\AzuraCastApiClient\Exception\AzuraCastApiClientRequestException;
 use Vaalyn\AzuraCastApiClient\Exception\AzuraCastRequestsDisabledException;
+use Vaalyn\AzuraCastApiClient\Transformer\RoleDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\ListenerDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\NowPlayingDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\CustomFieldDtoTransformer;
+use Vaalyn\AzuraCastApiClient\Transformer\PermissionsDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\SongHistoryDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\StationStatusDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\RequestableSongsDtoTransformer;
@@ -694,7 +698,7 @@ class AzuraCastApiClient {
 		if ($response->getStatusCode() !== 200) {
 			throw new AzuraCastApiClientRequestException(sprintf(
 				'Call to "admin/user/%s" returned non-successful response with code %s and body: %s',
-				$customFieldId,
+				$userId,
 				$response->getStatusCode(),
 				$response->getBody()->getContents()
 			));
@@ -858,6 +862,202 @@ class AzuraCastApiClient {
 			throw new AzuraCastApiClientRequestException(sprintf(
 				'Call to "admin/user/%s" returned non-successful response with code %s and body: %s',
 				$userId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+	}
+
+	/**
+	 * @return PermissionsDto
+	 */
+	public function permissions(): PermissionsDto {
+		$response = $this->httpClient->get('admin/permissions');
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/admin/permissions" returned non-successful response with code %s and body: %s',
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$permissionsData = json_decode($response->getBody()->getContents(), true);
+
+		$permissionsDtoTransformer = new PermissionsDtoTransformer();
+
+		return $permissionsDtoTransformer->arrayToDto($permissionsData);
+	}
+
+	/**
+	 * @return RoleDto[]
+	 */
+	public function roles(): array {
+		$response = $this->httpClient->get('admin/roles');
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/admin/roles" returned non-successful response with code %s and body: %s',
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$rolesData = json_decode($response->getBody()->getContents(), true);
+
+		$roleDtoTransformer = new RoleDtoTransformer();
+
+		$roles = [];
+
+		foreach ($rolesData as $roleData) {
+			$roles[] = $roleDtoTransformer->arrayToDto($roleData);
+		}
+
+		return $roles;
+	}
+
+	/**
+	 * @param string $name
+	 * @param string[] $permissionsGlobal
+	 * @param string[] $permissionsStation
+	 *
+	 * @return RoleDto
+	 */
+	public function createRole(string $name, array $permissionsGlobal, array $permissionsStation): RoleDto {
+		$permissions = new PermissionsDto($permissionsGlobal, $permissionsStation);
+		$roleDto = new RoleDto(0, $name, $permissions);
+
+		$response = $this->httpClient->post(
+			'admin/roles',
+			['json' => $roleDto]
+		);
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/roles" returned non-successful response with code %s and body: %s',
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$roleData = json_decode($response->getBody()->getContents(), true);
+
+		$roleDtoTransformer = new RoleDtoTransformer();
+
+		return $roleDtoTransformer->arrayToDto($roleData);
+	}
+
+	/**
+	 * @param int $roleId
+	 *
+	 * @return RoleDto
+	 */
+	public function role(int $roleId): RoleDto {
+		$response = $this->httpClient->get(sprintf(
+			'admin/role/%s',
+			$roleId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/role/%s" returned non-successful response with code %s and body: %s',
+				$roleId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$roleData = json_decode($response->getBody()->getContents(), true);
+
+		$roleDtoTransformer = new RoleDtoTransformer();
+
+		return $roleDtoTransformer->arrayToDto($roleData);
+	}
+
+	/**
+	 * @param int $roleId
+	 * @param string $name
+	 * @param string[] $permissionsGlobal
+	 * @param string[] $permissionsStation
+	 *
+	 * @return RoleDto
+	 */
+	public function updateRole(
+		int $roleId,
+		string $name,
+		array $permissionsGlobal,
+		array $permissionsStation
+	): RoleDto {
+		$permissionsDto = new PermissionsDto($permissionsGlobal, $permissionsStation);
+		$roleDto = new RoleDto($roleId, $name, $permissionsDto);
+
+		$response = $this->httpClient->put(
+			sprintf('admin/role/%s', $roleId),
+			['json' => $roleDto]
+		);
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/role/%s" returned non-successful response with code %s and body: %s',
+				$roleId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		return $roleDto;
+	}
+
+	/**
+	 * @param int $roleId
+	 *
+	 * @return void
+	 */
+	public function deleteRole(int $roleId): void {
+		$response = $this->httpClient->delete(sprintf(
+			'admin/role/%s', $roleId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/role/%s" returned non-successful response with code %s and body: %s',
+				$roleId,
 				$response->getStatusCode(),
 				$response->getBody()->getContents()
 			));

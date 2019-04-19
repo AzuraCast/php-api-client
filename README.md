@@ -160,3 +160,43 @@ $azuraCastApiClient->updateUser(
 ```
 $azuraCastApiClient->deleteUser(int $userId);
 ```
+
+### Administration: Roles
+`GET` `/admin/permissions`
+```
+$azuraCastApiClient->permissions();
+```
+
+`GET` `/admin/roles`
+```
+$azuraCastApiClient->roles();
+```
+
+`POST` `/admin/roles`
+```
+$azuraCastApiClient->createRole(
+	string $name,
+	string[] $permissionsGlobal,
+	string[] $permissionsStation
+);
+```
+
+`GET` `/admin/role/{id}`
+```
+$azuraCastApiClient->role(int $roleId);
+```
+
+`PUT` `/admin/role/{id}`
+```
+$azuraCastApiClient->updateRole(
+	int $roleId
+	string $name
+	string[] $permissionsGlobal
+	string[] $permissionsStation
+);
+```
+
+`DELETE` `/admin/role/{id}`
+```
+$azuraCastApiClient->deleteRole(int $roleId);
+```

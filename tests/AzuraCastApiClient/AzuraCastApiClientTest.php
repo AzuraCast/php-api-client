@@ -405,6 +405,108 @@ class AzuraCastApiClientTest extends TestCase {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function testPermissionsSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$permissions = $azuraCastApiClient->users();
+
+		$azuraCastApiClient->permissions();
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testRolesSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$roles = $azuraCastApiClient->roles();
+
+		$this->assertNotCount(0, $roles);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCreateRoleSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$role = $azuraCastApiClient->createRole(
+			uniqid(),
+			[],
+			[]
+		);
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testRoleSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$roles = $azuraCastApiClient->roles();
+
+		$azuraCastApiClient->role(
+			$roles[0]->getId()
+		);
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testUpdateRoleSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$name = uniqid();
+		$newName = uniqid();
+		$permissionsGlobal = [];
+		$permissionsStation = [];
+
+		$roleDto = $azuraCastApiClient->createRole($name, $permissionsGlobal, $permissionsStation);
+
+		$roleDto = $azuraCastApiClient->updateRole(
+			$roleDto->getId(),
+			$newName,
+			$permissionsGlobal,
+			$permissionsStation
+		);
+
+		$this->assertSame($newName, $roleDto->getName());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testDeleteRoleSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$name = uniqid();
+		$permissionsGlobal = [];
+		$permissionsStation = [];
+
+		$roleDto = $azuraCastApiClient->createRole($name, $permissionsGlobal, $permissionsStation);
+
+		foreach ($azuraCastApiClient->roles() as $role) {
+			if ($role->getName() !== $name) {
+				continue;
+			}
+
+			$roleDto = $role;
+		}
+
+		$azuraCastApiClient->deleteRole($roleDto->getId());
+
+		$this->assertTrue(true);
+	}
+
+	/**
 	 * @return AzuraCastApiClient
 	 */
 	private function createApiClient(): AzuraCastApiClient {
