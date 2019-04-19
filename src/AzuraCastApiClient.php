@@ -772,6 +772,99 @@ class AzuraCastApiClient {
 	}
 
 	/**
+	 * @param int $userId
+	 * @param string $email
+	 * @param string $authPassword
+	 * @param string $name
+	 * @param string $timezone
+	 * @param string $locale
+	 * @param string $theme
+	 * @param array $roles
+	 * @param array $apiKeys
+	 *
+	 * @return UserDto
+	 */
+	public function updateUser(
+		int $userId,
+		string $email,
+		string $authPassword,
+		string $name,
+		string $timezone,
+		string $locale,
+		string $theme,
+		array $roles,
+		array $apiKeys
+	): UserDto {
+		$userDto = new UserDto(
+			$userId,
+			$email,
+			$name,
+			$timezone,
+			$locale,
+			$theme,
+			time(),
+			time(),
+			$roles,
+			$apiKeys,
+			new LinksDto('')
+		);
+
+		if ($authPassword !== '') {
+			$userDto->setAuthPassword($authPassword);
+		}
+
+		$response = $this->httpClient->put(
+			sprintf('admin/users/%s', $userId),
+			['json' => $userDto]
+		);
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/user/%s" returned non-successful response with code %s and body: %s',
+				$userId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$userDto->setAuthPassword('');
+
+		return $userDto;
+	}
+
+	/**
+	 * @param int $userId
+	 *
+	 * @return void
+	 */
+	public function deleteUser(int $userId): void {
+		$response = $this->httpClient->delete(sprintf(
+			'admin/user/%s', $userId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/user/%s" returned non-successful response with code %s and body: %s',
+				$userId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+	}
+
+	/**
 	 * @param string $baseUri
 	 * @param string|null $apiKey
 	 *

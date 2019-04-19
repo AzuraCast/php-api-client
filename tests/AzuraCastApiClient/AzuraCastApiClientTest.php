@@ -317,6 +317,94 @@ class AzuraCastApiClientTest extends TestCase {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function testUpdateUserSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$email = uniqid() . '@example.com';
+		$authPassword = uniqid();
+		$name = uniqid();
+		$timezone = 'Europe/Berlin';
+		$locale = 'de_DE';
+		$theme = 'dark';
+		$roles = [];
+		$apiKeys = [];
+
+		$userDto = $azuraCastApiClient->createUser(
+			$email,
+			$authPassword,
+			$name,
+			$timezone,
+			$locale,
+			$theme,
+			$roles,
+			$apiKeys
+		);
+
+		foreach ($azuraCastApiClient->users() as $user) {
+			if ($user->getName() !== $name) {
+				continue;
+			}
+
+			$userDto = $user;
+		}
+
+		$azuraCastApiClient->updateUser(
+			$userDto->getId(),
+			$userDto->getEmail(),
+			$authPassword,
+			$userDto->getName(),
+			$userDto->getTimezone(),
+			$userDto->getLocale(),
+			$userDto->getTheme(),
+			$userDto->getRoles(),
+			$userDto->getApiKeys()
+		);
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testDeleteUserSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$email = uniqid() . '@example.com';
+		$authPassword = uniqid();
+		$name = uniqid();
+		$timezone = 'Europe/Berlin';
+		$locale = 'de_DE';
+		$theme = 'dark';
+		$roles = [];
+		$apiKeys = [];
+
+		$userDto = $azuraCastApiClient->createUser(
+			$email,
+			$authPassword,
+			$name,
+			$timezone,
+			$locale,
+			$theme,
+			$roles,
+			$apiKeys
+		);
+
+		foreach ($azuraCastApiClient->users() as $user) {
+			if ($user->getName() !== $name) {
+				continue;
+			}
+
+			$userDto = $user;
+		}
+
+		$azuraCastApiClient->deleteUser($userDto->getId());
+
+		$this->assertTrue(true);
+	}
+
+	/**
 	 * @return AzuraCastApiClient
 	 */
 	private function createApiClient(): AzuraCastApiClient {
