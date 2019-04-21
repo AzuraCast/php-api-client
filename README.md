@@ -90,6 +90,47 @@ $azuraCastApiClient->listenerDetails(int $stationId);
 $azuraCastApiClient->songAlbumArt(int $stationId, string $uniqueId);
 ```
 
+### Station: Streamers/DJs
+`GET` `/station/{station_id}/streamers`
+```
+$azuraCastApiClient->streamers(int $stationId);
+```
+
+`POST` `/station/{station_id}/streamers`
+```
+$azuraCastApiClient->createStreamer(
+	int $stationId,
+	string $username,
+	string $password,
+	string $displayName,
+	string $comments,
+	bool $isActive
+);
+```
+
+`GET` `/station/{station_id}/streamer/{id}`
+```
+$azuraCastApiClient->streamer(int $stationId, int $streamerId);
+```
+
+`PUT` `/station/{station_id}/streamer/{id}`
+```
+$azuraCastApiClient->updateStreamer(
+	int $stationId,
+	int $streamerId,
+	string $username,
+	string $password,
+	string $displayName,
+	string $comments,
+	bool $isActive
+);
+```
+
+`DELETE` `/station/{station_id}/streamer/{id}`
+```
+$azuraCastApiClient->deleteStreamer(int $stationId, int $streamerId);
+```
+
 ### Administration: Custom Fields
 `GET` `/admin/custom_fields`
 ```

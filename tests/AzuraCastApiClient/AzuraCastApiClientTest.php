@@ -550,6 +550,138 @@ class AzuraCastApiClientTest extends TestCase {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function testStreamersSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$streamer = $azuraCastApiClient->createStreamer(
+			$this->getStationId(),
+			uniqid(),
+			uniqid(),
+			uniqid(),
+			uniqid(),
+			true
+		);
+
+		$streamers = $azuraCastApiClient->streamers($this->getStationId());
+
+		$this->assertNotCount(0, $streamers);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testCreateStreamerSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$streamer = $azuraCastApiClient->createStreamer(
+			$this->getStationId(),
+			uniqid(),
+			uniqid(),
+			uniqid(),
+			uniqid(),
+			true
+		);
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testStreamerSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$streamer = $azuraCastApiClient->createStreamer(
+			$this->getStationId(),
+			uniqid(),
+			uniqid(),
+			uniqid(),
+			uniqid(),
+			true
+		);
+
+		$streamerDto = $azuraCastApiClient->streamer(
+			$this->getStationId(),
+			$streamer->getId()
+		);
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testUpdateStreamerSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$username = uniqid();
+		$password = uniqid();
+		$displayName = uniqid();
+		$comments = uniqid();
+		$isActive = true;
+
+		$streamer = $azuraCastApiClient->createStreamer(
+			$this->getStationId(),
+			$username,
+			$password,
+			$displayName,
+			$comments,
+			$isActive
+		);
+
+		$streamerDto = $azuraCastApiClient->updateStreamer(
+			$this->getStationId(),
+			$streamer->getId(),
+			$username,
+			$password,
+			$displayName,
+			$comments,
+			false
+		);
+
+		$this->assertSame(false, $streamerDto->getIsActive());
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testDeleteStreamerSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$username = uniqid();
+		$password = uniqid();
+		$displayName = uniqid();
+		$comments = uniqid();
+		$isActive = true;
+
+		$streamerDto = $azuraCastApiClient->createStreamer(
+			$this->getStationId(),
+			$username,
+			$password,
+			$displayName,
+			$comments,
+			$isActive
+		);
+
+		foreach ($azuraCastApiClient->streamers($this->getStationId()) as $streamer) {
+			if ($streamer->getUsername() !== $username) {
+				continue;
+			}
+
+			$streamerDto = $streamer;
+		}
+
+		$azuraCastApiClient->deleteStreamer(
+			$this->getStationId(),
+			$streamerDto->getId()
+		);
+
+		$this->assertTrue(true);
+	}
+
+	/**
 	 * @return AzuraCastApiClient
 	 */
 	private function createApiClient(): AzuraCastApiClient {

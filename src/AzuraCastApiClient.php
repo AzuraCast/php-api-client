@@ -12,6 +12,7 @@ use Vaalyn\AzuraCastApiClient\Dto\UserDto;
 use Vaalyn\AzuraCastApiClient\Dto\LinksDto;
 use Vaalyn\AzuraCastApiClient\Dto\ListenerDto;
 use Vaalyn\AzuraCastApiClient\Dto\SettingsDto;
+use Vaalyn\AzuraCastApiClient\Dto\StreamerDto;
 use Vaalyn\AzuraCastApiClient\Dto\NowPlayingDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationDto;
 use Vaalyn\AzuraCastApiClient\Dto\CustomFieldDto;
@@ -25,6 +26,7 @@ use Vaalyn\AzuraCastApiClient\Exception\AzuraCastRequestsDisabledException;
 use Vaalyn\AzuraCastApiClient\Transformer\RoleDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\ListenerDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\SettingsDtoTransformer;
+use Vaalyn\AzuraCastApiClient\Transformer\StreamerDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\NowPlayingDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\CustomFieldDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\PermissionsDtoTransformer;
@@ -1176,6 +1178,222 @@ class AzuraCastApiClient {
 		}
 
 		return $settingsDto;
+	}
+
+	/**
+	 * @param int $stationId
+	 *
+	 * @return StreamerDto[]
+	 */
+	public function streamers(int $stationId): array {
+		$response = $this->httpClient->get(sprintf(
+			'station/%s/streamers',
+			$stationId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "station/%s/streamers" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$streamersData = json_decode($response->getBody()->getContents(), true);
+
+		$streamerDtoTransformer = new StreamerDtoTransformer();
+
+		$streamers = [];
+
+		foreach ($streamersData as $streamerData) {
+			$streamers[] = $streamerDtoTransformer->arrayToDto($streamerData);
+		}
+
+		return $streamers;
+	}
+
+	/**
+	 * @param int $stationId
+	 * @param string $username
+	 * @param string $password
+	 * @param string $displayName
+	 * @param string $comments
+	 * @param bool $isActive
+	 *
+	 * @return StreamerDto
+	 */
+	public function createStreamer(
+		int $stationId,
+		string $username,
+		string $password,
+		string $displayName,
+		string $comments,
+		bool $isActive
+	): StreamerDto {
+		$linksDto = new LinksDto('');
+		$streamerDto = new StreamerDto(
+			0,
+			$username,
+			$password,
+			$displayName,
+			$comments,
+			$isActive,
+			$linksDto
+		);
+
+		$response = $this->httpClient->post(
+			sprintf('station/%s/streamers', $stationId),
+			['json' => $streamerDto]
+		);
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "station/%s/streamers" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$streamerData = json_decode($response->getBody()->getContents(), true);
+
+		$streamerDtoTransformer = new StreamerDtoTransformer();
+
+		return $streamerDtoTransformer->arrayToDto($streamerData);
+	}
+
+	/**
+	 * @param int $stationId
+	 * @param int $streamerId
+	 *
+	 * @return StreamerDto
+	 */
+	public function streamer(int $stationId, int $streamerId): StreamerDto {
+		$response = $this->httpClient->get(sprintf(
+			'station/%s/streamer/%s',
+			$stationId,
+			$streamerId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "station/%s/streamer/%s" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$streamerId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$streamerData = json_decode($response->getBody()->getContents(), true);
+
+		$streamerDtoTransformer = new StreamerDtoTransformer();
+
+ 		return $streamerDtoTransformer->arrayToDto($streamerData);
+	}
+
+	/**
+	 * @param int $stationId
+	 * @param int $streamerId
+	 * @param string $username
+	 * @param string $password
+	 * @param string $displayName
+	 * @param string $comments
+	 * @param bool $isActive
+	 *
+	 * @return StreamerDto
+	 */
+	public function updateStreamer(
+		int $stationId,
+		int $streamerId,
+		string $username,
+		string $password,
+		string $displayName,
+		string $comments,
+		bool $isActive
+	): StreamerDto {
+		$linksDto = new LinksDto('');
+		$streamerDto = new StreamerDto(
+			$streamerId,
+			$username,
+			$password,
+			$displayName,
+			$comments,
+			$isActive,
+			$linksDto
+		);
+
+		$response = $this->httpClient->put(
+			sprintf('station/%s/streamer/%s', $stationId, $streamerId),
+			['json' => $streamerDto]
+		);
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "station/%s/streamer/%s" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$streamerId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		return $streamerDto;
+	}
+
+	/**
+	 * @param int $stationId
+	 * @param int $streamerId
+	 *
+	 * @return void
+	 */
+	public function deleteStreamer(int $stationId, int $streamerId): void {
+		$response = $this->httpClient->delete(sprintf(
+			'station/%s/streamer/%s',
+			$stationId,
+			$streamerId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "station/%s/streamer/%s" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$streamerId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
 	}
 
 	/**
