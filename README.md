@@ -90,6 +90,12 @@ $azuraCastApiClient->listenerDetails(int $stationId);
 $azuraCastApiClient->songAlbumArt(int $stationId, string $uniqueId);
 ```
 
+### Stations: Mount Points
+`GET` `/station/{station_id}/mounts`
+```
+$azuraCastApiClient->mountpoints(int $stationId);
+```
+
 ### Station: Streamers/DJs
 `GET` `/station/{station_id}/streamers`
 ```

@@ -682,6 +682,17 @@ class AzuraCastApiClientTest extends TestCase {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function testMountpointsSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$mountpoints = $azuraCastApiClient->mountpoints($this->getStationId());
+
+		$this->assertNotCount(0, $mountpoints);
+	}
+
+	/**
 	 * @return AzuraCastApiClient
 	 */
 	private function createApiClient(): AzuraCastApiClient {

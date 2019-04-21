@@ -13,6 +13,7 @@ use Vaalyn\AzuraCastApiClient\Dto\LinksDto;
 use Vaalyn\AzuraCastApiClient\Dto\ListenerDto;
 use Vaalyn\AzuraCastApiClient\Dto\SettingsDto;
 use Vaalyn\AzuraCastApiClient\Dto\StreamerDto;
+use Vaalyn\AzuraCastApiClient\Dto\MountpointDto;
 use Vaalyn\AzuraCastApiClient\Dto\NowPlayingDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationDto;
 use Vaalyn\AzuraCastApiClient\Dto\CustomFieldDto;
@@ -27,6 +28,7 @@ use Vaalyn\AzuraCastApiClient\Transformer\RoleDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\ListenerDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\SettingsDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\StreamerDtoTransformer;
+use Vaalyn\AzuraCastApiClient\Transformer\MountpointDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\NowPlayingDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\CustomFieldDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\PermissionsDtoTransformer;
@@ -1394,6 +1396,45 @@ class AzuraCastApiClient {
 				$response->getBody()->getContents()
 			));
 		}
+	}
+
+	/**
+	 * @param int $stationId
+	 *
+	 * @return MountpointDto[]
+	 */
+	public function mountpoints(int $stationId): array {
+		$response = $this->httpClient->get(sprintf(
+			'station/%s/mounts',
+			$stationId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "station/%s/mounts" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$mountpointsData = json_decode($response->getBody()->getContents(), true);
+
+		$mountpointDtoTransformer = new MountpointDtoTransformer();
+
+		$mountpoints = [];
+
+		foreach ($mountpointsData as $mountpointData) {
+			$mountpoints[] = $mountpointDtoTransformer->arrayToDto($mountpointData);
+		}
+
+		return $mountpoints;
 	}
 
 	/**
