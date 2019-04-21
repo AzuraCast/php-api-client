@@ -130,7 +130,7 @@ class AzuraCastApiClientTest extends TestCase {
 
 		$azuraCastApiClient->requestSong(
 			$this->getStationId(),
-			$requestableSongs->getRequestableSongs()[0]->getSong()->getId()
+			$requestableSongs->getRequestableSongs()[0]->getRequestableSongId()
 		);
 
 		$this->assertTrue(true);
@@ -502,6 +502,49 @@ class AzuraCastApiClientTest extends TestCase {
 		}
 
 		$azuraCastApiClient->deleteRole($roleDto->getId());
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testSettingsSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$settings = $azuraCastApiClient->settings();
+
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testUpdateSettingsSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$settingsDto = $azuraCastApiClient->settings();
+
+		$settingsDto = $azuraCastApiClient->updateSettings(
+			$settingsDto->getBaseUrl(),
+			$settingsDto->getInstanceName(),
+			$settingsDto->getTimezone(),
+			$settingsDto->getPreferBrowserUrl(),
+			$settingsDto->getUseRadioProxy(),
+			$settingsDto->getHistoryKeepDays(),
+			$settingsDto->getAlwaysUseSsl(),
+			$settingsDto->getApiAccessControl(),
+			$settingsDto->getAnalytics(),
+			$settingsDto->getCentralUpdatesChannel(),
+			$settingsDto->getPublicTheme(),
+			$settingsDto->getHideAlbumArt(),
+			$settingsDto->getHomepageRedirectUrl(),
+			$settingsDto->getDefaultAlbumArtUrl(),
+			$settingsDto->getHideProductName(),
+			$settingsDto->getCustomCssPublic(),
+			$settingsDto->getCustomJsPublic(),
+			$settingsDto->getCustomCssInternal()
+		);
 
 		$this->assertTrue(true);
 	}

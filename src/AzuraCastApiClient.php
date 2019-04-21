@@ -11,6 +11,7 @@ use Vaalyn\AzuraCastApiClient\Dto\RoleDto;
 use Vaalyn\AzuraCastApiClient\Dto\UserDto;
 use Vaalyn\AzuraCastApiClient\Dto\LinksDto;
 use Vaalyn\AzuraCastApiClient\Dto\ListenerDto;
+use Vaalyn\AzuraCastApiClient\Dto\SettingsDto;
 use Vaalyn\AzuraCastApiClient\Dto\NowPlayingDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationDto;
 use Vaalyn\AzuraCastApiClient\Dto\CustomFieldDto;
@@ -23,6 +24,7 @@ use Vaalyn\AzuraCastApiClient\Exception\AzuraCastApiClientRequestException;
 use Vaalyn\AzuraCastApiClient\Exception\AzuraCastRequestsDisabledException;
 use Vaalyn\AzuraCastApiClient\Transformer\RoleDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\ListenerDtoTransformer;
+use Vaalyn\AzuraCastApiClient\Transformer\SettingsDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\NowPlayingDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\CustomFieldDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\PermissionsDtoTransformer;
@@ -818,7 +820,7 @@ class AzuraCastApiClient {
 		}
 
 		$response = $this->httpClient->put(
-			sprintf('admin/users/%s', $userId),
+			sprintf('admin/user/%s', $userId),
 			['json' => $userDto]
 		);
 
@@ -1062,6 +1064,118 @@ class AzuraCastApiClient {
 				$response->getBody()->getContents()
 			));
 		}
+	}
+
+	/**
+	 * @return SettingsDto
+	 */
+	public function settings(): SettingsDto {
+		$response = $this->httpClient->get('admin/settings');
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/settings" returned non-successful response with code %s and body: %s',
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$settingsData = json_decode($response->getBody()->getContents(), true);
+
+		$settingsDtoTransformer = new SettingsDtoTransformer();
+
+		return $settingsDtoTransformer->arrayToDto($settingsData);
+	}
+
+	/**
+	 * @param string $baseUrl
+	 * @param string $instanceName
+	 * @param string $timezone
+	 * @param bool $preferBrowserUrl
+	 * @param bool $useRadioProxy
+	 * @param int $historyKeepDays
+	 * @param bool $alwaysUseSsl
+	 * @param string $apiAccessControl
+	 * @param string $analytics
+	 * @param bool $centralUpdatesChannel
+	 * @param string $publicTheme
+	 * @param bool $hideAlbumArt
+	 * @param string $homepageRedirectUrl
+	 * @param string $defaultAlbumArtUrl
+	 * @param bool $hideProductName
+	 * @param string $customCssPublic
+	 * @param string $customJsPublic
+	 * @param string $customCssInternal
+	 *
+	 * @return SettingsDto
+	 */
+	public function updateSettings(
+		string $baseUrl,
+		string $instanceName,
+		string $timezone,
+		bool $preferBrowserUrl,
+		bool $useRadioProxy,
+		int $historyKeepDays,
+		bool $alwaysUseSsl,
+		string $apiAccessControl,
+		string $analytics,
+		bool $centralUpdatesChannel,
+		string $publicTheme,
+		bool $hideAlbumArt,
+		string $homepageRedirectUrl,
+		string $defaultAlbumArtUrl,
+		bool $hideProductName,
+		string $customCssPublic,
+		string $customJsPublic,
+		string $customCssInternal
+	): SettingsDto {
+		$settingsDto = new SettingsDto(
+			$baseUrl,
+			$instanceName,
+			$timezone,
+			$preferBrowserUrl,
+			$useRadioProxy,
+			$historyKeepDays,
+			$alwaysUseSsl,
+			$apiAccessControl,
+			$analytics,
+			$centralUpdatesChannel,
+			$publicTheme,
+			$hideAlbumArt,
+			$homepageRedirectUrl,
+			$defaultAlbumArtUrl,
+			$hideProductName,
+			$customCssPublic,
+			$customJsPublic,
+			$customCssInternal
+		);
+
+		$response = $this->httpClient->put(
+			'admin/settings',
+			['json' => $settingsDto]
+		);
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "admin/settings" returned non-successful response with code %s and body: %s',
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		return $settingsDto;
 	}
 
 	/**

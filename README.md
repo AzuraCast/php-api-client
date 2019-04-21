@@ -200,3 +200,33 @@ $azuraCastApiClient->updateRole(
 ```
 $azuraCastApiClient->deleteRole(int $roleId);
 ```
+
+### Administration: Settings
+`GET` `/admin/settings`
+```
+$azuraCastApiClient->settings();
+```
+
+`PUT` `/admin/settings`
+```
+$azuraCastApiClient->updateSettings(
+	string $baseUrl,
+	string $instanceName,
+	string $timezone,
+	bool $preferBrowserUrl,
+	bool $useRadioProxy,
+	int $historyKeepDays,
+	bool $alwaysUseSsl,
+	string $apiAccessControl,
+	string $analytics,
+	bool $centralUpdatesChannel,
+	string $publicTheme,
+	bool $hideAlbumArt,
+	string $homepageRedirectUrl,
+	string $defaultAlbumArtUrl,
+	bool $hideProductName,
+	string $customCssPublic,
+	string $customJsPublic,
+	string $customCssInternal
+);
+```
