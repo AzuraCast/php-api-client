@@ -33,8 +33,7 @@ class UserDtoTransformer {
 		return new UserDto(
 			$userData['id'],
 			$userData['email'],
-			$userData['name'],
-			$userData['timezone'] ?? '',
+			$userData['name'] ?? '',
 			$userData['locale'] ?? '',
 			$userData['theme'] ?? '',
 			$userData['created_at'],

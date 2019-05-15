@@ -13,9 +13,11 @@ use Vaalyn\AzuraCastApiClient\Dto\LinksDto;
 use Vaalyn\AzuraCastApiClient\Dto\ListenerDto;
 use Vaalyn\AzuraCastApiClient\Dto\SettingsDto;
 use Vaalyn\AzuraCastApiClient\Dto\StreamerDto;
+use Vaalyn\AzuraCastApiClient\Dto\MediaFileDto;
 use Vaalyn\AzuraCastApiClient\Dto\MountpointDto;
 use Vaalyn\AzuraCastApiClient\Dto\NowPlayingDto;
 use Vaalyn\AzuraCastApiClient\Dto\StationDto;
+use Vaalyn\AzuraCastApiClient\Dto\UploadFileDto;
 use Vaalyn\AzuraCastApiClient\Dto\CustomFieldDto;
 use Vaalyn\AzuraCastApiClient\Dto\PermissionsDto;
 use Vaalyn\AzuraCastApiClient\Dto\SongHistoryDto;
@@ -28,6 +30,7 @@ use Vaalyn\AzuraCastApiClient\Transformer\RoleDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\ListenerDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\SettingsDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\StreamerDtoTransformer;
+use Vaalyn\AzuraCastApiClient\Transformer\MediaFileDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\MountpointDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\NowPlayingDtoTransformer;
 use Vaalyn\AzuraCastApiClient\Transformer\CustomFieldDtoTransformer;
@@ -162,80 +165,6 @@ class AzuraCastApiClient {
 
 	/**
 	 * @param int $stationId
-	 *
-	 * @return StationStatusDto
-	 */
-	public function stationStatus(int $stationId): StationStatusDto {
-		$response = $this->httpClient->get(sprintf(
-			'station/%s/status',
-			$stationId
-		));
-
-		if ($response->getStatusCode() === 403) {
-			throw new AzuraCastApiAccessDeniedException(
-				$response->getBody()->getContents()
-			);
-		}
-
-		if ($response->getStatusCode() !== 200) {
-			throw new AzuraCastApiClientRequestException(sprintf(
-				'Call to "/station/%s" returned non-successful response with code %s and body: %s',
-				$stationId,
-				$response->getStatusCode(),
-				$response->getBody()->getContents()
-			));
-		}
-
-		$stationStatusData = json_decode($response->getBody()->getContents(), true);
-
-		$stationStatusDtoTransformer = new StationStatusDtoTransformer();
-
-		return $stationStatusDtoTransformer->arrayToDto($stationStatusData);
-	}
-
-	/**
-	 * @param int $stationId
-	 * @param \DateTime|null $start
-	 * @param \DateTime|null $end
-	 *
-	 * @return SongHistoryDto[]
-	 */
-	public function stationHistory(int $stationId, ?\DateTime $start = null, ?\DateTime $end = null): array {
-		$response = $this->httpClient->get(sprintf(
-			'station/%s/history',
-			$stationId
-		));
-
-		if ($response->getStatusCode() === 403) {
-			throw new AzuraCastApiAccessDeniedException(
-				$response->getBody()->getContents()
-			);
-		}
-
-		if ($response->getStatusCode() !== 200) {
-			throw new AzuraCastApiClientRequestException(sprintf(
-				'Call to "/station/%s/history" returned non-successful response with code %s and body: %s',
-				$stationId,
-				$response->getStatusCode(),
-				$response->getBody()->getContents()
-			));
-		}
-
-		$songHistoryDataArray = json_decode($response->getBody()->getContents(), true);
-
-		$songHistoryDtoTransformer = new SongHistoryDtoTransformer();
-
-		$songHistory = [];
-
-		foreach ($songHistoryDataArray as $songHistoryData) {
-			$songHistory[] = $songHistoryDtoTransformer->arrayToDto($songHistoryData);
-		}
-
-		return $songHistory;
-	}
-
-	/**
-	 * @param int $stationId
 	 * @param int $page
 	 *
 	 * @return RequestableSongsDto
@@ -312,33 +241,6 @@ class AzuraCastApiClient {
 	 * @param int $stationId
 	 * @param string $uniqueId
 	 *
-	 * @return resource|bool
-	 */
-	public function songAlbumArt(int $stationId, string $uniqueId) {
-		$response = $this->httpClient->get(sprintf(
-			'station/%s/art/%s',
-			$stationId,
-			$uniqueId
-		));
-
-		if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 404) {
-			throw new AzuraCastApiClientRequestException(sprintf(
-				'Call to "/station/%s" returned non-successful response with code %s and body: %s',
-				$stationId,
-				$response->getStatusCode(),
-				$response->getBody()->getContents()
-			));
-		}
-
-		$imageData = $response->getBody()->getContents();
-
-		return imagecreatefromstring($imageData);
-	}
-
-	/**
-	 * @param int $stationId
-	 * @param string $uniqueId
-	 *
 	 * @return void
 	 */
 	public function requestSong(int $stationId, string $uniqueId): void {
@@ -368,11 +270,11 @@ class AzuraCastApiClient {
 	/**
 	 * @param int $stationId
 	 *
-	 * @return ListenerDto[]
+	 * @return StationStatusDto
 	 */
-	public function listenerDetails(int $stationId): array {
+	public function stationStatus(int $stationId): StationStatusDto {
 		$response = $this->httpClient->get(sprintf(
-			'station/%s/listeners',
+			'station/%s/status',
 			$stationId
 		));
 
@@ -384,24 +286,18 @@ class AzuraCastApiClient {
 
 		if ($response->getStatusCode() !== 200) {
 			throw new AzuraCastApiClientRequestException(sprintf(
-				'Call to "/station/%s/listeners" returned non-successful response with code %s and body: %s',
+				'Call to "/station/%s" returned non-successful response with code %s and body: %s',
 				$stationId,
 				$response->getStatusCode(),
 				$response->getBody()->getContents()
 			));
 		}
 
-		$listenerDataArray = json_decode($response->getBody()->getContents(), true);
+		$stationStatusData = json_decode($response->getBody()->getContents(), true);
 
-		$listenerDtoTransformer = new ListenerDtoTransformer();
+		$stationStatusDtoTransformer = new StationStatusDtoTransformer();
 
-		$listenerDtoArray = [];
-
-		foreach ($listenerDataArray as $listenerData) {
-			$listenerDtoArray[] = $listenerDtoTransformer->arrayToDto($listenerData);
-		}
-
-		return $listenerDtoArray;
+		return $stationStatusDtoTransformer->arrayToDto($stationStatusData);
 	}
 
 	/**
@@ -489,6 +385,225 @@ class AzuraCastApiClient {
 				$response->getBody()->getContents()
 			));
 		}
+	}
+
+	/**
+	 * @param int $stationId
+	 * @param \DateTime|null $start
+	 * @param \DateTime|null $end
+	 *
+	 * @return SongHistoryDto[]
+	 */
+	public function stationHistory(int $stationId, ?\DateTime $start = null, ?\DateTime $end = null): array {
+		$response = $this->httpClient->get(sprintf(
+			'station/%s/history',
+			$stationId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/station/%s/history" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$songHistoryDataArray = json_decode($response->getBody()->getContents(), true);
+
+		$songHistoryDtoTransformer = new SongHistoryDtoTransformer();
+
+		$songHistory = [];
+
+		foreach ($songHistoryDataArray as $songHistoryData) {
+			$songHistory[] = $songHistoryDtoTransformer->arrayToDto($songHistoryData);
+		}
+
+		return $songHistory;
+	}
+
+	/**
+	 * @param int $stationId
+	 *
+	 * @return ListenerDto[]
+	 */
+	public function listenerDetails(int $stationId): array {
+		$response = $this->httpClient->get(sprintf(
+			'station/%s/listeners',
+			$stationId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/station/%s/listeners" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$listenerDataArray = json_decode($response->getBody()->getContents(), true);
+
+		$listenerDtoTransformer = new ListenerDtoTransformer();
+
+		$listenerDtoArray = [];
+
+		foreach ($listenerDataArray as $listenerData) {
+			$listenerDtoArray[] = $listenerDtoTransformer->arrayToDto($listenerData);
+		}
+
+		return $listenerDtoArray;
+	}
+
+	/**
+	 * @param int $stationId
+	 * @param string $uniqueId
+	 *
+	 * @return resource|bool
+	 */
+	public function mediaAlbumArt(int $stationId, string $uniqueId) {
+		$response = $this->httpClient->get(sprintf(
+			'station/%s/art/%s',
+			$stationId,
+			$uniqueId
+		));
+
+		if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 404) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/station/%s" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$imageData = $response->getBody()->getContents();
+
+		return imagecreatefromstring($imageData);
+	}
+
+	/**
+	 * @param int $stationId
+	 *
+	 * @return MediaFileDto[]
+	 */
+	public function mediaFiles(int $stationId): array {
+		$response = $this->httpClient->get(sprintf(
+			'station/%s/files',
+			$stationId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/station/%s/files" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$mediaFilesDataArray = json_decode($response->getBody()->getContents(), true);
+
+		$mediaFileDtoTransformer = new MediaFileDtoTransformer();
+
+		$mediaFileDtoArray = [];
+
+		foreach ($mediaFilesDataArray as $mediaFileData) {
+			$mediaFileDtoArray[] = $mediaFileDtoTransformer->arrayToDto($mediaFileData);
+		}
+
+		return $mediaFileDtoArray;
+	}
+
+	/**
+	 * @param int $stationId
+	 * @param UploadFileDto $uploadFile
+	 *
+	 * @return MediaFileDto
+	 */
+	public function uploadMediaFile(int $stationId, UploadFileDto $uploadFile): MediaFileDto {
+		$response = $this->httpClient->post(
+			sprintf('station/%s/files', $stationId),
+			['json' => $uploadFile]
+		);
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "/station/%s/files" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$mediaFileData = json_decode($response->getBody()->getContents(), true);
+
+		$mediaFileDtoTransformer = new MediaFileDtoTransformer();
+
+		return $mediaFileDtoTransformer->arrayToDto($mediaFileData);
+	}
+
+	/**
+	 * @param int $stationId
+	 *
+	 * @return MountpointDto[]
+	 */
+	public function mountpoints(int $stationId): array {
+		$response = $this->httpClient->get(sprintf(
+			'station/%s/mounts',
+			$stationId
+		));
+
+		if ($response->getStatusCode() === 403) {
+			throw new AzuraCastApiAccessDeniedException(
+				$response->getBody()->getContents()
+			);
+		}
+
+		if ($response->getStatusCode() !== 200) {
+			throw new AzuraCastApiClientRequestException(sprintf(
+				'Call to "station/%s/mounts" returned non-successful response with code %s and body: %s',
+				$stationId,
+				$response->getStatusCode(),
+				$response->getBody()->getContents()
+			));
+		}
+
+		$mountpointsData = json_decode($response->getBody()->getContents(), true);
+
+		$mountpointDtoTransformer = new MountpointDtoTransformer();
+
+		$mountpoints = [];
+
+		foreach ($mountpointsData as $mountpointData) {
+			$mountpoints[] = $mountpointDtoTransformer->arrayToDto($mountpointData);
+		}
+
+		return $mountpoints;
 	}
 
 	/**
@@ -721,7 +836,6 @@ class AzuraCastApiClient {
 	 * @param string $email
 	 * @param string $authPassword
 	 * @param string $name
-	 * @param string $timezone
 	 * @param string $locale
 	 * @param string $theme
 	 * @param array $roles
@@ -733,7 +847,6 @@ class AzuraCastApiClient {
 		string $email,
 		string $authPassword,
 		string $name,
-		string $timezone,
 		string $locale,
 		string $theme,
 		array $roles,
@@ -743,7 +856,6 @@ class AzuraCastApiClient {
 			0,
 			$email,
 			$name,
-			$timezone,
 			$locale,
 			$theme,
 			time(),
@@ -786,7 +898,6 @@ class AzuraCastApiClient {
 	 * @param string $email
 	 * @param string $authPassword
 	 * @param string $name
-	 * @param string $timezone
 	 * @param string $locale
 	 * @param string $theme
 	 * @param array $roles
@@ -799,7 +910,6 @@ class AzuraCastApiClient {
 		string $email,
 		string $authPassword,
 		string $name,
-		string $timezone,
 		string $locale,
 		string $theme,
 		array $roles,
@@ -809,7 +919,6 @@ class AzuraCastApiClient {
 			$userId,
 			$email,
 			$name,
-			$timezone,
 			$locale,
 			$theme,
 			time(),
@@ -1396,45 +1505,6 @@ class AzuraCastApiClient {
 				$response->getBody()->getContents()
 			));
 		}
-	}
-
-	/**
-	 * @param int $stationId
-	 *
-	 * @return MountpointDto[]
-	 */
-	public function mountpoints(int $stationId): array {
-		$response = $this->httpClient->get(sprintf(
-			'station/%s/mounts',
-			$stationId
-		));
-
-		if ($response->getStatusCode() === 403) {
-			throw new AzuraCastApiAccessDeniedException(
-				$response->getBody()->getContents()
-			);
-		}
-
-		if ($response->getStatusCode() !== 200) {
-			throw new AzuraCastApiClientRequestException(sprintf(
-				'Call to "station/%s/mounts" returned non-successful response with code %s and body: %s',
-				$stationId,
-				$response->getStatusCode(),
-				$response->getBody()->getContents()
-			));
-		}
-
-		$mountpointsData = json_decode($response->getBody()->getContents(), true);
-
-		$mountpointDtoTransformer = new MountpointDtoTransformer();
-
-		$mountpoints = [];
-
-		foreach ($mountpointsData as $mountpointData) {
-			$mountpoints[] = $mountpointDtoTransformer->arrayToDto($mountpointData);
-		}
-
-		return $mountpoints;
 	}
 
 	/**

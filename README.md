@@ -87,7 +87,17 @@ $azuraCastApiClient->listenerDetails(int $stationId);
 ### Stations: Media
 `GET` `/station/{station_id}/art/{media_id}`
 ```
-$azuraCastApiClient->songAlbumArt(int $stationId, string $uniqueId);
+$azuraCastApiClient->mediaAlbumArt(int $stationId, string $uniqueId);
+```
+
+`GET` `/station/{station_id}/files`
+```
+$azuraCastApiClient->mediaFiles(int $stationId);
+```
+
+`POST` `/station/{station_id}/files`
+```
+$azuraCastApiClient->uploadMediaFile(int $stationId, UploadFileDto $uploadFile);
 ```
 
 ### Stations: Mount Points

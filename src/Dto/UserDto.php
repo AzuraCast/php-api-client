@@ -30,11 +30,6 @@ class UserDto implements JsonSerializable {
 	/**
 	 * @var string
 	 */
-	protected $timezone;
-
-	/**
-	 * @var string
-	 */
 	protected $locale;
 
 	/**
@@ -71,7 +66,6 @@ class UserDto implements JsonSerializable {
 	 * @param int $id
 	 * @param string $email
 	 * @param string $name
-	 * @param string $timezone
 	 * @param string $locale
 	 * @param string $theme
 	 * @param int $createdAt
@@ -84,7 +78,6 @@ class UserDto implements JsonSerializable {
 		int $id,
 		string $email,
 		string $name,
-		string $timezone,
 		string $locale,
 		string $theme,
 		int $createdAt,
@@ -97,7 +90,6 @@ class UserDto implements JsonSerializable {
 			->setEmail($email)
 			->setAuthPassword('')
 			->setName($name)
-			->setTimezone($timezone)
 			->setLocale($locale)
 			->setTheme($theme)
 			->setCreatedAt($createdAt)
@@ -184,17 +176,6 @@ class UserDto implements JsonSerializable {
 	 */
 	public function getTimezone(): string {
 		return $this->timezone;
-	}
-
-	/**
-	 * @param string $timezone
-	 *
-	 * @return UserDto
-	 */
-	public function setTimezone(string $timezone): UserDto {
-		$this->timezone = $timezone;
-
-		return $this;
 	}
 
 	/**
@@ -354,7 +335,6 @@ class UserDto implements JsonSerializable {
 			'email' => $this->getEmail(),
 			'auth_password' => $this->getAuthPassword(),
 			'name' => $this->getName(),
-			'timezone' => $this->getTimezone(),
 			'locale' => $this->getLocale(),
 			'theme' => $this->getTheme(),
 			'created_at' => $this->getCreatedAt(),

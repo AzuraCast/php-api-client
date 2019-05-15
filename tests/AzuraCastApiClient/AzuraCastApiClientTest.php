@@ -7,6 +7,8 @@ namespace Vaalyn\AzuraCastApiClient;
 use Dotenv\Dotenv;
 use PHPUnit\Framework\TestCase;
 
+use Vaalyn\AzuraCastApiClient\Dto\UploadFileDto;
+
 class AzuraCastApiClientTest extends TestCase {
 	/**
 	 * @return void
@@ -107,17 +109,44 @@ class AzuraCastApiClientTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function testSongAlbumArtSuccessful(): void {
+	public function testMediaAlbumArtSuccessful(): void {
 		$azuraCastApiClient = $this->createApiClient();
 
-		$requestableSongs = $azuraCastApiClient->requestableSongs($this->getStationId());
+		$mediaFiles = $azuraCastApiClient->mediaFiles($this->getStationId());
 
-		$albumArtResource = $azuraCastApiClient->songAlbumArt(
+		$albumArtResource = $azuraCastApiClient->mediaAlbumArt(
 			$this->getStationId(),
-			$requestableSongs->getRequestableSongs()[0]->getSong()->getId()
+			$mediaFiles[0]->getUniqueId()
 		);
 
 		$this->assertTrue(is_resource($albumArtResource));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testMediaFilesSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$mediaFiles = $azuraCastApiClient->mediaFiles($this->getStationId());
+
+		$this->assertNotCount(0, $mediaFiles);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testUploadMediaFileSuccessful(): void {
+		$azuraCastApiClient = $this->createApiClient();
+
+		$uploadFileDto = new UploadFileDto(
+			'test.mp3',
+			file_get_contents(__DIR__ . '/../resources/test.mp3')
+		);
+
+		$azuraCastApiClient->uploadMediaFile($this->getStationId(), $uploadFileDto);
+
+		$this->assertTrue(true);
 	}
 
 	/**
@@ -292,7 +321,6 @@ class AzuraCastApiClientTest extends TestCase {
 		$email = uniqid() . '@example.com';
 		$authPassword = uniqid();
 		$name = uniqid();
-		$timezone = 'Europe/Berlin';
 		$locale = 'de_DE';
 		$theme = 'dark';
 		$roles = [];
@@ -302,7 +330,6 @@ class AzuraCastApiClientTest extends TestCase {
 			$email,
 			$authPassword,
 			$name,
-			$timezone,
 			$locale,
 			$theme,
 			$roles,
@@ -311,7 +338,6 @@ class AzuraCastApiClientTest extends TestCase {
 
 		$this->assertSame($email, $userDto->getEmail());
 		$this->assertSame($name, $userDto->getName());
-		$this->assertSame($timezone, $userDto->getTimezone());
 		$this->assertSame($locale, $userDto->getLocale());
 		$this->assertSame($theme, $userDto->getTheme());
 	}
@@ -325,7 +351,6 @@ class AzuraCastApiClientTest extends TestCase {
 		$email = uniqid() . '@example.com';
 		$authPassword = uniqid();
 		$name = uniqid();
-		$timezone = 'Europe/Berlin';
 		$locale = 'de_DE';
 		$theme = 'dark';
 		$roles = [];
@@ -335,7 +360,6 @@ class AzuraCastApiClientTest extends TestCase {
 			$email,
 			$authPassword,
 			$name,
-			$timezone,
 			$locale,
 			$theme,
 			$roles,
@@ -355,7 +379,6 @@ class AzuraCastApiClientTest extends TestCase {
 			$userDto->getEmail(),
 			$authPassword,
 			$userDto->getName(),
-			$userDto->getTimezone(),
 			$userDto->getLocale(),
 			$userDto->getTheme(),
 			$userDto->getRoles(),
@@ -374,7 +397,6 @@ class AzuraCastApiClientTest extends TestCase {
 		$email = uniqid() . '@example.com';
 		$authPassword = uniqid();
 		$name = uniqid();
-		$timezone = 'Europe/Berlin';
 		$locale = 'de_DE';
 		$theme = 'dark';
 		$roles = [];
@@ -384,7 +406,6 @@ class AzuraCastApiClientTest extends TestCase {
 			$email,
 			$authPassword,
 			$name,
-			$timezone,
 			$locale,
 			$theme,
 			$roles,
