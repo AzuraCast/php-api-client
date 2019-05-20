@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Vaalyn\AzuraCastApiClient\Dto;
+namespace AzuraCast\AzuraCastApiClient\Dto;
 
 class LocationDto {
 	/**

@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace Vaalyn\AzuraCastApiClient\Transformer;
+namespace AzuraCast\AzuraCastApiClient\Transformer;
 
-use Vaalyn\AzuraCastApiClient\Dto\SongDto;
+use AzuraCast\AzuraCastApiClient\Dto\SongDto;
 
 class SongDtoTransformer {
 	/**

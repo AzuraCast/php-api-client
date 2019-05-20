@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Vaalyn\AzuraCastApiClient;
+namespace AzuraCast\AzuraCastApiClient;
 
+use AzuraCast\AzuraCastApiClient\Dto\UploadFileDto;
 use Dotenv\Dotenv;
 use PHPUnit\Framework\TestCase;
-
-use Vaalyn\AzuraCastApiClient\Dto\UploadFileDto;
 
 class AzuraCastApiClientTest extends TestCase {
 	/**

@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace Vaalyn\AzuraCastApiClient\Transformer;
+namespace AzuraCast\AzuraCastApiClient\Transformer;
 
-use Vaalyn\AzuraCastApiClient\Dto\ListenersDto;
+use AzuraCast\AzuraCastApiClient\Dto\ListenersDto;
 
 class ListenersDtoTransformer {
 	/**

@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Vaalyn\AzuraCastApiClient\Transformer;
+namespace AzuraCast\AzuraCastApiClient\Transformer;
 
-use Vaalyn\AzuraCastApiClient\Dto\MediaFileDto;
-use Vaalyn\AzuraCastApiClient\Dto\MediaFileCustomFieldDto;
+use AzuraCast\AzuraCastApiClient\Dto\MediaFileDto;
+use AzuraCast\AzuraCastApiClient\Dto\MediaFileCustomFieldDto;
 
 class MediaFileDtoTransformer {
 	/**

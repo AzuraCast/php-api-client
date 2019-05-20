@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace Vaalyn\AzuraCastApiClient\Transformer;
+namespace AzuraCast\AzuraCastApiClient\Transformer;
 
-use Vaalyn\AzuraCastApiClient\Dto\MediaFilePlaylistDto;
+use AzuraCast\AzuraCastApiClient\Dto\MediaFilePlaylistDto;
 
 class MediaFilePlaylistDtoTransformer {
 	/**

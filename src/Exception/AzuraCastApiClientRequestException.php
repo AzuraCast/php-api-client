@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Vaalyn\AzuraCastApiClient\Exception;
+namespace AzuraCast\AzuraCastApiClient\Exception;
 
 class AzuraCastApiClientRequestException extends \Exception {
 

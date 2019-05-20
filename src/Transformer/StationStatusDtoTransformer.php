@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace Vaalyn\AzuraCastApiClient\Transformer;
+namespace AzuraCast\AzuraCastApiClient\Transformer;
 
-use Vaalyn\AzuraCastApiClient\Dto\StationStatusDto;
+use AzuraCast\AzuraCastApiClient\Dto\StationStatusDto;
 
 class StationStatusDtoTransformer {
 	/**

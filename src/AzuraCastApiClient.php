@@ -2,44 +2,44 @@
 
 declare(strict_types = 1);
 
-namespace Vaalyn\AzuraCastApiClient;
+namespace AzuraCast\AzuraCastApiClient;
 
 use GuzzleHttp\Pool;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use Vaalyn\AzuraCastApiClient\Dto\RoleDto;
-use Vaalyn\AzuraCastApiClient\Dto\UserDto;
-use Vaalyn\AzuraCastApiClient\Dto\LinksDto;
-use Vaalyn\AzuraCastApiClient\Dto\ListenerDto;
-use Vaalyn\AzuraCastApiClient\Dto\SettingsDto;
-use Vaalyn\AzuraCastApiClient\Dto\StreamerDto;
-use Vaalyn\AzuraCastApiClient\Dto\MediaFileDto;
-use Vaalyn\AzuraCastApiClient\Dto\MountpointDto;
-use Vaalyn\AzuraCastApiClient\Dto\NowPlayingDto;
-use Vaalyn\AzuraCastApiClient\Dto\StationDto;
-use Vaalyn\AzuraCastApiClient\Dto\UploadFileDto;
-use Vaalyn\AzuraCastApiClient\Dto\CustomFieldDto;
-use Vaalyn\AzuraCastApiClient\Dto\PermissionsDto;
-use Vaalyn\AzuraCastApiClient\Dto\SongHistoryDto;
-use Vaalyn\AzuraCastApiClient\Dto\StationStatusDto;
-use Vaalyn\AzuraCastApiClient\Dto\RequestableSongsDto;
-use Vaalyn\AzuraCastApiClient\Exception\AzuraCastApiAccessDeniedException;
-use Vaalyn\AzuraCastApiClient\Exception\AzuraCastApiClientRequestException;
-use Vaalyn\AzuraCastApiClient\Exception\AzuraCastRequestsDisabledException;
-use Vaalyn\AzuraCastApiClient\Transformer\RoleDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\ListenerDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\SettingsDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\StreamerDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\MediaFileDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\MountpointDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\NowPlayingDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\CustomFieldDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\PermissionsDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\SongHistoryDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\StationStatusDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\RequestableSongsDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\StationDtoTransformer;
-use Vaalyn\AzuraCastApiClient\Transformer\UserDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Dto\RoleDto;
+use AzuraCast\AzuraCastApiClient\Dto\UserDto;
+use AzuraCast\AzuraCastApiClient\Dto\LinksDto;
+use AzuraCast\AzuraCastApiClient\Dto\ListenerDto;
+use AzuraCast\AzuraCastApiClient\Dto\SettingsDto;
+use AzuraCast\AzuraCastApiClient\Dto\StreamerDto;
+use AzuraCast\AzuraCastApiClient\Dto\MediaFileDto;
+use AzuraCast\AzuraCastApiClient\Dto\MountpointDto;
+use AzuraCast\AzuraCastApiClient\Dto\NowPlayingDto;
+use AzuraCast\AzuraCastApiClient\Dto\StationDto;
+use AzuraCast\AzuraCastApiClient\Dto\UploadFileDto;
+use AzuraCast\AzuraCastApiClient\Dto\CustomFieldDto;
+use AzuraCast\AzuraCastApiClient\Dto\PermissionsDto;
+use AzuraCast\AzuraCastApiClient\Dto\SongHistoryDto;
+use AzuraCast\AzuraCastApiClient\Dto\StationStatusDto;
+use AzuraCast\AzuraCastApiClient\Dto\RequestableSongsDto;
+use AzuraCast\AzuraCastApiClient\Exception\AzuraCastApiAccessDeniedException;
+use AzuraCast\AzuraCastApiClient\Exception\AzuraCastApiClientRequestException;
+use AzuraCast\AzuraCastApiClient\Exception\AzuraCastRequestsDisabledException;
+use AzuraCast\AzuraCastApiClient\Transformer\RoleDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\ListenerDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\SettingsDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\StreamerDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\MediaFileDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\MountpointDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\NowPlayingDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\CustomFieldDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\PermissionsDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\SongHistoryDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\StationStatusDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\RequestableSongsDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\StationDtoTransformer;
+use AzuraCast\AzuraCastApiClient\Transformer\UserDtoTransformer;
 
 class AzuraCastApiClient {
 	/**

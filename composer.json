@@ -1,8 +1,8 @@
 {
-    "name": "vaalyn/azuracast-api-client",
+    "name": "azuracast/php-api-client",
     "description": "An API client library for the AzuraCast API",
     "keywords": ["azuracast", "api", "client"],
-    "homepage": "https://github.com/Vaalyn/azuracast-api-client",
+    "homepage": "https://github.com/AzuraCast/php-api-client",
     "type": "library",
     "license": "Apache-2.0",
     "authors": [
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Vaalyn\\AzuraCastApiClient\\": "src"
+            "AzuraCast\\AzuraCastApiClient\\": "src"
         }
     },
     "require-dev": {
