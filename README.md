@@ -3,6 +3,10 @@ This PHP library provides an API client for the [AzuraCast](https://github.com/A
 # Usage
 
 ```
+<?php
+
+use AzuraCast\AzuraCastApiClient\AzuraCastApiClient;
+
 $azuraCastApiClient = new AzuraCastApiClient(
 	'<IP-Address | Host>',
 	'<API Key>'
