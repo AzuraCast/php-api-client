@@ -5,6 +5,8 @@ This PHP library provides an API client for the [AzuraCast](https://github.com/A
 ```
 <?php
 
+require __DIR__ . '/vendor/autoload.php';
+
 use AzuraCast\AzuraCastApiClient\AzuraCastApiClient;
 
 $azuraCastApiClient = new AzuraCastApiClient(
