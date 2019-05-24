@@ -26,11 +26,6 @@ class NowPlayingDto {
 	protected $currentSong;
 
 	/**
-	 * @var SongHistoryDto
-	 */
-	protected $nextSong;
-
-	/**
 	 * @var SongHistoryDto[]
 	 */
 	protected $songHistory;
@@ -45,7 +40,6 @@ class NowPlayingDto {
 	 * @param ListenersDto $listeners
 	 * @param LiveDto $live
 	 * @param CurrentSongDto $currentSong
-	 * @param SongHistoryDto $nextSong
 	 * @param SongHistoryDto[] $songHistory
 	 * @param string $cache
 	 */
@@ -54,7 +48,6 @@ class NowPlayingDto {
 		ListenersDto $listeners,
 		LiveDto $live,
 		CurrentSongDto $currentSong,
-		SongHistoryDto $nextSong,
 		array $songHistory,
 		string $cache
 	) {
@@ -62,7 +55,6 @@ class NowPlayingDto {
 			->setListeners($listeners)
 			->setLive($live)
 			->setCurrentSong($currentSong)
-			->setNextSong($nextSong)
 			->setSongHistory($songHistory)
 			->setCache($cache);
 	}
@@ -135,24 +127,6 @@ class NowPlayingDto {
 	 */
 	public function setCurrentSong(CurrentSongDto $currentSong): NowPlayingDto {
 		$this->currentSong = $currentSong;
-
-		return $this;
-	}
-
-	/**
-	 * @return SongHistoryDto
-	 */
-	public function getNextSong(): SongHistoryDto {
-		return $this->nextSong;
-	}
-
-	/**
-	 * @param SongHistoryDto $nextSong
-	 *
-	 * @return NowPlayingDto
-	 */
-	public function setNextSong(SongHistoryDto $nextSong): NowPlayingDto {
-		$this->nextSong = $nextSong;
 
 		return $this;
 	}

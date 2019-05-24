@@ -23,7 +23,6 @@ class NowPlayingDtoTransformer {
 		$listenersDto = $listenersDtoTransformer->arrayToDto($nowPlayingData['listeners']);
 		$liveDto = $liveDtoTransformer->arrayToDto($nowPlayingData['live']);
 		$currentSongDto = $currentSongDtoTransformer->arrayToDto($nowPlayingData['now_playing']);
-		$nextSongDto = $songHistoryDtoTransformer->arrayToDto($nowPlayingData['playing_next']);
 
 		$songHistory = [];
 
@@ -36,7 +35,6 @@ class NowPlayingDtoTransformer {
 			$listenersDto,
 			$liveDto,
 			$currentSongDto,
-			$nextSongDto,
 			$songHistory,
 			$nowPlayingData['cache']
 		);
