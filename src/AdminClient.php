@@ -48,6 +48,4 @@ class AdminClient extends AbstractClient
         return new Admin\SettingsClient($this->httpClient);
     }
 
-
-
 }
