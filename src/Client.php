@@ -48,7 +48,7 @@ class Client extends AbstractClient
 
         $stationDtoArray = [];
         foreach ($stationDataArray as $stationData) {
-            $stationDtoArray[] = new Dto\StationDto($stationData);
+            $stationDtoArray[] = Dto\StationDto::fromArray($stationData);
         }
         return $stationDtoArray;
     }
@@ -64,7 +64,7 @@ class Client extends AbstractClient
             $stationId
         ));
 
-        return new Dto\StationDto($stationData);
+        return Dto\StationDto::fromArray($stationData);
     }
 
     /**
@@ -80,7 +80,7 @@ class Client extends AbstractClient
             $page
         ));
 
-        return new Dto\RequestableSongsDto($requestableSongsData);
+        return Dto\RequestableSongsDto::fromArray($requestableSongsData);
     }
 
     /**
@@ -146,7 +146,7 @@ class Client extends AbstractClient
             $stationId
         ));
 
-        return new Dto\StationStatusDto($stationStatusData);
+        return Dto\StationStatusDto::fromArray($stationStatusData);
     }
 
     /**
@@ -205,7 +205,7 @@ class Client extends AbstractClient
 
         $songHistory = [];
         foreach ($songHistoryDataArray as $songHistoryData) {
-            $songHistory[] = new Dto\SongHistoryDto($songHistoryData);
+            $songHistory[] = Dto\SongHistoryDto::fromArray($songHistoryData);
         }
         return $songHistory;
     }
@@ -224,7 +224,7 @@ class Client extends AbstractClient
 
         $listenerDtoArray = [];
         foreach ($listenerDataArray as $listenerData) {
-            $listenerDtoArray[] = new Dto\ListenerDto($listenerData);
+            $listenerDtoArray[] = Dto\ListenerDto::fromArray($listenerData);
         }
         return $listenerDtoArray;
     }
@@ -261,14 +261,14 @@ class Client extends AbstractClient
      */
     public function mediaFiles($stationId): array
     {
-        $mediaFilesDataArray = $this->request('GET', sprintf(
-            'station/%s/files',
-            $stationId
-        ));
+        $mediaFilesDataArray = $this->request(
+            'GET',
+            sprintf('station/%s/files', $stationId)
+        );
 
         $mediaFileDtoArray = [];
         foreach ($mediaFilesDataArray as $mediaFileData) {
-            $mediaFileDtoArray[] = new Dto\MediaFileDto($mediaFileData);
+            $mediaFileDtoArray[] = Dto\MediaFileDto::fromArray($mediaFileData);
         }
         return $mediaFileDtoArray;
     }
@@ -281,12 +281,13 @@ class Client extends AbstractClient
      */
     public function uploadMediaFile($stationId, Dto\UploadFileDto $uploadFile): Dto\MediaFileDto
     {
-        $mediaFileData = $this->request('POST',
+        $mediaFileData = $this->request(
+            'POST',
             sprintf('station/%s/files', $stationId),
             ['json' => $uploadFile]
         );
 
-        return new Dto\MediaFileDto($mediaFileData);
+        return Dto\MediaFileDto::fromArray($mediaFileData);
     }
 
     /**
@@ -296,14 +297,14 @@ class Client extends AbstractClient
      */
     public function mountpoints($stationId): array
     {
-        $mountpointsData = $this->request('GET', sprintf(
-            'station/%s/mounts',
-            $stationId
-        ));
+        $mountpointsData = $this->request(
+            'GET',
+            sprintf('station/%s/mounts',$stationId)
+        );
 
         $mountpoints = [];
         foreach ($mountpointsData as $mountpointData) {
-            $mountpoints[] = new Dto\MountpointDto($mountpointData);
+            $mountpoints[] = Dto\MountpointDto::fromArray($mountpointData);
         }
         return $mountpoints;
     }
@@ -313,11 +314,14 @@ class Client extends AbstractClient
      */
     public function customFields(): array
     {
-        $customFieldsData = $this->request('GET', 'admin/custom_fields');
+        $customFieldsData = $this->request(
+            'GET',
+            'admin/custom_fields'
+        );
 
         $customFields = [];
         foreach ($customFieldsData as $customFieldData) {
-            $customFields[] = new Dto\CustomFieldDto($customFieldData);
+            $customFields[] = Dto\CustomFieldDto::fromArray($customFieldData);
         }
         return $customFields;
     }
@@ -329,12 +333,12 @@ class Client extends AbstractClient
      */
     public function customField(int $customFieldId): Dto\CustomFieldDto
     {
-        $customFieldData = $this->request('GET', sprintf(
-            'admin/custom_field/%s',
-            $customFieldId
-        ));
+        $customFieldData = $this->request(
+            'GET',
+            sprintf('admin/custom_field/%s', $customFieldId)
+        );
 
-        return new Dto\CustomFieldDto($customFieldData);
+        return Dto\CustomFieldDto::fromArray($customFieldData);
     }
 
     /**
@@ -345,13 +349,14 @@ class Client extends AbstractClient
      */
     public function createCustomField(string $name, string $shortName): Dto\CustomFieldDto
     {
-        $customFieldDto = (new Dto\CustomFieldDto([]))
-            ->setId(0)
-            ->setName($name)
-            ->setShortName($shortName);
+        $customFieldDto = new Dto\CustomFieldDto(
+            0,
+            $name,
+            $shortName
+        );
 
         $customFieldData = $this->request('POST', 'admin/custom_fields', ['json' => $customFieldDto]);
-        return new Dto\CustomFieldDto($customFieldData);
+        return Dto\CustomFieldDto::fromArray($customFieldData);
     }
 
     /**
@@ -363,30 +368,17 @@ class Client extends AbstractClient
      */
     public function updateCustomField(int $customFieldId, string $name, string $shortName): Dto\CustomFieldDto
     {
-        $customFieldDto = (new Dto\CustomFieldDto([]))
-            ->setId($customFieldId)
-            ->setName($name)
-            ->setShortName($shortName);
+        $customFieldDto = new Dto\CustomFieldDto(
+            $customFieldId,
+            $name,
+            $shortName
+        );
 
-        $response = $this->httpClient->put(
+        $this->request(
+            'PUT',
             sprintf('admin/custom_field/%s', $customFieldId),
             ['json' => $customFieldDto]
         );
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/custom_field/%s" returned non-successful response with code %s and body: %s',
-                $customFieldId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
 
         return $customFieldDto;
     }
@@ -398,92 +390,39 @@ class Client extends AbstractClient
      */
     public function deleteCustomField(int $customFieldId): void
     {
-        $response = $this->httpClient->delete(sprintf(
-            'admin/custom_field/%s', $customFieldId
-        ));
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/custom_field/%s" returned non-successful response with code %s and body: %s',
-                $customFieldId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
+        $this->request(
+            'DELETE',
+            sprintf('admin/custom_field/%s', $customFieldId)
+        );
     }
 
     /**
-     * @return UserDto[]
+     * @return Dto\UserDto[]
      */
     public function users(): array
     {
-        $response = $this->httpClient->get('admin/users');
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "/admin/users" returned non-successful response with code %s and body: %s',
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
-        $usersData = json_decode($response->getBody()->getContents(), true);
-
-        $userDtoTransformer = new UserDtoTransformer();
+        $usersData = $this->request('GET', 'admin/users');
 
         $users = [];
-
         foreach ($usersData as $userData) {
-            $users[] = $userDtoTransformer->fromArray($userData);
+            $users[] = Dto\UserDto::fromArray($userData);
         }
-
         return $users;
     }
 
     /**
      * @param int $userId
      *
-     * @return UserDto
+     * @return Dto\UserDto
      */
-    public function user(int $userId): UserDto
+    public function user(int $userId): Dto\UserDto
     {
-        $response = $this->httpClient->get(sprintf(
-            'admin/user/%s',
-            $userId
-        ));
+        $userData = $this->request(
+            'GET',
+            sprintf('admin/user/%s', $userId)
+        );
 
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/user/%s" returned non-successful response with code %s and body: %s',
-                $userId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
-        $userData = json_decode($response->getBody()->getContents(), true);
-
-        $userDtoTransformer = new UserDtoTransformer();
-
-        return $userDtoTransformer->fromArray($userData);
+        return Dto\UserDto::fromArray($userData);
     }
 
     /**
@@ -495,7 +434,7 @@ class Client extends AbstractClient
      * @param array $roles
      * @param array $apiKeys
      *
-     * @return UserDto
+     * @return Dto\UserDto
      */
     public function createUser(
         string $email,
@@ -505,8 +444,8 @@ class Client extends AbstractClient
         string $theme,
         array $roles,
         array $apiKeys
-    ): UserDto {
-        $userDto = new UserDto(
+    ): Dto\UserDto {
+        $userDto = new Dto\UserDto(
             0,
             $email,
             $name,
@@ -516,35 +455,17 @@ class Client extends AbstractClient
             time(),
             $roles,
             $apiKeys,
-            new LinksDto('')
+            new Dto\LinksDto('')
         );
-
         $userDto->setAuthPassword($authPassword);
 
-        $response = $this->httpClient->post(
+        $userData = $this->request(
+            'POST',
             'admin/users',
             ['json' => $userDto]
         );
 
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/users" returned non-successful response with code %s and body: %s',
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
-        $userData = json_decode($response->getBody()->getContents(), true);
-
-        $userDtoTransformer = new UserDtoTransformer();
-
-        return $userDtoTransformer->fromArray($userData);
+        return Dto\UserDto::fromArray($userData);
     }
 
     /**
@@ -557,7 +478,7 @@ class Client extends AbstractClient
      * @param array $roles
      * @param array $apiKeys
      *
-     * @return UserDto
+     * @return Dto\UserDto
      */
     public function updateUser(
         int $userId,
@@ -568,8 +489,8 @@ class Client extends AbstractClient
         string $theme,
         array $roles,
         array $apiKeys
-    ): UserDto {
-        $userDto = new UserDto(
+    ): Dto\UserDto {
+        $userDto = new Dto\UserDto(
             $userId,
             $email,
             $name,
@@ -579,35 +500,19 @@ class Client extends AbstractClient
             time(),
             $roles,
             $apiKeys,
-            new LinksDto('')
+            new Dto\LinksDto('')
         );
-
         if ($authPassword !== '') {
             $userDto->setAuthPassword($authPassword);
         }
 
-        $response = $this->httpClient->put(
+        $this->request(
+            'PUT',
             sprintf('admin/user/%s', $userId),
             ['json' => $userDto]
         );
 
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/user/%s" returned non-successful response with code %s and body: %s',
-                $userId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
         $userDto->setAuthPassword('');
-
         return $userDto;
     }
 
@@ -618,85 +523,32 @@ class Client extends AbstractClient
      */
     public function deleteUser(int $userId): void
     {
-        $response = $this->httpClient->delete(sprintf(
-            'admin/user/%s', $userId
-        ));
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/user/%s" returned non-successful response with code %s and body: %s',
-                $userId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
+        $this->request(
+            'DELETE',
+            sprintf('admin/user/%s', $userId)
+        );
     }
 
     /**
-     * @return PermissionsDto
+     * @return Dto\PermissionsDto
      */
-    public function permissions(): PermissionsDto
+    public function permissions(): Dto\PermissionsDto
     {
-        $response = $this->httpClient->get('admin/permissions');
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "/admin/permissions" returned non-successful response with code %s and body: %s',
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
-        $permissionsData = json_decode($response->getBody()->getContents(), true);
-
-        $permissionsDtoTransformer = new PermissionsDtoTransformer();
-
-        return $permissionsDtoTransformer->fromArray($permissionsData);
+        $permissionsData = $this->request('GET', 'admin/permissions');
+        return Dto\PermissionsDto::fromArray($permissionsData);
     }
 
     /**
-     * @return RoleDto[]
+     * @return Dto\RoleDto[]
      */
     public function roles(): array
     {
-        $response = $this->httpClient->get('admin/roles');
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "/admin/roles" returned non-successful response with code %s and body: %s',
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
-        $rolesData = json_decode($response->getBody()->getContents(), true);
-
-        $roleDtoTransformer = new RoleDtoTransformer();
+        $rolesData = $this->request('GET', 'admin/roles');
 
         $roles = [];
-
         foreach ($rolesData as $roleData) {
-            $roles[] = $roleDtoTransformer->fromArray($roleData);
+            $roles[] = Dto\RoleDto::fromArray($roleData);
         }
-
         return $roles;
     }
 
@@ -705,71 +557,35 @@ class Client extends AbstractClient
      * @param string[] $permissionsGlobal
      * @param string[] $permissionsStation
      *
-     * @return RoleDto
+     * @return Dto\RoleDto
      */
-    public function createRole(string $name, array $permissionsGlobal, array $permissionsStation): RoleDto
+    public function createRole(string $name, array $permissionsGlobal, array $permissionsStation): Dto\RoleDto
     {
-        $permissions = new PermissionsDto($permissionsGlobal, $permissionsStation);
-        $roleDto = new RoleDto(0, $name, $permissions);
+        $permissions = new Dto\PermissionsDto($permissionsGlobal, $permissionsStation);
+        $roleDto = new Dto\RoleDto(0, $name, $permissions);
 
-        $response = $this->httpClient->post(
+        $roleData = $this->request(
+            'POST',
             'admin/roles',
             ['json' => $roleDto]
         );
 
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/roles" returned non-successful response with code %s and body: %s',
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
-        $roleData = json_decode($response->getBody()->getContents(), true);
-
-        $roleDtoTransformer = new RoleDtoTransformer();
-
-        return $roleDtoTransformer->fromArray($roleData);
+        return Dto\RoleDto::fromArray($roleData);
     }
 
     /**
      * @param int $roleId
      *
-     * @return RoleDto
+     * @return Dto\RoleDto
      */
-    public function role(int $roleId): RoleDto
+    public function role(int $roleId): Dto\RoleDto
     {
-        $response = $this->httpClient->get(sprintf(
-            'admin/role/%s',
-            $roleId
-        ));
+        $roleData = $this->request(
+            'GET',
+            sprintf('admin/role/%s', $roleId)
+        );
 
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/role/%s" returned non-successful response with code %s and body: %s',
-                $roleId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
-        $roleData = json_decode($response->getBody()->getContents(), true);
-
-        $roleDtoTransformer = new RoleDtoTransformer();
-
-        return $roleDtoTransformer->fromArray($roleData);
+        return Dto\RoleDto::fromArray($roleData);
     }
 
     /**
@@ -778,36 +594,22 @@ class Client extends AbstractClient
      * @param string[] $permissionsGlobal
      * @param string[] $permissionsStation
      *
-     * @return RoleDto
+     * @return Dto\RoleDto
      */
     public function updateRole(
         int $roleId,
         string $name,
         array $permissionsGlobal,
         array $permissionsStation
-    ): RoleDto {
-        $permissionsDto = new PermissionsDto($permissionsGlobal, $permissionsStation);
-        $roleDto = new RoleDto($roleId, $name, $permissionsDto);
+    ): Dto\RoleDto {
+        $permissionsDto = new Dto\PermissionsDto($permissionsGlobal, $permissionsStation);
+        $roleDto = new Dto\RoleDto($roleId, $name, $permissionsDto);
 
-        $response = $this->httpClient->put(
+        $this->request(
+            'PUT',
             sprintf('admin/role/%s', $roleId),
             ['json' => $roleDto]
         );
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/role/%s" returned non-successful response with code %s and body: %s',
-                $roleId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
 
         return $roleDto;
     }
@@ -819,52 +621,20 @@ class Client extends AbstractClient
      */
     public function deleteRole(int $roleId): void
     {
-        $response = $this->httpClient->delete(sprintf(
-            'admin/role/%s', $roleId
-        ));
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/role/%s" returned non-successful response with code %s and body: %s',
-                $roleId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
+        $this->request(
+            'DELETE',
+            sprintf('admin/role/%s', $roleId)
+        );
     }
 
     /**
-     * @return SettingsDto
+     * @return Dto\SettingsDto
      */
-    public function settings(): SettingsDto
+    public function settings(): Dto\SettingsDto
     {
-        $response = $this->httpClient->get('admin/settings');
+        $settingsData = $this->request('GET', 'admin/settings');
 
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/settings" returned non-successful response with code %s and body: %s',
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
-        $settingsData = json_decode($response->getBody()->getContents(), true);
-
-        $settingsDtoTransformer = new SettingsDtoTransformer();
-
-        return $settingsDtoTransformer->fromArray($settingsData);
+        return Dto\SettingsDto::fromArray($settingsData);
     }
 
     /**
@@ -887,7 +657,7 @@ class Client extends AbstractClient
      * @param string $customJsPublic
      * @param string $customCssInternal
      *
-     * @return SettingsDto
+     * @return Dto\SettingsDto
      */
     public function updateSettings(
         string $baseUrl,
@@ -908,8 +678,8 @@ class Client extends AbstractClient
         string $customCssPublic,
         string $customJsPublic,
         string $customCssInternal
-    ): SettingsDto {
-        $settingsDto = new SettingsDto(
+    ): Dto\SettingsDto {
+        $settingsDto = new Dto\SettingsDto(
             $baseUrl,
             $instanceName,
             $timezone,
@@ -930,24 +700,11 @@ class Client extends AbstractClient
             $customCssInternal
         );
 
-        $response = $this->httpClient->put(
+        $this->request(
+            'PUT',
             'admin/settings',
             ['json' => $settingsDto]
         );
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "admin/settings" returned non-successful response with code %s and body: %s',
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
 
         return $settingsDto;
     }
@@ -955,40 +712,19 @@ class Client extends AbstractClient
     /**
      * @param int $stationId
      *
-     * @return StreamerDto[]
+     * @return Dto\StreamerDto[]
      */
     public function streamers(int $stationId): array
     {
-        $response = $this->httpClient->get(sprintf(
-            'station/%s/streamers',
-            $stationId
-        ));
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "station/%s/streamers" returned non-successful response with code %s and body: %s',
-                $stationId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
-        $streamersData = json_decode($response->getBody()->getContents(), true);
-
-        $streamerDtoTransformer = new StreamerDtoTransformer();
+        $streamersData = $this->request(
+            'GET',
+            sprintf('station/%s/streamers', $stationId)
+        );
 
         $streamers = [];
-
         foreach ($streamersData as $streamerData) {
-            $streamers[] = $streamerDtoTransformer->fromArray($streamerData);
+            $streamers[] = Dto\StreamerDto::fromArray($streamerData);
         }
-
         return $streamers;
     }
 
@@ -1000,7 +736,7 @@ class Client extends AbstractClient
      * @param string $comments
      * @param bool $isActive
      *
-     * @return StreamerDto
+     * @return Dto\StreamerDto
      */
     public function createStreamer(
         int $stationId,
@@ -1009,9 +745,9 @@ class Client extends AbstractClient
         string $displayName,
         string $comments,
         bool $isActive
-    ): StreamerDto {
-        $linksDto = new LinksDto('');
-        $streamerDto = new StreamerDto(
+    ): Dto\StreamerDto {
+        $linksDto = new Dto\LinksDto('');
+        $streamerDto = new Dto\StreamerDto(
             0,
             $username,
             $password,
@@ -1021,68 +757,29 @@ class Client extends AbstractClient
             $linksDto
         );
 
-        $response = $this->httpClient->post(
+        $streamerData = $this->request(
+            'POST',
             sprintf('station/%s/streamers', $stationId),
             ['json' => $streamerDto]
         );
 
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "station/%s/streamers" returned non-successful response with code %s and body: %s',
-                $stationId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
-        $streamerData = json_decode($response->getBody()->getContents(), true);
-
-        $streamerDtoTransformer = new StreamerDtoTransformer();
-
-        return $streamerDtoTransformer->fromArray($streamerData);
+        return Dto\StreamerDto::fromArray($streamerData);
     }
 
     /**
      * @param int $stationId
      * @param int $streamerId
      *
-     * @return StreamerDto
+     * @return Dto\StreamerDto
      */
-    public function streamer(int $stationId, int $streamerId): StreamerDto
+    public function streamer(int $stationId, int $streamerId): Dto\StreamerDto
     {
-        $response = $this->httpClient->get(sprintf(
-            'station/%s/streamer/%s',
-            $stationId,
-            $streamerId
-        ));
+        $streamerData = $this->request(
+            'GET',
+            sprintf('station/%s/streamer/%s', $stationId, $streamerId)
+        );
 
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "station/%s/streamer/%s" returned non-successful response with code %s and body: %s',
-                $stationId,
-                $streamerId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
-
-        $streamerData = json_decode($response->getBody()->getContents(), true);
-
-        $streamerDtoTransformer = new StreamerDtoTransformer();
-
-        return $streamerDtoTransformer->fromArray($streamerData);
+        return Dto\StreamerDto::fromArray($streamerData);
     }
 
     /**
@@ -1094,7 +791,7 @@ class Client extends AbstractClient
      * @param string $comments
      * @param bool $isActive
      *
-     * @return StreamerDto
+     * @return Dto\StreamerDto
      */
     public function updateStreamer(
         int $stationId,
@@ -1104,9 +801,9 @@ class Client extends AbstractClient
         string $displayName,
         string $comments,
         bool $isActive
-    ): StreamerDto {
-        $linksDto = new LinksDto('');
-        $streamerDto = new StreamerDto(
+    ): Dto\StreamerDto {
+        $linksDto = new Dto\LinksDto('');
+        $streamerDto = new Dto\StreamerDto(
             $streamerId,
             $username,
             $password,
@@ -1116,26 +813,11 @@ class Client extends AbstractClient
             $linksDto
         );
 
-        $response = $this->httpClient->put(
+        $this->request(
+            'PUT',
             sprintf('station/%s/streamer/%s', $stationId, $streamerId),
             ['json' => $streamerDto]
         );
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "station/%s/streamer/%s" returned non-successful response with code %s and body: %s',
-                $stationId,
-                $streamerId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
 
         return $streamerDto;
     }
@@ -1148,26 +830,9 @@ class Client extends AbstractClient
      */
     public function deleteStreamer(int $stationId, int $streamerId): void
     {
-        $response = $this->httpClient->delete(sprintf(
-            'station/%s/streamer/%s',
-            $stationId,
-            $streamerId
-        ));
-
-        if ($response->getStatusCode() === 403) {
-            throw new AccessDeniedException(
-                $response->getBody()->getContents()
-            );
-        }
-
-        if ($response->getStatusCode() !== 200) {
-            throw new ClientRequestException(sprintf(
-                'Call to "station/%s/streamer/%s" returned non-successful response with code %s and body: %s',
-                $stationId,
-                $streamerId,
-                $response->getStatusCode(),
-                $response->getBody()->getContents()
-            ));
-        }
+        $this->request(
+            'DELETE',
+            sprintf('station/%s/streamer/%s', $stationId, $streamerId)
+        );
     }
 }
