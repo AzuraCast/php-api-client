@@ -7,14 +7,12 @@ This PHP library provides an API client for the [AzuraCast](https://github.com/A
 
 require __DIR__ . '/vendor/autoload.php';
 
-use AzuraCast\AzuraCastApiClient\AzuraCastApiClient;
-
-$azuraCastApiClient = new AzuraCastApiClient(
+$api = \AzuraCast\Api\Client::create(
 	'<IP-Address | Host>',
 	'<API Key>'
 );
 
-$nowPlaying = $azuraCastApiClient->nowPlaying();
+$nowPlaying = $api->nowPlaying();
 
 echo $nowPlaying->getCurrentSong()->getSong()->getTitle();
 ```
@@ -24,104 +22,106 @@ echo $nowPlaying->getCurrentSong()->getSong()->getTitle();
 ### Now Playing
 `GET` `/nowplaying`
 ```
-$azuraCastApiClient->nowPlaying();
+$api->nowPlaying();
 ```
 
 `GET` `/nowplaying/{station_id}`
 ```
-$azuraCastApiClient->nowPlayingOnStation(int $stationId);
+$api->station($station_id)->nowPlaying();
 ```
 
 ### Stations: General
 `GET` `/stations`
 ```
-$azuraCastApiClient->stations();
+$api->stations();
 ```
 
 `GET` `/station/{station_id}`
 ```
-$azuraCastApiClient->station(int $stationId);
+$api->station($stationId)->get();
 ```
 
 ### Stations: Song Requests
 `GET` `/station/{station_id}/requests`
 ```
-$azuraCastApiClient->requestableSongs(int $stationId, int $page = 1);
-```
-```
-$azuraCastApiClient->allRequestableSongs(int $stationId);
+$api->station($stationId)->requests()->list($page = 1);
+$api->station($stationId)->requests()->all();
 ```
 
 `POST` `/station/{station_id}/request/{request_id}`
 ```
-$azuraCastApiClient->requestSong(int $stationId, string $uniqueId);
+$api->station($stationId)->requests()->submit($uniqueId);
 ```
 
 ### Stations: Service Control
 `GET` `/station/{station_id}/status`
 ```
-$azuraCastApiClient->stationStatus(int $stationId);
+$api->station($stationId)->status();
 ```
 
 `POST` `/station/{station_id}/restart`
 ```
-$azuraCastApiClient->restartStation(int $stationId);
+$api->station($stationId)->restart();
 ```
 
 `POST` `/station/{station_id}/frontend/{action}`
 ```
-$azuraCastApiClient->performFrontendAction(int $stationId, string $action);
+$api->station($stationId)->frontend($action);
 ```
 
 `POST` `/station/{station_id}/backend/{action}`
 ```
-$azuraCastApiClient->performBackendAction(int $stationId, string $action);
+$api->station($stationId)->backend($action);
 ```
 
 ### Stations: History
 `GET` `/station/{station_id}/history`
 ```
-$azuraCastApiClient->stationHistory(int $stationId, ?\DateTime $start = null, ?\DateTime $end = null);
+$api->station($stationId)->history(?\DateTime $start = null, ?\DateTime $end = null);
 ```
 
 ### Stations: Listeners
 `GET` `/station/{station_id}/listeners`
 ```
-$azuraCastApiClient->listenerDetails(int $stationId);
+$api->station($stationId)->listeners();
 ```
 
 ### Stations: Media
 `GET` `/station/{station_id}/art/{media_id}`
 ```
-$azuraCastApiClient->mediaAlbumArt(int $stationId, string $uniqueId);
+$api->station($stationId)->media()->art($uniqueId);
 ```
 
 `GET` `/station/{station_id}/files`
 ```
-$azuraCastApiClient->mediaFiles(int $stationId);
+$api->station($stationId)->media()->list();
 ```
 
 `POST` `/station/{station_id}/files`
 ```
-$azuraCastApiClient->uploadMediaFile(int $stationId, UploadFileDto $uploadFile);
+$api->station($stationId)->media()->upload(UploadFileDto $uploadFile);
 ```
 
 ### Stations: Mount Points
 `GET` `/station/{station_id}/mounts`
 ```
-$azuraCastApiClient->mountpoints(int $stationId);
+$api->station($stationId)->mounts();
 ```
 
 ### Station: Streamers/DJs
 `GET` `/station/{station_id}/streamers`
 ```
-$azuraCastApiClient->streamers(int $stationId);
+$api->station($stationId)->streamers()->list();
+```
+
+`GET` `/station/{station_id}/streamer/{id}`
+```
+$api->station($stationId)->streamers()->get(int $streamerId);
 ```
 
 `POST` `/station/{station_id}/streamers`
 ```
-$azuraCastApiClient->createStreamer(
-	int $stationId,
+$api->station($stationId)->streamers()->create(
 	string $username,
 	string $password,
 	string $displayName,
@@ -130,16 +130,9 @@ $azuraCastApiClient->createStreamer(
 );
 ```
 
-`GET` `/station/{station_id}/streamer/{id}`
-```
-$azuraCastApiClient->streamer(int $stationId, int $streamerId);
-```
-
 `PUT` `/station/{station_id}/streamer/{id}`
 ```
-$azuraCastApiClient->updateStreamer(
-	int $stationId,
-	int $streamerId,
+$api->station($stationId)->streamers()->update(
 	string $username,
 	string $password,
 	string $displayName,
@@ -150,44 +143,49 @@ $azuraCastApiClient->updateStreamer(
 
 `DELETE` `/station/{station_id}/streamer/{id}`
 ```
-$azuraCastApiClient->deleteStreamer(int $stationId, int $streamerId);
+$api->station($stationId)->streamers()->delete($streamerId);
 ```
 
 ### Administration: Custom Fields
 `GET` `/admin/custom_fields`
 ```
-$azuraCastApiClient->customFields();
+$api->admin()->customFields()->list();
 ```
 
 `POST` `/admin/custom_fields`
 ```
-$azuraCastApiClient->customField(int $customFieldId);
+$api->admin()->customFields()->get(int $customFieldId);
 ```
 
 `GET` `/admin/custom_fields/{id}`
 ```
-$azuraCastApiClient->createCustomField(string $name, string $shortName);
+$api->admin()->customFields()->create(string $name, string $shortName);
 ```
 
 `PUT` `/admin/custom_fields/{id}`
 ```
-$azuraCastApiClient->updateCustomField(int $customFieldId, string $name, string $shortName);
+$api->admin()->customFields()->update(int $customFieldId, string $name, string $shortName);
 ```
 
 `DELETE` `/admin/custom_fields/{id}`
 ```
-$azuraCastApiClient->deleteCustomField(int $customFieldId);
+$api->admin()->customFields()->delete(int $customFieldId);
 ```
 
 ### Administration: Users
 `GET` `/admin/users`
 ```
-$azuraCastApiClient->users();
+$api->admin()->users()->list();
+```
+
+`GET` `/admin/user/{id}`
+```
+$api->admin()->users()->get(int $userId);
 ```
 
 `POST` `/admin/users`
 ```
-$azuraCastApiClient->createUser(
+$api->admin()->users()->create(
 	string $email,
 	string $authPassword,
 	string $name,
@@ -199,14 +197,10 @@ $azuraCastApiClient->createUser(
 );
 ```
 
-`GET` `/admin/user/{id}`
-```
-$azuraCastApiClient->user(int $userId);
-```
 
 `PUT` `/admin/user/{id}`
 ```
-$azuraCastApiClient->updateUser(
+$api->admin()->users()->update(
 	int $userId,
 	string $email,
 	string $authPassword,
@@ -221,37 +215,37 @@ $azuraCastApiClient->updateUser(
 
 `DELETE` `/admin/user/{id}`
 ```
-$azuraCastApiClient->deleteUser(int $userId);
+$api->admin()->users()->delete(int $userId);
 ```
 
 ### Administration: Roles
 `GET` `/admin/permissions`
 ```
-$azuraCastApiClient->permissions();
+$api->admin()->permissions();
 ```
 
 `GET` `/admin/roles`
 ```
-$azuraCastApiClient->roles();
+$api->admin()->roles()->list();
+```
+
+`GET` `/admin/role/{id}`
+```
+$api->admin()->roles()->get(int $roleId);
 ```
 
 `POST` `/admin/roles`
 ```
-$azuraCastApiClient->createRole(
+$api->admin()->roles()->create(
 	string $name,
 	string[] $permissionsGlobal,
 	string[] $permissionsStation
 );
 ```
 
-`GET` `/admin/role/{id}`
-```
-$azuraCastApiClient->role(int $roleId);
-```
-
 `PUT` `/admin/role/{id}`
 ```
-$azuraCastApiClient->updateRole(
+$api->admin()->roles()->update(
 	int $roleId
 	string $name
 	string[] $permissionsGlobal
@@ -261,18 +255,18 @@ $azuraCastApiClient->updateRole(
 
 `DELETE` `/admin/role/{id}`
 ```
-$azuraCastApiClient->deleteRole(int $roleId);
+$api->admin()->roles()->delete(int $roleId);
 ```
 
 ### Administration: Settings
 `GET` `/admin/settings`
 ```
-$azuraCastApiClient->settings();
+$api->admin()->settings()->list();
 ```
 
 `PUT` `/admin/settings`
 ```
-$azuraCastApiClient->updateSettings(
+$api->admin()->settings()->update(
 	string $baseUrl,
 	string $instanceName,
 	string $timezone,

@@ -18,31 +18,6 @@ abstract class AbstractClient
     }
 
     /**
-     * @param string $host
-     * @param string|null $apiKey
-     * @return static
-     */
-    public static function create(
-        string $host,
-        ?string $apiKey = null
-    ): self {
-        $options = [
-            'base_uri' => $host . '/api/',
-            'allow_redirects' => true,
-            'http_errors' => false
-        ];
-
-        if ($apiKey !== null) {
-            $options['headers'] = [
-                'Authorization' => 'Bearer ' . $apiKey
-            ];
-        }
-
-        $httpClient = new Client($options);
-        return new static($httpClient);
-    }
-
-    /**
      * @param string $method
      * @param string $uri
      * @param array $options
