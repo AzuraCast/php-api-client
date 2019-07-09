@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AzuraCast\AzuraCastApiClient;
+namespace AzuraCast\Api;
 
-use AzuraCast\AzuraCastApiClient\Dto\UploadFileDto;
+use AzuraCast\Api\Dto\UploadFileDto;
 use Dotenv\Dotenv;
 use PHPUnit\Framework\TestCase;
 
@@ -713,10 +713,10 @@ class AzuraCastApiClientTest extends TestCase {
 	}
 
 	/**
-	 * @return AzuraCastApiClient
+	 * @return Client
 	 */
-	private function createApiClient(): AzuraCastApiClient {
-		return new AzuraCastApiClient($this->getHost(), $this->getApiKey());
+	private function createApiClient(): Client {
+		return new Client($this->getHost(), $this->getApiKey());
 	}
 
 	/**

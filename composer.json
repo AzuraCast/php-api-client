@@ -13,6 +13,9 @@
     ],
     "require": {
         "php": ">=7.2.0",
+        "ext-json": "*",
+        "ext-gd": "*",
+
         "guzzlehttp/guzzle": "^6.3"
     },
     "autoload": {
