@@ -32,15 +32,24 @@ class MountDto
     protected $format;
 
     /**
-     * @param array $mountData
+     * @param string $name
+     * @param bool $isDefault
+     * @param string $url
+     * @param int $bitrate
+     * @param string $format
      */
-    public function __construct(array $mountData)
-    {
-        $this->setName($mountData['name'])
-            ->setIsDefault($mountData['is_default'])
-            ->setUrl($mountData['url'])
-            ->setBitrate($mountData['bitrate'])
-            ->setFormat($mountData['format']);
+    public function __construct(
+        string $name,
+        bool $isDefault,
+        string $url,
+        int $bitrate,
+        string $format
+    ) {
+        $this->setName($name)
+            ->setIsDefault($isDefault)
+            ->setUrl($url)
+            ->setBitrate($bitrate)
+            ->setFormat($format);
     }
 
     /**
@@ -141,5 +150,21 @@ class MountDto
         $this->format = $format;
 
         return $this;
+    }
+
+    /**
+     * @param array $mountData
+     *
+     * @return MountDto
+     */
+    public static function fromArray(array $mountData): self
+    {
+        return new self(
+            $mountData['name'],
+            $mountData['is_default'],
+            $mountData['url'],
+            $mountData['bitrate'],
+            $mountData['format']
+        );
     }
 }

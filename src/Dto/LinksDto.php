@@ -14,11 +14,11 @@ class LinksDto implements JsonSerializable
     protected $self;
 
     /**
-     * @param array $linksData
+     * @param string $self
      */
-    public function __construct(array $linksData)
+    public function __construct(string $self)
     {
-        $this->setSelf($linksData['self']);
+        $this->setSelf($self);
     }
 
     /**
@@ -49,5 +49,15 @@ class LinksDto implements JsonSerializable
         return [
             'self' => $this->getSelf()
         ];
+    }
+
+    /**
+     * @param array $linksData
+     *
+     * @return LinksDto
+     */
+    public static function fromArray(array $linksData): self
+    {
+        return new self($linksData['self']);
     }
 }

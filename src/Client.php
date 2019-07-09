@@ -20,7 +20,7 @@ class Client extends AbstractClient
 
         $nowPlayingDtoArray = [];
         foreach ($response as $nowPlayingData) {
-            $nowPlayingDtoArray[] = new Dto\NowPlayingDto($nowPlayingData);
+            $nowPlayingDtoArray[] = Dto\NowPlayingDto::fromArray($nowPlayingData);
         }
         return $nowPlayingDtoArray;
     }
@@ -36,7 +36,7 @@ class Client extends AbstractClient
             $stationId
         ));
 
-        return new Dto\NowPlayingDto($nowPlayingData);
+        return Dto\NowPlayingDto::fromArray($nowPlayingData);
     }
 
     /**
@@ -446,7 +446,7 @@ class Client extends AbstractClient
         $users = [];
 
         foreach ($usersData as $userData) {
-            $users[] = $userDtoTransformer->arrayToDto($userData);
+            $users[] = $userDtoTransformer->fromArray($userData);
         }
 
         return $users;
@@ -483,7 +483,7 @@ class Client extends AbstractClient
 
         $userDtoTransformer = new UserDtoTransformer();
 
-        return $userDtoTransformer->arrayToDto($userData);
+        return $userDtoTransformer->fromArray($userData);
     }
 
     /**
@@ -544,7 +544,7 @@ class Client extends AbstractClient
 
         $userDtoTransformer = new UserDtoTransformer();
 
-        return $userDtoTransformer->arrayToDto($userData);
+        return $userDtoTransformer->fromArray($userData);
     }
 
     /**
@@ -663,7 +663,7 @@ class Client extends AbstractClient
 
         $permissionsDtoTransformer = new PermissionsDtoTransformer();
 
-        return $permissionsDtoTransformer->arrayToDto($permissionsData);
+        return $permissionsDtoTransformer->fromArray($permissionsData);
     }
 
     /**
@@ -694,7 +694,7 @@ class Client extends AbstractClient
         $roles = [];
 
         foreach ($rolesData as $roleData) {
-            $roles[] = $roleDtoTransformer->arrayToDto($roleData);
+            $roles[] = $roleDtoTransformer->fromArray($roleData);
         }
 
         return $roles;
@@ -735,7 +735,7 @@ class Client extends AbstractClient
 
         $roleDtoTransformer = new RoleDtoTransformer();
 
-        return $roleDtoTransformer->arrayToDto($roleData);
+        return $roleDtoTransformer->fromArray($roleData);
     }
 
     /**
@@ -769,7 +769,7 @@ class Client extends AbstractClient
 
         $roleDtoTransformer = new RoleDtoTransformer();
 
-        return $roleDtoTransformer->arrayToDto($roleData);
+        return $roleDtoTransformer->fromArray($roleData);
     }
 
     /**
@@ -864,7 +864,7 @@ class Client extends AbstractClient
 
         $settingsDtoTransformer = new SettingsDtoTransformer();
 
-        return $settingsDtoTransformer->arrayToDto($settingsData);
+        return $settingsDtoTransformer->fromArray($settingsData);
     }
 
     /**
@@ -986,7 +986,7 @@ class Client extends AbstractClient
         $streamers = [];
 
         foreach ($streamersData as $streamerData) {
-            $streamers[] = $streamerDtoTransformer->arrayToDto($streamerData);
+            $streamers[] = $streamerDtoTransformer->fromArray($streamerData);
         }
 
         return $streamers;
@@ -1045,7 +1045,7 @@ class Client extends AbstractClient
 
         $streamerDtoTransformer = new StreamerDtoTransformer();
 
-        return $streamerDtoTransformer->arrayToDto($streamerData);
+        return $streamerDtoTransformer->fromArray($streamerData);
     }
 
     /**
@@ -1082,7 +1082,7 @@ class Client extends AbstractClient
 
         $streamerDtoTransformer = new StreamerDtoTransformer();
 
-        return $streamerDtoTransformer->arrayToDto($streamerData);
+        return $streamerDtoTransformer->fromArray($streamerData);
     }
 
     /**

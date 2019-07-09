@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AzuraCast\Api\Dto;
@@ -46,18 +47,33 @@ class SongDto
     protected $customFields;
 
     /**
-     * @param array $songData
+     * @param string $id
+     * @param string $text
+     * @param string $artist
+     * @param string $title
+     * @param string $album
+     * @param string $lyrics
+     * @param string $art
+     * @param array $customFields
      */
-    public function __construct(array $songData)
-    {
-        $this->setId($songData['id'])
-            ->setText($songData['text'])
-            ->setArtist($songData['artist'])
-            ->setTitle($songData['title'])
-            ->setAlbum($songData['album'])
-            ->setLyrics($songData['lyrics'])
-            ->setArt($songData['art'])
-            ->setCustomFields($songData['custom_fields']);
+    public function __construct(
+        string $id,
+        string $text,
+        string $artist,
+        string $title,
+        string $album,
+        string $lyrics,
+        string $art,
+        array $customFields
+    ) {
+        $this->setId($id)
+            ->setText($text)
+            ->setArtist($artist)
+            ->setTitle($title)
+            ->setAlbum($album)
+            ->setLyrics($lyrics)
+            ->setArt($art)
+            ->setCustomFields($customFields);
     }
 
     /**
@@ -218,5 +234,24 @@ class SongDto
         $this->customFields = $customFields;
 
         return $this;
+    }
+
+    /**
+     * @param array $songData
+     *
+     * @return SongDto
+     */
+    public static function fromArray(array $songData): self
+    {
+        return new self(
+            $songData['id'],
+            $songData['text'],
+            $songData['artist'],
+            $songData['title'],
+            $songData['album'],
+            $songData['lyrics'],
+            $songData['art'],
+            $songData['custom_fields']
+        );
     }
 }

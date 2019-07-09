@@ -104,39 +104,65 @@ class MediaFileDto implements JsonSerializable
     protected $customFields;
 
     /**
-     * @param array $mediaFileData
+     * @param int $id
+     * @param string $songId
+     * @param string $title
+     * @param string $artist
+     * @param string $album
+     * @param string $lyrics
+     * @param string $isrc
+     * @param int $length
+     * @param string $lengthText
+     * @param string $path
+     * @param int $mtime
+     * @param float $fadeOverlap
+     * @param float $fadeIn
+     * @param float $fadeOut
+     * @param float $cueIn
+     * @param float $cueOut
+     * @param MediaFilePlaylistDto[] $playlists
+     * @param string $uniqueId
+     * @param MediaFileCustomFieldDto[] $customFields
      */
-    public function __construct(array $mediaFileData)
-    {
-        $playlists = [];
-        $customFields = [];
-
-        foreach ($mediaFileData['playlists'] as $playlistData) {
-            $playlists[] = new MediaFilePlaylistDto($playlistData);
-        }
-
-        foreach ($mediaFileData['custom_fields'] as $id => $value) {
-            $customFields[] = new MediaFileCustomFieldDto((int)$id, $value);
-        }
-
-        $this->setId($mediaFileData['id'])
-            ->setSongId($mediaFileData['song_id'])
-            ->setTitle($mediaFileData['title'] ?? '')
-            ->setArtist($mediaFileData['artist'] ?? '')
-            ->setAlbum($mediaFileData['album'] ?? '')
-            ->setLyrics($mediaFileData['lyrics'] ?? '')
-            ->setIsrc($mediaFileData['isrc'] ?? '')
-            ->setLength($mediaFileData['length'] ?? 0)
-            ->setLengthText($mediaFileData['length_text'] ?? '')
-            ->setPath($mediaFileData['path'])
-            ->setMtime($mediaFileData['mtime'])
-            ->setFadeOverlap($mediaFileData['fade_overlap'] ?? 0.0)
-            ->setFadeIn($mediaFileData['fade_in'] ?? 0.0)
-            ->setFadeOut($mediaFileData['fade_out'] ?? 0.0)
-            ->setCueIn($mediaFileData['cue_in'] ?? 0.0)
-            ->setCueOut($mediaFileData['cue_out'] ?? 0.0)
+    public function __construct(
+        int $id,
+        string $songId,
+        string $title,
+        string $artist,
+        string $album,
+        string $lyrics,
+        string $isrc,
+        int $length,
+        string $lengthText,
+        string $path,
+        int $mtime,
+        float $fadeOverlap,
+        float $fadeIn,
+        float $fadeOut,
+        float $cueIn,
+        float $cueOut,
+        array $playlists,
+        string $uniqueId,
+        array $customFields
+    ) {
+        $this->setId($id)
+            ->setSongId($songId)
+            ->setTitle($title)
+            ->setArtist($artist)
+            ->setAlbum($album)
+            ->setLyrics($lyrics)
+            ->setIsrc($isrc)
+            ->setLength($length)
+            ->setLengthText($lengthText)
+            ->setPath($path)
+            ->setMtime($mtime)
+            ->setFadeOverlap($fadeOverlap)
+            ->setFadeIn($fadeIn)
+            ->setFadeOut($fadeOut)
+            ->setCueIn($cueIn)
+            ->setCueOut($cueOut)
             ->setPlaylists($playlists)
-            ->setUniqueId($mediaFileData['unique_id'])
+            ->setUniqueId($uniqueId)
             ->setCustomFields($customFields);
     }
 
@@ -545,5 +571,45 @@ class MediaFileDto implements JsonSerializable
             'unique_id' => $this->getUniqueId(),
             'custom_fields' => $this->getCustomFields()
         ];
+    }
+
+    /**
+     * @param array $mediaFileData
+     *
+     * @return self
+     */
+    public static function fromArray(array $mediaFileData): self
+    {
+        $playlists = [];
+        foreach ($mediaFileData['playlists'] as $playlistData) {
+            $playlists[] = MediaFilePlaylistDto::fromArray($playlistData);
+        }
+
+        $customFields = [];
+        foreach ($mediaFileData['custom_fields'] as $id => $value) {
+            $customFields[] = new MediaFileCustomFieldDto((int)$id, $value);
+        }
+
+        return new MediaFileDto(
+            $mediaFileData['id'],
+            $mediaFileData['song_id'],
+            $mediaFileData['title'] ?? '',
+            $mediaFileData['artist'] ?? '',
+            $mediaFileData['album'] ?? '',
+            $mediaFileData['lyrics'] ?? '',
+            $mediaFileData['isrc'] ?? '',
+            $mediaFileData['length'] ?? 0,
+            $mediaFileData['length_text'] ?? '',
+            $mediaFileData['path'],
+            $mediaFileData['mtime'],
+            $mediaFileData['fade_overlap'] ?? 0.0,
+            $mediaFileData['fade_in'] ?? 0.0,
+            $mediaFileData['fade_out'] ?? 0.0,
+            $mediaFileData['cue_in'] ?? 0.0,
+            $mediaFileData['cue_out'] ?? 0.0,
+            $customFields,
+            $mediaFileData['unique_id'],
+            $playlists
+        );
     }
 }

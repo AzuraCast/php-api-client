@@ -37,17 +37,27 @@ class SongHistoryDto
     protected $song;
 
     /**
-     * @param array $songHistoryData
+     * @param int $id
+     * @param int $playedAt
+     * @param int $duration
+     * @param string $playlist
+     * @param bool $isRequest
+     * @param SongDto $song
      */
-    public function __construct(array $songHistoryData)
-    {
-        $this->setId($songHistoryData['sh_id'])
-            ->setPlayedAt($songHistoryData['played_at'])
-            ->setDuration($songHistoryData['duration'])
-            ->setPlaylist($songHistoryData['playlist'])
-            ->setIsRequest($songHistoryData['is_request'])
-            ->setSong(new SongDto($songHistoryData['song']));
-
+    public function __construct(
+        int $id,
+        int $playedAt,
+        int $duration,
+        string $playlist,
+        bool $isRequest,
+        SongDto $song
+    ) {
+        $this->setId($id)
+            ->setPlayedAt($playedAt)
+            ->setDuration($duration)
+            ->setPlaylist($playlist)
+            ->setIsRequest($isRequest)
+            ->setSong($song);
     }
 
     /**
@@ -168,5 +178,22 @@ class SongHistoryDto
         $this->song = $song;
 
         return $this;
+    }
+
+    /**
+     * @param array $songHistoryData
+     *
+     * @return SongHistoryDto
+     */
+    public static function fromArray(array $songHistoryData): self
+    {
+        return new self(
+            $songHistoryData['sh_id'],
+            $songHistoryData['played_at'],
+            $songHistoryData['duration'],
+            $songHistoryData['playlist'],
+            $songHistoryData['is_request'],
+            SongDto::fromArray($songHistoryData['song'])
+        );
     }
 }

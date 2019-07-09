@@ -18,13 +18,10 @@ class PermissionsDto implements JsonSerializable
      */
     protected $station;
 
-    /**
-     * @param array $permissionsData
-     */
-    public function __construct(array $permissionsData)
+    public function __construct(array $global, array $station)
     {
-        $this->setGlobal($permissionsData['global'])
-            ->setStation($permissionsData['station']);
+        $this->setGlobal($global)
+            ->setStation($station);
     }
 
     /**
@@ -87,5 +84,18 @@ class PermissionsDto implements JsonSerializable
             'global' => $this->getGlobal(),
             'station' => $this->getStation()
         ];
+    }
+
+    /**
+     * @param array $permissionsData
+     *
+     * @return PermissionsDto
+     */
+    public static function fromArray(array $permissionsData): self
+    {
+        return new self(
+            $permissionsData['global'],
+            $permissionsData['station']
+        );
     }
 }

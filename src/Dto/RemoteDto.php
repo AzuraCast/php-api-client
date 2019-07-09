@@ -22,13 +22,18 @@ class RemoteDto
     protected $format;
 
     /**
-     * @param array $remoteData
+     * @param string $url
+     * @param int $bitrate
+     * @param string $format
      */
-    public function __construct(array $remoteData)
-    {
-        $this->setUrl($remoteData['url'])
-            ->setBitrate($remoteData['bitrate'])
-            ->setFormat($remoteData['format']);
+    public function __construct(
+        string $url,
+        int $bitrate,
+        string $format
+    ) {
+        $this->setUrl($url)
+            ->setBitrate($bitrate)
+            ->setFormat($format);
     }
 
     /**
@@ -89,5 +94,19 @@ class RemoteDto
         $this->format = $format;
 
         return $this;
+    }
+
+    /**
+     * @param array $remoteData
+     *
+     * @return RemoteDto
+     */
+    public static function fromArray(array $remoteData): self
+    {
+        return new self(
+            $remoteData['url'],
+            $remoteData['bitrate'],
+            $remoteData['format']
+        );
     }
 }

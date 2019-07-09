@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AzuraCast\Api\Dto;
@@ -46,18 +47,33 @@ class CurrentSongDto
     protected $song;
 
     /**
-     * @param array $currentSongData
+     * @param int $elapsed
+     * @param int $remaining
+     * @param int $songHistoryId
+     * @param int $playedAt
+     * @param int $duration
+     * @param string $playlist
+     * @param bool $isRequest
+     * @param SongDto $song
      */
-    public function __construct(array $currentSongData = [])
-    {
-        $this->setElapsed($currentSongData['elapsed'])
-            ->setRemaining($currentSongData['remaining'])
-            ->setSongHistoryId($currentSongData['sh_id'])
-            ->setPlayedAt($currentSongData['played_at'])
-            ->setDuration($currentSongData['duration'])
-            ->setPlaylist($currentSongData['playlist'])
-            ->setIsRequest($currentSongData['is_request'])
-            ->setSong(new SongDto($currentSongData['song']));
+    public function __construct(
+        int $elapsed,
+        int $remaining,
+        int $songHistoryId,
+        int $playedAt,
+        int $duration,
+        string $playlist,
+        bool $isRequest,
+        SongDto $song
+    ) {
+        $this->setElapsed($elapsed)
+            ->setRemaining($remaining)
+            ->setSongHistoryId($songHistoryId)
+            ->setPlayedAt($playedAt)
+            ->setDuration($duration)
+            ->setPlaylist($playlist)
+            ->setIsRequest($isRequest)
+            ->setSong($song);
     }
 
     /**
@@ -71,9 +87,9 @@ class CurrentSongDto
     /**
      * @param int $elapsed
      *
-     * @return self
+     * @return CurrentSongDto
      */
-    public function setElapsed(int $elapsed): self
+    public function setElapsed(int $elapsed): CurrentSongDto
     {
         $this->elapsed = $elapsed;
 
@@ -91,9 +107,9 @@ class CurrentSongDto
     /**
      * @param int $remaining
      *
-     * @return self
+     * @return CurrentSongDto
      */
-    public function setRemaining(int $remaining): self
+    public function setRemaining(int $remaining): CurrentSongDto
     {
         $this->remaining = $remaining;
 
@@ -111,9 +127,9 @@ class CurrentSongDto
     /**
      * @param int $songHistoryId
      *
-     * @return self
+     * @return CurrentSongDto
      */
-    public function setSongHistoryId(int $songHistoryId): self
+    public function setSongHistoryId(int $songHistoryId): CurrentSongDto
     {
         $this->songHistoryId = $songHistoryId;
 
@@ -131,9 +147,9 @@ class CurrentSongDto
     /**
      * @param int $playedAt
      *
-     * @return self
+     * @return CurrentSongDto
      */
-    public function setPlayedAt(int $playedAt): self
+    public function setPlayedAt(int $playedAt): CurrentSongDto
     {
         $this->playedAt = $playedAt;
 
@@ -151,9 +167,9 @@ class CurrentSongDto
     /**
      * @param int $duration
      *
-     * @return self
+     * @return CurrentSongDto
      */
-    public function setDuration(int $duration): self
+    public function setDuration(int $duration): CurrentSongDto
     {
         $this->duration = $duration;
 
@@ -171,9 +187,9 @@ class CurrentSongDto
     /**
      * @param string $playlist
      *
-     * @return self
+     * @return CurrentSongDto
      */
-    public function setPlaylist(string $playlist): self
+    public function setPlaylist(string $playlist): CurrentSongDto
     {
         $this->playlist = $playlist;
 
@@ -191,9 +207,9 @@ class CurrentSongDto
     /**
      * @param bool $isRequest
      *
-     * @return self
+     * @return CurrentSongDto
      */
-    public function setIsRequest(bool $isRequest): self
+    public function setIsRequest(bool $isRequest): CurrentSongDto
     {
         $this->isRequest = $isRequest;
 
@@ -211,12 +227,30 @@ class CurrentSongDto
     /**
      * @param SongDto $song
      *
-     * @return self
+     * @return CurrentSongDto
      */
-    public function setSong(SongDto $song): self
+    public function setSong(SongDto $song): CurrentSongDto
     {
         $this->song = $song;
 
         return $this;
+    }
+
+    /**
+     * @param array $currentSongData
+     * @return CurrentSongDto
+     */
+    public static function fromArray(array $currentSongData): self
+    {
+        return new self(
+            $currentSongData['elapsed'],
+            $currentSongData['remaining'],
+            $currentSongData['sh_id'],
+            $currentSongData['played_at'],
+            $currentSongData['duration'],
+            $currentSongData['playlist'],
+            $currentSongData['is_request'],
+            SongDto::fromArray($currentSongData['song'])
+        );
     }
 }

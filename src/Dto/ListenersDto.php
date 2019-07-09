@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AzuraCast\Api\Dto;
@@ -21,13 +22,15 @@ class ListenersDto
     protected $total;
 
     /**
-     * @param array $listenersData
+     * @param int $current
+     * @param int $unique
+     * @param int $total
      */
-    public function __construct(array $listenersData)
+    public function __construct(int $current, int $unique, int $total)
     {
-        $this->setCurrent($listenersData['current'])
-            ->setUnique($listenersData['unique'])
-            ->setTotal($listenersData['total']);
+        $this->setCurrent($current)
+            ->setUnique($unique)
+            ->setTotal($total);
     }
 
     /**
@@ -88,5 +91,19 @@ class ListenersDto
         $this->total = $total;
 
         return $this;
+    }
+
+    /**
+     * @param array $listenersData
+     *
+     * @return ListenersDto
+     */
+    public static function fromArray(array $listenersData): self
+    {
+        return new self(
+            $listenersData['current'],
+            $listenersData['unique'],
+            $listenersData['total']
+        );
     }
 }

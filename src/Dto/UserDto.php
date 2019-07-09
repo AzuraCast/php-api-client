@@ -64,31 +64,40 @@ class UserDto implements JsonSerializable
     protected $links;
 
     /**
-     * @param array $userData
+     * @param int $id
+     * @param string $email
+     * @param string $name
+     * @param string $locale
+     * @param string $theme
+     * @param int $createdAt
+     * @param int $updatedAt
+     * @param array $roles
+     * @param array $apiKeys
+     * @param LinksDto $links
      */
-    public function __construct(array $userData)
-    {
-        $roles = [];
-        foreach ($userData['roles'] as $roleData) {
-            $roles[] = new RoleDto($roleData);
-        }
-
-        $apiKeys = [];
-        foreach ($userData['api_keys'] as $apiKeyData) {
-            $apiKeys[] = new ApiKeyDto($apiKeyData);
-        }
-
-        $this->setId($userData['id'])
-            ->setEmail($userData['email'])
+    public function __construct(
+        int $id,
+        string $email,
+        string $name,
+        string $locale,
+        string $theme,
+        int $createdAt,
+        int $updatedAt,
+        array $roles,
+        array $apiKeys,
+        LinksDto $links
+    ) {
+        $this->setId($id)
+            ->setEmail($email)
             ->setAuthPassword('')
-            ->setName($userData['name'] ?? '')
-            ->setLocale($userData['locale'] ?? '')
-            ->setTheme($userData['theme'] ?? '')
-            ->setCreatedAt($userData['created_at'])
-            ->setUpdatedAt($userData['updated_at'])
+            ->setName($name)
+            ->setLocale($locale)
+            ->setTheme($theme)
+            ->setCreatedAt($createdAt)
+            ->setUpdatedAt($updatedAt)
             ->setRoles($roles)
             ->setApiKeys($apiKeys)
-            ->setLinks(new LinksDto($userData['links']));
+            ->setLinks($links);
     }
 
     /**
@@ -361,5 +370,36 @@ class UserDto implements JsonSerializable
             'api_keys' => $this->getApiKeys(),
             'links' => $this->getLinks()
         ];
+    }
+
+    /**
+     * @param array $userData
+     *
+     * @return UserDto
+     */
+    public static function fromArray(array $userData): self
+    {
+        $roles = [];
+        foreach ($userData['roles'] as $roleData) {
+            $roles[] = RoleDto::fromArray($roleData);
+        }
+
+        $apiKeys = [];
+        foreach ($userData['api_keys'] as $apiKeyData) {
+            $apiKeys[] = ApiKeyDto::fromArray($apiKeyData);
+        }
+
+        return new self(
+            $userData['id'],
+            $userData['email'],
+            $userData['name'] ?? '',
+            $userData['locale'] ?? '',
+            $userData['theme'] ?? '',
+            $userData['created_at'],
+            $userData['updated_at'],
+            $roles,
+            $apiKeys,
+            LinksDto::fromArray($userData['links'])
+        );
     }
 }

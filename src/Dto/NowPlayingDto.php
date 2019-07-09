@@ -37,21 +37,27 @@ class NowPlayingDto
     protected $cache;
 
     /**
-     * @param array $nowPlayingData
+     * @param StationDto $station
+     * @param ListenersDto $listeners
+     * @param LiveDto $live
+     * @param CurrentSongDto $currentSong
+     * @param SongHistoryDto[] $songHistory
+     * @param string $cache
      */
-    public function __construct(array $nowPlayingData)
-    {
-        $songHistory = [];
-        foreach ($nowPlayingData['song_history'] as $songHistoryData) {
-            $songHistory[] = new SongHistoryDto($songHistoryData);
-        }
-
-        $this->setStation(new StationDto($nowPlayingData['station']))
-            ->setListeners(new ListenersDto($nowPlayingData['listeners']))
-            ->setLive(new LiveDto($nowPlayingData['live']))
-            ->setCurrentSong(new CurrentSongDto($nowPlayingData['now_playing']))
+    public function __construct(
+        StationDto $station,
+        ListenersDto $listeners,
+        LiveDto $live,
+        CurrentSongDto $currentSong,
+        array $songHistory,
+        string $cache
+    ) {
+        $this->setStation($station)
+            ->setListeners($listeners)
+            ->setLive($live)
+            ->setCurrentSong($currentSong)
             ->setSongHistory($songHistory)
-            ->setCache($nowPlayingData['cache']);
+            ->setCache($cache);
     }
 
     /**
@@ -172,5 +178,27 @@ class NowPlayingDto
         $this->cache = $cache;
 
         return $this;
+    }
+
+    /**
+     * @param array $nowPlayingData
+     *
+     * @return NowPlayingDto
+     */
+    public static function fromArray(array $nowPlayingData): self
+    {
+        $songHistory = [];
+        foreach ($nowPlayingData['song_history'] as $songHistoryData) {
+            $songHistory[] = SongHistoryDto::fromArray($songHistoryData);
+        }
+
+        return new NowPlayingDto(
+            StationDto::fromArray($nowPlayingData['station']),
+            ListenersDto::fromArray($nowPlayingData['listeners']),
+            LiveDto::fromArray($nowPlayingData['live']),
+            CurrentSongDto::fromArray($nowPlayingData['now_playing']),
+            $songHistory,
+            $nowPlayingData['cache']
+        );
     }
 }

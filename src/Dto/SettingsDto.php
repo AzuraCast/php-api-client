@@ -99,28 +99,63 @@ class SettingsDto implements JsonSerializable
     protected $customCssInternal;
 
     /**
-     * @param array $settingsData
+     * @param string $baseUrl
+     * @param string $instanceName
+     * @param string $timezone
+     * @param bool $preferBrowserUrl
+     * @param bool $useRadioProxy
+     * @param int $historyKeepDays
+     * @param bool $alwaysUseSsl
+     * @param string $apiAccessControl
+     * @param string $analytics
+     * @param bool $centralUpdatesChannel
+     * @param string $publicTheme
+     * @param bool $hideAlbumArt
+     * @param string $homepageRedirectUrl
+     * @param string $defaultAlbumArtUrl
+     * @param bool $hideProductName
+     * @param string $customCssPublic
+     * @param string $customJsPublic
+     * @param string $customCssInternal
      */
-    public function __construct(array $settingsData)
-    {
-        $this->setBaseUrl($settingsData['base_url'])
-            ->setInstanceName($settingsData['instance_name'])
-            ->setTimezone($settingsData['timezone'])
-            ->setPreferBrowserUrl((bool)$settingsData['prefer_browser_url'])
-            ->setUseRadioProxy((bool)$settingsData['use_radio_proxy'])
-            ->setHistoryKeepDays($settingsData['history_keep_days'])
-            ->setAlwaysUseSsl((bool)$settingsData['always_use_ssl'])
-            ->setApiAccessControl($settingsData['api_access_control'] ?? '')
-            ->setAnalytics($settingsData['analytics'])
-            ->setCentralUpdatesChannel((bool)$settingsData['central_updates_channel'])
-            ->setPublicTheme($settingsData['public_theme'])
-            ->setHideAlbumArt((bool)$settingsData['hide_album_art'])
-            ->setHomepageRedirectUrl($settingsData['homepage_redirect_url'] ?? '')
-            ->setDefaultAlbumArtUrl($settingsData['default_album_art_url'] ?? '')
-            ->setHideProductName((bool)$settingsData['hide_product_name'])
-            ->setCustomCssPublic($settingsData['custom_css_public'] ?? '')
-            ->setCustomJsPublic($settingsData['custom_js_public'] ?? '')
-            ->setCustomCssInternal($settingsData['custom_css_internal'] ?? '');
+    public function __construct(
+        string $baseUrl,
+        string $instanceName,
+        string $timezone,
+        bool $preferBrowserUrl,
+        bool $useRadioProxy,
+        int $historyKeepDays,
+        bool $alwaysUseSsl,
+        string $apiAccessControl,
+        string $analytics,
+        bool $centralUpdatesChannel,
+        string $publicTheme,
+        bool $hideAlbumArt,
+        string $homepageRedirectUrl,
+        string $defaultAlbumArtUrl,
+        bool $hideProductName,
+        string $customCssPublic,
+        string $customJsPublic,
+        string $customCssInternal
+    ) {
+        $this->setBaseUrl($baseUrl)
+            ->setInstanceName($instanceName)
+            ->setTimezone($timezone)
+            ->setPreferBrowserUrl($preferBrowserUrl)
+            ->setUseRadioProxy($useRadioProxy)
+            ->setHistoryKeepDays($historyKeepDays)
+            ->setAlwaysUseSsl($alwaysUseSsl)
+            ->setApiAccessControl($apiAccessControl)
+            ->setAnalytics($analytics)
+            ->setCentralUpdatesChannel($centralUpdatesChannel)
+            ->setPublicTheme($publicTheme)
+            ->setHideAlbumArt($hideAlbumArt)
+            ->setHomepageRedirectUrl($homepageRedirectUrl)
+            ->setDefaultAlbumArtUrl($defaultAlbumArtUrl)
+            ->setHideProductName($hideProductName)
+            ->setCustomCssPublic($customCssPublic)
+            ->setCustomJsPublic($customJsPublic)
+            ->setCustomCssInternal($customCssInternal);
     }
 
     /**
@@ -508,5 +543,34 @@ class SettingsDto implements JsonSerializable
             'custom_js_public' => $this->customJsPublic,
             'custom_css_internal' => $this->customCssInternal
         ];
+    }
+
+    /**
+     * @param array $settingsData
+     *
+     * @return SettingsDto
+     */
+    public static function fromArray(array $settingsData): self
+    {
+        return new self(
+            $settingsData['base_url'],
+            $settingsData['instance_name'],
+            $settingsData['timezone'],
+            (bool)$settingsData['prefer_browser_url'],
+            (bool)$settingsData['use_radio_proxy'],
+            $settingsData['history_keep_days'],
+            (bool)$settingsData['always_use_ssl'],
+            $settingsData['api_access_control'] ?? '',
+            $settingsData['analytics'],
+            (bool)$settingsData['central_updates_channel'],
+            $settingsData['public_theme'],
+            (bool)$settingsData['hide_album_art'],
+            $settingsData['homepage_redirect_url'] ?? '',
+            $settingsData['default_album_art_url'] ?? '',
+            (bool)$settingsData['hide_product_name'],
+            $settingsData['custom_css_public'] ?? '',
+            $settingsData['custom_js_public'] ?? '',
+            $settingsData['custom_css_internal'] ?? ''
+        );
     }
 }

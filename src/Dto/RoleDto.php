@@ -24,13 +24,15 @@ class RoleDto implements JsonSerializable
     protected $permissions;
 
     /**
-     * @param array $roleData
+     * @param int $id
+     * @param string $name
+     * @param PermissionsDto $permissions
      */
-    public function __construct(array $roleData)
+    public function __construct(int $id, string $name, PermissionsDto $permissions)
     {
-        $this->setId($roleData['id'])
-            ->setName($roleData['name'])
-            ->setPermissions(new PermissionsDto($roleData['permissions']));
+        $this->setId($id)
+            ->setName($name)
+            ->setPermissions($permissions);
     }
 
     /**
@@ -103,5 +105,19 @@ class RoleDto implements JsonSerializable
             'name' => $this->getName(),
             'permissions' => $this->getPermissions()
         ];
+    }
+
+    /**
+     * @param array $roleData
+     *
+     * @return RoleDto
+     */
+    public static function fromArray(array $roleData): self
+    {
+        return new self(
+            $roleData['id'],
+            $roleData['name'],
+            PermissionsDto::fromArray($roleData['permissions'])
+        );
     }
 }

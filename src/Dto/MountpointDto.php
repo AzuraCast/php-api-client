@@ -59,20 +59,39 @@ class MountpointDto implements JsonSerializable
     protected $links;
 
     /**
-     * @param array $mountpointData
+     * @param int $id
+     * @param string $name
+     * @param string $displayName
+     * @param bool $isVisibleOnPublicPages
+     * @param bool $isDefault
+     * @param bool $isPublic
+     * @param bool $enableAutodj
+     * @param string $autodjFormat
+     * @param int $autodjBitrate
+     * @param LinksDto $linksDto
      */
-    public function __construct(array $mountpointData)
-    {
-        $this->setId($mountpointData['id'])
-            ->setName($mountpointData['name'])
-            ->setDisplayName($mountpointData['display_name'])
-            ->setIsVisibleOnPublicPages($mountpointData['is_visible_on_public_pages'])
-            ->setIsDefault($mountpointData['is_default'])
-            ->setIsPublic($mountpointData['is_public'])
-            ->setEnableAutodj($mountpointData['enable_autodj'])
-            ->setAutodjFormat($mountpointData['autodj_format'])
-            ->setAutodjBitrate($mountpointData['autodj_bitrate'])
-            ->setLinks(new LinksDto($mountpointData['links']));
+    public function __construct(
+        int $id,
+        string $name,
+        string $displayName,
+        bool $isVisibleOnPublicPages,
+        bool $isDefault,
+        bool $isPublic,
+        bool $enableAutodj,
+        string $autodjFormat,
+        int $autodjBitrate,
+        LinksDto $linksDto
+    ) {
+        $this->setId($id)
+            ->setName($name)
+            ->setDisplayName($displayName)
+            ->setIsVisibleOnPublicPages($isVisibleOnPublicPages)
+            ->setIsDefault($isDefault)
+            ->setIsPublic($isPublic)
+            ->setEnableAutodj($enableAutodj)
+            ->setAutodjFormat($autodjFormat)
+            ->setAutodjBitrate($autodjBitrate)
+            ->setLinks($linksDto);
     }
 
     /**
@@ -292,5 +311,26 @@ class MountpointDto implements JsonSerializable
             'autodj_bitrate' => $this->getAutodjBitrate(),
             'links' => $this->getLinks()
         ];
+    }
+
+    /**
+     * @param array $mountpointData
+     *
+     * @return MountpointDto
+     */
+    public static function fromArray(array $mountpointData): self
+    {
+        return new self(
+            $mountpointData['id'],
+            $mountpointData['name'],
+            $mountpointData['display_name'],
+            $mountpointData['is_visible_on_public_pages'],
+            $mountpointData['is_default'],
+            $mountpointData['is_public'],
+            $mountpointData['enable_autodj'],
+            $mountpointData['autodj_format'],
+            $mountpointData['autodj_bitrate'],
+            LinksDto::fromArray($mountpointData['links'])
+        );
     }
 }

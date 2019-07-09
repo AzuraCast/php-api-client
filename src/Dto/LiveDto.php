@@ -17,12 +17,13 @@ class LiveDto
     protected $streamerName;
 
     /**
-     * @param array $liveData
+     * @param bool $isLive
+     * @param string $streamerName
      */
-    public function __construct(array $liveData)
+    public function __construct(bool $isLive, string $streamerName)
     {
-        $this->setIsLive($liveData['is_live'])
-            ->setStreamerName($liveData['streamer_name']);
+        $this->setIsLive($isLive)
+            ->setStreamerName($streamerName);
     }
 
     /**
@@ -63,5 +64,18 @@ class LiveDto
         $this->streamerName = $streamerName;
 
         return $this;
+    }
+
+    /**
+     * @param array $liveData
+     *
+     * @return LiveDto
+     */
+    public static function fromArray(array $liveData): self
+    {
+        return new self(
+            $liveData['is_live'],
+            $liveData['streamer_name']
+        );
     }
 }

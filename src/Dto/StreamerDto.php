@@ -44,17 +44,30 @@ class StreamerDto implements JsonSerializable
     protected $links;
 
     /**
-     * @param array $streamerData
+     * @param int $id
+     * @param string $username
+     * @param string $password
+     * @param string $displayName
+     * @param string $comments
+     * @param bool $isActive
+     * @param LinksDto $links
      */
-    public function __construct(array $streamerData)
-    {
-        $this->setId($streamerData['id'])
-            ->setUsername($streamerData['streamer_username'])
-            ->setPassword($streamerData['streamer_password'])
-            ->setDisplayName($streamerData['display_name'])
-            ->setComments($streamerData['comments'])
-            ->setIsActive($streamerData['is_active'])
-            ->setLinks(new LinksDto($streamerData['links']));
+    public function __construct(
+        int $id,
+        string $username,
+        string $password,
+        string $displayName,
+        string $comments,
+        bool $isActive,
+        LinksDto $links
+    ) {
+        $this->setId($id)
+            ->setUsername($username)
+            ->setPassword($password)
+            ->setDisplayName($displayName)
+            ->setComments($comments)
+            ->setIsActive($isActive)
+            ->setLinks($links);
     }
 
     /**
@@ -211,5 +224,23 @@ class StreamerDto implements JsonSerializable
             'is_active' => $this->getIsActive(),
             'links' => $this->getLinks()
         ];
+    }
+
+    /**
+     * @param array $streamerData
+     *
+     * @return StreamerDto
+     */
+    public static function fromArray(array $streamerData): self
+    {
+        return new self(
+            $streamerData['id'],
+            $streamerData['streamer_username'],
+            $streamerData['streamer_password'],
+            $streamerData['display_name'],
+            $streamerData['comments'],
+            $streamerData['is_active'],
+            LinksDto::fromArray($streamerData['links'])
+        );
     }
 }

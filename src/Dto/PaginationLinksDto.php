@@ -27,14 +27,17 @@ class PaginationLinksDto
     protected $last;
 
     /**
-     * @param array $paginationLinksData
+     * @param string $first
+     * @param string $previous
+     * @param string $next
+     * @param string $last
      */
-    public function __construct(array $paginationLinksData)
+    public function __construct(string $first, string $previous, string $next, string $last)
     {
-        $this->setFirst($paginationLinksData['first'])
-            ->setPrevious($paginationLinksData['previous'])
-            ->setNext($paginationLinksData['next'])
-            ->setLast($paginationLinksData['last']);
+        $this->setFirst($first)
+            ->setPrevious($previous)
+            ->setNext($next)
+            ->setLast($last);
     }
 
     /**
@@ -115,5 +118,20 @@ class PaginationLinksDto
         $this->last = $last;
 
         return $this;
+    }
+
+    /**
+     * @param array $paginationLinksData
+     *
+     * @return PaginationLinksDto
+     */
+    public static function fromArray(array $paginationLinksData): self
+    {
+        return new self(
+            $paginationLinksData['first'],
+            $paginationLinksData['previous'],
+            $paginationLinksData['next'],
+            $paginationLinksData['last']
+        );
     }
 }

@@ -19,12 +19,13 @@ class ApiKeyDto implements JsonSerializable
     protected $comment;
 
     /**
-     * @param array $apiKeyData
+     * @param string $id
+     * @param string $comment
      */
-    public function __construct(array $apiKeyData = [])
+    public function __construct(string $id, string $comment)
     {
-        $this->setId($apiKeyData['id']);
-        $this->setComment($apiKeyData['comment']);
+        $this->setId($id)
+            ->setComment($comment);
     }
 
     /**
@@ -76,5 +77,17 @@ class ApiKeyDto implements JsonSerializable
             'id' => $this->getId(),
             'comment' => $this->getComment()
         ];
+    }
+
+    /**
+     * @param array $apiKeyData
+     * @return ApiKeyDto
+     */
+    public static function fromArray(array $apiKeyData): self
+    {
+        return new self(
+            $apiKeyData['id'],
+            $apiKeyData['comment']
+        );
     }
 }

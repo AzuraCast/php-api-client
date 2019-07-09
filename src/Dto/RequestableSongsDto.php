@@ -37,20 +37,26 @@ class RequestableSongsDto
     protected $requestableSongs;
 
     /**
-     * @param array $requestableSongsData
+     * @param int $page
+     * @param int $songsPerPage
+     * @param int $songsTotal
+     * @param int $pagesTotal
+     * @param PaginationLinksDto $paginationLinks
+     * @param RequestableSongDto[] $requestableSongs
      */
-    public function __construct(array $requestableSongsData)
-    {
-        $requestableSongs = [];
-        foreach ($requestableSongsData['rows'] as $requestableSongData) {
-            $requestableSongs[] = new RequestableSongDto($requestableSongData);
-        }
-
-        $this->setPage($requestableSongsData['page'])
-            ->setSongsPerPage($requestableSongsData['per_page'])
-            ->setSongsTotal($requestableSongsData['total'])
-            ->setPagesTotal($requestableSongsData['total_pages'])
-            ->setPaginationLinks(new PaginationLinksDto($requestableSongsData['links']))
+    public function __construct(
+        int $page,
+        int $songsPerPage,
+        int $songsTotal,
+        int $pagesTotal,
+        PaginationLinksDto $paginationLinks,
+        array $requestableSongs
+    ) {
+        $this->setPage($page)
+            ->setSongsPerPage($songsPerPage)
+            ->setSongsTotal($songsTotal)
+            ->setPagesTotal($pagesTotal)
+            ->setPaginationLinks($paginationLinks)
             ->setRequestableSongs($requestableSongs);
     }
 
@@ -172,5 +178,27 @@ class RequestableSongsDto
         $this->requestableSongs = $requestableSongs;
 
         return $this;
+    }
+
+    /**
+     * @param array $requestableSongsData
+     *
+     * @return RequestableSongsDto
+     */
+    public static function fromArray(array $requestableSongsData): self
+    {
+        $requestableSongs = [];
+        foreach ($requestableSongsData['rows'] as $requestableSongData) {
+            $requestableSongs[] = RequestableSongDto::fromArray($requestableSongData);
+        }
+
+        return new self(
+            $requestableSongsData['page'],
+            $requestableSongsData['per_page'],
+            $requestableSongsData['total'],
+            $requestableSongsData['total_pages'],
+            PaginationLinksDto::fromArray($requestableSongsData['links']),
+            $requestableSongs
+        );
     }
 }

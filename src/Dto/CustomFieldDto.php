@@ -24,13 +24,15 @@ class CustomFieldDto implements JsonSerializable
     protected $shortName;
 
     /**
-     * @param array $customFieldData
+     * @param int $id
+     * @param string $name
+     * @param string $shortName
      */
-    public function __construct(array $customFieldData)
+    public function __construct(int $id, string $name, string $shortName)
     {
-        $this->setId((int)$customFieldData['id'])
-            ->setName($customFieldData['name'])
-            ->setShortName($customFieldData['short_name']);
+        $this->setId($id)
+            ->setName($name)
+            ->setShortName($shortName);
     }
 
     /**
@@ -103,5 +105,18 @@ class CustomFieldDto implements JsonSerializable
             'name' => $this->getName(),
             'short_name' => $this->getShortName()
         ];
+    }
+
+    /**
+     * @param array $customFieldData
+     * @return CustomFieldDto
+     */
+    public static function fromArray(array $customFieldData): self
+    {
+        return new self(
+            (int)$customFieldData['id'],
+            $customFieldData['name'],
+            $customFieldData['short_name']
+        );
     }
 }

@@ -22,13 +22,15 @@ class RequestableSongDto
     protected $song;
 
     /**
-     * @param array $requestableSongData
+     * @param string $requestableSongId
+     * @param string $requestUrl
+     * @param SongDto $song
      */
-    public function __construct(array $requestableSongData)
+    public function __construct(string $requestableSongId, string $requestUrl, SongDto $song)
     {
-        $this->setRequestableSongId($requestableSongData['request_id'])
-            ->setRequestUrl($requestableSongData['request_url'])
-            ->setSong(new SongDto($requestableSongData['song']));
+        $this->setRequestableSongId($requestableSongId)
+            ->setRequestUrl($requestUrl)
+            ->setSong($song);
     }
 
     /**
@@ -89,5 +91,19 @@ class RequestableSongDto
         $this->song = $song;
 
         return $this;
+    }
+
+    /**
+     * @param array $requestableSongData
+     *
+     * @return RequestableSongDto
+     */
+    public static function fromArray(array $requestableSongData): self
+    {
+        return new self(
+            $requestableSongData['request_id'],
+            $requestableSongData['request_url'],
+            SongDto::fromArray($requestableSongData['song'])
+        );
     }
 }

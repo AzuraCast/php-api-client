@@ -24,13 +24,15 @@ class MediaFilePlaylistDto implements JsonSerializable
     protected $weight;
 
     /**
-     * @param array $mediaFilePlaylistData
+     * @param int $id
+     * @param string $name
+     * @param int $weight
      */
-    public function __construct(array $mediaFilePlaylistData)
+    public function __construct(int $id, string $name, int $weight)
     {
-        $this->setId($mediaFilePlaylistData['id'])
-            ->setName($mediaFilePlaylistData['name'])
-            ->setWeight($mediaFilePlaylistData['weight']);
+        $this->setId($id)
+            ->setName($name)
+            ->setWeight($weight);
     }
 
     /**
@@ -103,5 +105,19 @@ class MediaFilePlaylistDto implements JsonSerializable
             'name' => $this->getName(),
             'weight' => $this->getWeight()
         ];
+    }
+
+    /**
+     * @param array $mediaFilePlaylistData
+     *
+     * @return MediaFilePlaylistDto
+     */
+    public static function fromArray(array $mediaFilePlaylistData): self
+    {
+        return new self(
+            $mediaFilePlaylistData['id'],
+            $mediaFilePlaylistData['name'],
+            $mediaFilePlaylistData['weight']
+        );
     }
 }

@@ -37,16 +37,27 @@ class ListenerDto
     protected $location;
 
     /**
-     * @param array $listenerData
+     * @param string $ipAddress
+     * @param string $userAgent
+     * @param bool $isMobile
+     * @param int $connectedAt
+     * @param int $connectionDuration
+     * @param LocationDto $location
      */
-    public function __construct(array $listenerData)
-    {
-        $this->setIpAddress($listenerData['ip'])
-            ->setUserAgent($listenerData['user_agent'])
-            ->setIsMobile($listenerData['is_mobile'])
-            ->setConnectedAt($listenerData['connected_on'])
-            ->setConnectionDuration($listenerData['connected_time'])
-            ->setLocation(new LocationDto($listenerData['location']));
+    public function __construct(
+        string $ipAddress,
+        string $userAgent,
+        bool $isMobile,
+        int $connectedAt,
+        int $connectionDuration,
+        LocationDto $location
+    ) {
+        $this->setIpAddress($ipAddress)
+            ->setUserAgent($userAgent)
+            ->setIsMobile($isMobile)
+            ->setConnectedAt($connectedAt)
+            ->setConnectionDuration($connectionDuration)
+            ->setLocation($location);
     }
 
     /**
@@ -167,5 +178,22 @@ class ListenerDto
         $this->location = $location;
 
         return $this;
+    }
+
+    /**
+     * @param array $listenerData
+     *
+     * @return ListenerDto
+     */
+    public static function fromArray(array $listenerData): self
+    {
+        return new self(
+            $listenerData['ip'],
+            $listenerData['user_agent'],
+            $listenerData['is_mobile'],
+            $listenerData['connected_on'],
+            $listenerData['connected_time'],
+            LocationDto::fromArray($listenerData['location'])
+        );
     }
 }

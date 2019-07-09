@@ -57,28 +57,37 @@ class StationDto
     protected $remotes;
 
     /**
-     * @param array $stationData
+     * @param int $id
+     * @param string $name
+     * @param string $shortcode
+     * @param string $description
+     * @param string $frontend
+     * @param string $backend
+     * @param string $listenUrl
+     * @param bool $isPublic
+     * @param MountDto[] $mounts
+     * @param RemoteDto[] $remotes
      */
-    public function __construct(array $stationData)
-    {
-        $mounts = [];
-        foreach ($stationData['mounts'] as $mountData) {
-            $mounts[] = new MountDto($mountData);
-        }
-
-        $remotes = [];
-        foreach ($stationData['remotes'] as $remoteData) {
-            $remotes[] = new RemoteDto($remoteData);
-        }
-
-        $this->setId($stationData['id'])
-            ->setName($stationData['name'])
-            ->setShortcode($stationData['shortcode'])
-            ->setDescription($stationData['description'])
-            ->setFrontend($stationData['frontend'])
-            ->setBackend($stationData['backend'])
-            ->setListenUrl($stationData['listen_url'])
-            ->setIsPublic($stationData['is_public'])
+    public function __construct(
+        int $id,
+        string $name,
+        string $shortcode,
+        string $description,
+        string $frontend,
+        string $backend,
+        string $listenUrl,
+        bool $isPublic,
+        array $mounts,
+        array $remotes
+    ) {
+        $this->setId($id)
+            ->setName($name)
+            ->setShortcode($shortcode)
+            ->setDescription($description)
+            ->setFrontend($frontend)
+            ->setBackend($backend)
+            ->setListenUrl($listenUrl)
+            ->setIsPublic($isPublic)
             ->setMounts($mounts)
             ->setRemotes($remotes);
     }
@@ -281,5 +290,36 @@ class StationDto
         $this->remotes = $remotes;
 
         return $this;
+    }
+
+    /**
+     * @param array $stationData
+     *
+     * @return StationDto
+     */
+    public static function fromArray(array $stationData): self
+    {
+        $mounts = [];
+        foreach ($stationData['mounts'] as $mountData) {
+            $mounts[] = MountDto::fromArray($mountData);
+        }
+
+        $remotes = [];
+        foreach ($stationData['remotes'] as $remoteData) {
+            $remotes[] = RemoteDto::fromArray($remoteData);
+        }
+
+        return new self(
+            $stationData['id'],
+            $stationData['name'],
+            $stationData['shortcode'],
+            $stationData['description'],
+            $stationData['frontend'],
+            $stationData['backend'],
+            $stationData['listen_url'],
+            $stationData['is_public'],
+            $mounts,
+            $remotes
+        );
     }
 }

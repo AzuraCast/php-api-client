@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AzuraCast\Api\Dto;
@@ -46,18 +47,33 @@ class LocationDto
     protected $message;
 
     /**
-     * @param array $locationData
+     * @param string $status
+     * @param string $latitude
+     * @param string $longitude
+     * @param string $timezone
+     * @param string $region
+     * @param string $country
+     * @param string $city
+     * @param string $message
      */
-    public function __construct(array $locationData)
-    {
-        $this->setStatus($locationData['status'])
-            ->setLatitude((string)$locationData['lat'])
-            ->setLongitude((string)$locationData['lon'])
-            ->setTimezone($locationData['timezone'])
-            ->setRegion($locationData['region'])
-            ->setCountry($locationData['country'])
-            ->setCity($locationData['city'])
-            ->setMessage($locationData['message']);
+    public function __construct(
+        string $status,
+        string $latitude,
+        string $longitude,
+        string $timezone,
+        string $region,
+        string $country,
+        string $city,
+        string $message
+    ) {
+        $this->setStatus($status)
+            ->setLatitude($latitude)
+            ->setLongitude($longitude)
+            ->setTimezone($timezone)
+            ->setRegion($region)
+            ->setCountry($country)
+            ->setCity($city)
+            ->setMessage($message);
     }
 
     /**
@@ -218,5 +234,24 @@ class LocationDto
         $this->message = $message;
 
         return $this;
+    }
+
+    /**
+     * @param array $locationData
+     *
+     * @return LocationDto
+     */
+    public static function fromArray(array $locationData): self
+    {
+        return new self(
+            $locationData['status'],
+            (string)$locationData['lat'],
+            (string)$locationData['lon'],
+            $locationData['timezone'],
+            $locationData['region'],
+            $locationData['country'],
+            $locationData['city'],
+            $locationData['message']
+        );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AzuraCast\Api\Dto;
@@ -16,12 +17,13 @@ class StationStatusDto
     protected $frontendRunning;
 
     /**
-     * @param array $stationStatusData
+     * @param bool $backendRunning
+     * @param bool $frontendRunning
      */
-    public function __construct(array $stationStatusData)
+    public function __construct(bool $backendRunning, bool $frontendRunning)
     {
-        $this->setBackendRunning($stationStatusData['backend_running'])
-            ->setFrontendRunning($stationStatusData['frontend_running']);
+        $this->setBackendRunning($backendRunning)
+            ->setFrontendRunning($frontendRunning);
     }
 
     /**
@@ -62,5 +64,18 @@ class StationStatusDto
         $this->frontendRunning = $frontendRunning;
 
         return $this;
+    }
+
+    /**
+     * @param array $stationStatusData
+     *
+     * @return StationStatusDto
+     */
+    public static function fromArray(array $stationStatusData): self
+    {
+        return new self(
+            $stationStatusData['backend_running'],
+            $stationStatusData['frontend_running']
+        );
     }
 }
