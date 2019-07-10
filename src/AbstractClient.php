@@ -15,7 +15,25 @@ abstract class AbstractClient
 
     public function __construct(Client $httpClient)
     {
+        $this->setHttpClient($httpClient);
+    }
+
+    /**
+     * @return Client
+     */
+    public function getHttpClient(): Client
+    {
+        return $this->httpClient;
+    }
+
+    /**
+     * @param Client $httpClient
+     * @return AbstractClient
+     */
+    public function setHttpClient(Client $httpClient): AbstractClient
+    {
         $this->httpClient = $httpClient;
+        return $this;
     }
 
     /**

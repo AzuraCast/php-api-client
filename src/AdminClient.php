@@ -33,6 +33,14 @@ class AdminClient extends AbstractClient
     }
 
     /**
+     * @return Admin\RelaysClient
+     */
+    public function relays(): Admin\RelaysClient
+    {
+        return new Admin\RelaysClient($this->httpClient);
+    }
+
+    /**
      * @return Admin\RolesClient
      */
     public function roles(): Admin\RolesClient
