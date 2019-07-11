@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AzuraCast\Api;
 
 use AzuraCast\Api\Dto;
+use GuzzleHttp\Psr7\Uri;
 
 class Client extends AbstractClient
 {
@@ -52,22 +53,33 @@ class Client extends AbstractClient
     /**
      * @param string $host
      * @param string|null $apiKey
-     * @return self
+     * @param \GuzzleHttp\Client|null $existingClient An existing HTTP client to pull configuration from.
+     * @return Client
      */
     public static function create(
         string $host,
-        ?string $apiKey = null
+        ?string $apiKey = null,
+        ?\GuzzleHttp\Client $existingClient = null
     ): self {
-        $options = [
-            'base_uri' => $host . '/api/',
-            'allow_redirects' => true,
-            'http_errors' => false
-        ];
+        if ($existingClient instanceof \GuzzleHttp\Client) {
+            $options = $existingClient->getConfig();
+        } else {
+            $options = [];
+        }
 
-        if ($apiKey !== null) {
-            $options['headers'] = [
-                'Authorization' => 'Bearer ' . $apiKey
-            ];
+        $baseUri = new Uri($host);
+        if (empty($baseUri->getScheme())) {
+            $baseUri = $baseUri->withScheme('http');
+        }
+        $baseUri = $baseUri->withPath('/api/');
+
+        $options['base_uri'] = (string)$baseUri;
+
+        $options['allow_redirects'] = true;
+        $options['http_errors'] = false;
+
+        if (null !== $apiKey) {
+            $options['headers']['Authorization'] = 'Bearer ' . $apiKey;
         }
 
         $httpClient = new \GuzzleHttp\Client($options);
