@@ -11,6 +11,11 @@ class MountDto
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $path;
+
+    /**
      * @var bool
      */
     protected $isDefault;
@@ -31,24 +36,22 @@ class MountDto
     protected $format;
 
     /**
+     * MountDto constructor.
      * @param string $name
+     * @param string $path
      * @param bool $isDefault
      * @param string $url
      * @param int $bitrate
      * @param string $format
      */
-    public function __construct(
-        string $name,
-        bool $isDefault,
-        string $url,
-        int $bitrate,
-        string $format
-    ) {
-        $this->setName($name)
-            ->setIsDefault($isDefault)
-            ->setUrl($url)
-            ->setBitrate($bitrate)
-            ->setFormat($format);
+    public function __construct(string $name, string $path, bool $isDefault, string $url, int $bitrate, string $format)
+    {
+        $this->name = $name;
+        $this->path = $path;
+        $this->isDefault = $isDefault;
+        $this->url = $url;
+        $this->bitrate = $bitrate;
+        $this->format = $format;
     }
 
     /**
@@ -61,33 +64,47 @@ class MountDto
 
     /**
      * @param string $name
-     *
      * @return MountDto
      */
     public function setName(string $name): MountDto
     {
         $this->name = $name;
+        return $this;
+    }
 
+    /**
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param string $path
+     * @return MountDto
+     */
+    public function setPath(string $path): MountDto
+    {
+        $this->path = $path;
         return $this;
     }
 
     /**
      * @return bool
      */
-    public function getIsDefault(): bool
+    public function isDefault(): bool
     {
         return $this->isDefault;
     }
 
     /**
      * @param bool $isDefault
-     *
      * @return MountDto
      */
     public function setIsDefault(bool $isDefault): MountDto
     {
         $this->isDefault = $isDefault;
-
         return $this;
     }
 
@@ -101,13 +118,11 @@ class MountDto
 
     /**
      * @param string $url
-     *
      * @return MountDto
      */
     public function setUrl(string $url): MountDto
     {
         $this->url = $url;
-
         return $this;
     }
 
@@ -121,13 +136,11 @@ class MountDto
 
     /**
      * @param int $bitrate
-     *
      * @return MountDto
      */
     public function setBitrate(int $bitrate): MountDto
     {
         $this->bitrate = $bitrate;
-
         return $this;
     }
 
@@ -141,13 +154,11 @@ class MountDto
 
     /**
      * @param string $format
-     *
      * @return MountDto
      */
     public function setFormat(string $format): MountDto
     {
         $this->format = $format;
-
         return $this;
     }
 
@@ -160,6 +171,7 @@ class MountDto
     {
         return new self(
             $mountData['name'],
+            $mountData['path'],
             $mountData['is_default'],
             $mountData['url'],
             $mountData['bitrate'],
