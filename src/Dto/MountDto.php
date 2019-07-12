@@ -11,7 +11,7 @@ class MountDto
     protected $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $path;
 
@@ -38,13 +38,13 @@ class MountDto
     /**
      * MountDto constructor.
      * @param string $name
-     * @param string $path
+     * @param string|null $path
      * @param bool $isDefault
      * @param string $url
      * @param int $bitrate
      * @param string $format
      */
-    public function __construct(string $name, string $path, bool $isDefault, string $url, int $bitrate, string $format)
+    public function __construct(string $name, ?string $path, bool $isDefault, string $url, int $bitrate, string $format)
     {
         $this->name = $name;
         $this->path = $path;
@@ -73,18 +73,18 @@ class MountDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }
 
     /**
-     * @param string $path
+     * @param string|null $path
      * @return MountDto
      */
-    public function setPath(string $path): MountDto
+    public function setPath(?string $path): MountDto
     {
         $this->path = $path;
         return $this;
