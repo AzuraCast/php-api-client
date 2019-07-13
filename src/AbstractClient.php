@@ -42,13 +42,13 @@ abstract class AbstractClient
      * @param string $uri
      * @param array $options
      *
-     * @return array
+     * @return mixed
      */
     public function request(
         string $method = 'GET',
         string $uri = '',
         array $options = []
-    ): array {
+    ) {
         $response = $this->httpClient->request($method, $uri, $options);
 
         if (403 === $response->getStatusCode()) {
