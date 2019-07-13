@@ -28,6 +28,7 @@ abstract class AbstractClient
 
     /**
      * @param Client $httpClient
+     *
      * @return AbstractClient
      */
     public function setHttpClient(Client $httpClient): AbstractClient
@@ -40,10 +41,8 @@ abstract class AbstractClient
      * @param string $method
      * @param string $uri
      * @param array $options
+     *
      * @return array
-     * @throws Exception\AccessDeniedException
-     * @throws Exception\ClientRequestException
-     * @throws GuzzleException
      */
     public function request(
         string $method = 'GET',

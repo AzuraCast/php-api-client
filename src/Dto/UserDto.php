@@ -182,14 +182,6 @@ class UserDto implements JsonSerializable
     /**
      * @return string
      */
-    public function getTimezone(): string
-    {
-        return $this->timezone;
-    }
-
-    /**
-     * @return string
-     */
     public function getLocale(): string
     {
         return $this->locale;

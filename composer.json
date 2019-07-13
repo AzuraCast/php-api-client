@@ -9,6 +9,10 @@
         {
             "name": "Vaalyn",
             "email": "vaalyndev@gmail.com"
+        },
+        {
+            "name": "Buster 'Silver Eagle' Neece",
+            "email": "buster@busterneece.com"
         }
     ],
     "require": {
@@ -18,13 +22,27 @@
 
         "guzzlehttp/guzzle": "^6.3"
     },
+    "require-dev": {
+        "overtrue/phplint": "^1.1",
+        "phpstan/phpstan": "^0.11.1",
+        "phpstan/phpstan-strict-rules": "^0.11.0",
+        "phpunit/phpunit": "^7.5",
+        "roave/security-advisories": "dev-master"
+    },
     "autoload": {
         "psr-4": {
             "AzuraCast\\Api\\": "src"
         }
     },
-    "require-dev": {
-        "phpunit/phpunit": "^7.5",
-        "vlucas/phpdotenv": "^3.3"
+    "scripts": {
+        "test": [
+            "@composer install",
+            "@phplint",
+            "@phpstan",
+            "@phpunit"
+        ],
+        "phplint": "phplint",
+        "phpstan": "phpstan analyze",
+        "phpunit": "phpunit tests/AzuraCastApiClient/AzuraCastApiClientTest.php"
     }
 }

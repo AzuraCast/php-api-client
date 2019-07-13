@@ -94,7 +94,7 @@ class RequestableSongsDto
      */
     public function setSongsPerPage(int $songPerPage): RequestableSongsDto
     {
-        $this->songPerPage = $songPerPage;
+        $this->songsPerPage = $songPerPage;
 
         return $this;
     }

@@ -6,6 +6,10 @@ services:
     volumes:
       - ./:/app
       - composer_data:/tmp
+    environment:
+      AZURACAST_HOST: "${AZURACAST_HOST:-https://demo.azuracast.com/}"
+      AZURACAST_API_KEY: "${AZURACAST_API_KEY:-}"
+      AZURACAST_STATION_ID: "${AZURACAST_STATION_ID:-1}"
     command: composer test
 
 volumes:

@@ -155,4 +155,12 @@ class StationClient extends AbstractStationClient
         }
         return $mountpoints;
     }
+
+    /**
+     * @return Station\StreamersClient
+     */
+    public function streamers(): Station\StreamersClient
+    {
+        return new Station\StreamersClient($this->httpClient, $this->stationId);
+    }
 }
