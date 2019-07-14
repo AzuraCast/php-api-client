@@ -18,7 +18,7 @@ install:
 - rm docker-compose.yml
 - cp docker-compose.testing.yml docker-compose.override.yml
 - curl -L https://raw.githubusercontent.com/AzuraCast/AzuraCast/master/docker-compose.sample.yml > docker-compose.yml
-- docker-compose run --rm --user="azuracast" web azuracast_install --load-fixtures
+- docker-compose run -e APPLICATION_ENV=production --rm --user="azuracast" web azuracast_install --load-fixtures
 script:
 - docker-compose run --rm cli composer test
 notifications:
