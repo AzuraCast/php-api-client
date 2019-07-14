@@ -1,8 +1,16 @@
 This PHP library provides an API client for the [AzuraCast](https://github.com/AzuraCast/AzuraCast) JSON API.
 
+# Installation
+
+It is highly recommended to use the [Composer]() package manager to install this client by running this command:
+
+```bash
+composer require azuracast/php-api-client
+```
+
 # Usage
 
-```
+```php
 <?php
 
 require __DIR__ . '/vendor/autoload.php';
