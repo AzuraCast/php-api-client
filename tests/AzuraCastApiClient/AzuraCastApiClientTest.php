@@ -405,10 +405,10 @@ class AzuraCastApiClientTest extends TestCase
         // CREATE
         $faker = Faker::create();
 
-        $name = $faker->name;
-        $comments = $faker->words(5);
         $username = $faker->userName;
         $password = $faker->password;
+        $name = $faker->name;
+        $comments = $faker->words(5, true);
         
         $streamerDto = $streamersApi->create(
             $username,
