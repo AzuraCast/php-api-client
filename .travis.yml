@@ -1,11 +1,7 @@
 git:
   depth: 1
 env:
-  global:
-  - DOCKER_COMPOSE_VERSION: 1.19.0
-  - secure: l7VjS+0KS29TdBigwTOpwsjIDED0kjfjtXsk3qAyaAxIMa8RH2q9UcQgLlcb7oQ9C3tSZNgieesuVbXUg2fNYskvQkMQ/55n50H6o+UNEmIc6ehqPubYoADrGMOwySMuxarGuWdQubWw+hjp9izQsM8CoFBZY4Aig6tY+C+Ci8S3xpwDDxMKzZBDcjb2jHWGZbItfXBR5dkbp9edqiLAfkxqTa5blJ5c4SO6bXXLzSHy9hck2TfzBAk3vZuVEx7ydal5+Tu4w4Lk7MmyeAJC0TljpWWQx78yjwTBDokLa6NQr0efmw5VQgX9INP3KAmWL3+pEUa4lDOfnt78enuqybAN/jLlBzW8oMh+lrQaHD2l3DQBFklts6xgfzY/Ur8T2eWwpbVWyd3b4efgiUWue2Bpxp/CopcCoWkSLoMf5bDjAd119JTHrflpqYTFAL8QB48iZKHlaLLmZg0nez2VGAVR6iQJhV6c74jVe6AWVCuWCauPXQY1qyiJKjc6JqFqwbw9vSiD5kR98v9yNBi9/qobai4zB0vWkts720zCoYjBIm3zw/xvyt+Dti21OPosmIS3rlM/dDDVhlaV3UwQJOCg3g1QXMHzKRV06ajwL80tidDb8Ox0NubEn2lSB9KKDga1lBD5SndAWnC/iAfBppxIqA2nh3OJGt+ITEibGGs=
-  - secure: pT7pJrcWUbFrYi3y8CBm3kTVIV2Px5K54jzcwslxWavqzIc1/WIv79ZlHQzehNSujEuk+xPzSJjkpDA1IESD2GOH0OMa2CxN0REDlKYYDwZowqKKzucPEktT1OBX85AudnP5rAw50fiFUGJtIs2UcN+cq27RyC2XxZPyG+9z4Q6e0WpY3m0Jsu+YIIVeHBnGO2n0RGvISDyaaYRTtRTG322K0YR0e3T2k/2lhvlFp1xJL6RHJIXN539qc/C2+3FWqVewBKtNuouJJ9tKk1wfudMd2n7WtMuficp8Ti5y3/5uKPFW4sSghPj/dHU3gNZRw3sbksYsE5ixVISy8ZDl2cANC4Ahax5IgywksuPNKPyK9oc+8MJn1IVNzaDh5ZoGlt+He9Yud+32flWH5enJXSZb9AixrBXYaMGz7/WOo/+WKsf/COX5+XiCH4o9jMctVM6uGS3OD/c/2itRwubGbqfRnE4lCFg1Pdgsw/nqw9lDx2JuSEP+xiU3/StNy45mdL8eloFIZR7PTYGmPBzWoqARfVqmuOlqacqtzCKjY3rE1+EIPvat8vWvT9fBy1kXde+uTxGm69ButbtNhmdOpRnfwzrxKG9ZjYVJHbGYQyTcgt49ZHVb4qIaVQ69bbiaUJ18AobT/nXdUdRVl/evrdksI4/rvQLuhug9WuxDQ0c=
-  - secure: QZ4yd2Mt8qVKGr1DzpREdCucc/YWHELqsfqGg9YZNOzGy7sDONFl9kGfTj27OqTdEz5TX82owx5dumATxJaRR3TioGHGik60WPkM3vD/yjmkVpQsmWCUup4tMuvIroLhXu40/6h2RLNjXPYcLJrGxi9GYz8dw5WTbV/1+5Zs3bUZbJw9zdAGM2hnnySeGKx+x5zwlr2ErcJ4bfMhE2c8vkrl6lqWfr5pfWQ0xrI46C/cIE4RGI/H0Nxovg3FIWO3KEiE+ZKFDZkDGEksdolZ6f4oULwLvOML8Q499kfojv+C02u6j9r0t/tUUqB165npvw3o6vJydsr7TXHcOJp+pftdtGoI+JM27Ia2bFwqG0yKW81fz4s9Tao0rwFrgw+v46TYFulOyuoekBFUFjo7c7HlnPJwkEUiVm/0e5VCTwpS5M1xEQwNFtsSLez/pmgDwxzjqBPv9mZglhUNhInOEkCNskIYIgEQ00CqQgoEq0tFnoLUjCruvDlIZpbCvDCawy40yClvgpjrJ/fWOQMS7z8QhX64CmlLN1H7Bly8LMYR3+nq/m0k11FfMHXX7P+wiSqoSNT+iqsOpNn+S6QWZiJeAOnVSmsH5INzXlu4HM/6I+NxbtjwcMAGdPoq5v3kil35ctaa3UcciZ+WPxEVZ4epzVwDuGODtPUEMSWWyHU=
+  DOCKER_COMPOSE_VERSION: 1.19.0
 sudo: required
 dist: trusty
 services:
@@ -18,6 +14,11 @@ before_install:
   -s`-`uname -m` > docker-compose
 - chmod +x docker-compose
 - sudo mv docker-compose /usr/local/bin
+install:
+- rm docker-compose.yml
+- cp docker-compose.testing.yml docker-compose.override.yml
+- curl -L https://raw.githubusercontent.com/AzuraCast/AzuraCast/master/docker-compose.sample.yml > docker-compose.yml
+- docker-compose run --rm --user="azuracast" web azuracast_install --load-fixtures
 script:
 - docker-compose run --rm cli composer test
 notifications:
