@@ -13,9 +13,11 @@ class RequestsClient extends AbstractStationClient
 {
     /**
      * @param int $page
+     * @param int $perPage
+     *
      * @return Dto\RequestableSongsDto
      */
-    public function list(int $page = 1): Dto\RequestableSongsDto
+    public function list(int $page = 1, int $perPage = -1): Dto\RequestableSongsDto
     {
         $requestableSongsData = $this->request('GET', sprintf(
             'station/%s/requests?per_page=50&page=%s',
@@ -24,39 +26,6 @@ class RequestsClient extends AbstractStationClient
         ));
 
         return Dto\RequestableSongsDto::fromArray($requestableSongsData);
-    }
-
-    /**
-     * @return Dto\RequestableSongsDto[]
-     */
-    public function all(): array
-    {
-        $requestableSongsDto = $this->list(1);
-
-        $requests = function() use ($requestableSongsDto) {
-            for ($page = 1; $page <= $requestableSongsDto->getPagesTotal(); $page++) {
-                $uri = sprintf('station/%s/requests?per_page=50&page=%s', $this->stationId, $page);
-                yield new Request('GET', $uri);
-            }
-        };
-
-        $requestableSongs = [];
-        $pool = new Pool($this->httpClient, $requests, [
-            'concurrency' => 5,
-            'fulfilled' => function ($response, $index) use (&$requestableSongs) {
-                if ($response->getStatusCode() !== 200) {
-                    return;
-                }
-
-                $requestableSongsData = json_decode($response->getBody()->getContents(), true);
-                $requestableSongs[] = Dto\RequestableSongsDto::fromArray($requestableSongsData);
-            }
-        ]);
-
-        $promise = $pool->promise();
-        $promise->wait();
-
-        return $requestableSongs;
     }
 
     /**

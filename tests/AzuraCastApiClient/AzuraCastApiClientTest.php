@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AzuraCast\Api;
 
 use AzuraCast\Api\Dto\UploadFileDto;
+use AzuraCast\Api\Exception\ClientRequestException;
 use PHPUnit\Framework\TestCase;
 
 class AzuraCastApiClientTest extends TestCase
@@ -95,18 +96,6 @@ class AzuraCastApiClientTest extends TestCase
     /**
      * @return void
      */
-    public function testAllRequestableSongsSuccessful(): void
-    {
-        $api = $this->createApiClient();
-
-        $allRequestableSongs = $api->station($this->getStationId())->requests()->all();
-
-        $this->assertNotCount(0, $allRequestableSongs);
-    }
-
-    /**
-     * @return void
-     */
     public function testMediaAlbumArtSuccessful(): void
     {
         $api = $this->createApiClient();
@@ -161,9 +150,16 @@ class AzuraCastApiClientTest extends TestCase
 
         $requestableSongs = $requestsApi->list();
 
-        $requestsApi->submit(
-            $requestableSongs->getRequestableSongs()[0]->getRequestableSongId()
-        );
+        try {
+            $requestsApi->submit(
+                $requestableSongs->getRequestableSongs()[0]->getRequestableSongId()
+            );
+        } catch(ClientRequestException $e) {
+            // Ignore the "already requested" error.
+            if (false === stripos($e->getMessage(), 'already requested')) {
+                throw $e;
+            }
+        }
 
         $this->assertTrue(true);
     }
@@ -275,8 +271,6 @@ class AzuraCastApiClientTest extends TestCase
         $name = $this->uniqid();
         $locale = 'en_US';
         $theme = 'dark';
-        $roles = [];
-        $apiKeys = [];
 
         $userDto = $usersApi->create(
             $email,
@@ -284,8 +278,8 @@ class AzuraCastApiClientTest extends TestCase
             $name,
             $locale,
             $theme,
-            $roles,
-            $apiKeys
+            [],
+            []
         );
 
         $this->assertSame($email, $userDto->getEmail());
@@ -307,18 +301,16 @@ class AzuraCastApiClientTest extends TestCase
         $name = $this->uniqid();
         $locale = 'de_DE';
         $theme = 'dark';
-        $roles = [];
-        $apiKeys = [];
 
         $userUpdated = $usersApi->update(
             $userDto->getId(),
-            $userDto->getEmail(),
+            $email,
             $authPassword,
-            $userDto->getName(),
-            $userDto->getLocale(),
-            $userDto->getTheme(),
-            $userDto->getRoles(),
-            $userDto->getApiKeys()
+            $name,
+            $locale,
+            $theme,
+            [],
+            []
         );
 
         $this->assertSame($userUpdated->getEmail(), $email);

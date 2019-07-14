@@ -44,8 +44,7 @@ $api->station($stationId)->get();
 ### Stations: Song Requests
 `GET` `/station/{station_id}/requests`
 ```
-$api->station($stationId)->requests()->list($page = 1);
-$api->station($stationId)->requests()->all();
+$api->station($stationId)->requests()->list();
 ```
 
 `POST` `/station/{station_id}/request/{request_id}`
