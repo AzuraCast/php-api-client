@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace AzuraCast\Api;
 
+use Faker\Factory as Faker;
 use AzuraCast\Api\Dto\UploadFileDto;
 use AzuraCast\Api\Exception\ClientRequestException;
 use PHPUnit\Framework\TestCase;
@@ -198,8 +199,10 @@ class AzuraCastApiClientTest extends TestCase
         $api = $this->createApiClient();
         $customFieldsApi = $api->admin()->customFields();
 
-        $name = $this->uniqid();
-        $shortName = $this->uniqid();
+        $faker = Faker::create();
+
+        $name = $faker->word;
+        $shortName = strtolower(str_replace(' ', '_', $name));
 
         // CREATE
         $customFieldDto = $customFieldsApi->create(
@@ -218,8 +221,8 @@ class AzuraCastApiClientTest extends TestCase
         $this->assertNotCount(0, $customFields);
 
         // UPDATE
-        $name = $this->uniqid();
-        $shortName = $this->uniqid();
+        $name = $faker->word;
+        $shortName = strtolower(str_replace(' ', '_', $name));
 
         $customFieldDto = $customFieldsApi->update(
             $customFields[0]->getId(),
@@ -244,9 +247,11 @@ class AzuraCastApiClientTest extends TestCase
         $usersApi = $api->admin()->users();
 
         // CREATE
-        $email = $this->uniqid() . '@example.com';
-        $authPassword = $this->uniqid();
-        $name = $this->uniqid();
+        $faker = Faker::create();
+
+        $email = $faker->email;
+        $authPassword = $faker->password;
+        $name = $faker->name;
         $locale = 'en_US';
         $theme = 'dark';
 
@@ -274,9 +279,9 @@ class AzuraCastApiClientTest extends TestCase
         $this->assertNotCount(0, $users);
 
         // UPDATE
-        $email = $this->uniqid() . '@example.com';
-        $authPassword = $this->uniqid();
-        $name = $this->uniqid();
+        $email = $faker->email;
+        $authPassword = $faker->password;
+        $name = $faker->name;
         $locale = 'de_DE';
         $theme = 'dark';
 
@@ -319,7 +324,9 @@ class AzuraCastApiClientTest extends TestCase
         $rolesApi = $api->admin()->roles();
 
         // CREATE
-        $roleName = $this->uniqid();
+        $faker = Faker::create();
+
+        $roleName = $faker->jobTitle;
 
         $roleDto = $rolesApi->create(
             $roleName,
@@ -337,7 +344,7 @@ class AzuraCastApiClientTest extends TestCase
         $this->assertNotCount(0, $roles);
 
         // UPDATE
-        $roleName = $this->uniqid();
+        $roleName = $faker->jobTitle;
 
         $roleUpdated = $rolesApi->update(
             $roleDto->getId(),
@@ -396,14 +403,18 @@ class AzuraCastApiClientTest extends TestCase
         $streamersApi = $api->station($this->getStationId())->streamers();
 
         // CREATE
-        $username = $this->uniqid();
-        $password = $this->uniqid();
+        $faker = Faker::create();
+
+        $name = $faker->name;
+        $comments = $faker->words(5);
+        $username = $faker->userName;
+        $password = $faker->password;
         
         $streamerDto = $streamersApi->create(
             $username,
             $password,
-            $this->uniqid(),
-            $this->uniqid(),
+            $name,
+            $comments,
             true
         );
         $this->assertSame($streamerDto->getUsername(), $username);
@@ -419,8 +430,8 @@ class AzuraCastApiClientTest extends TestCase
         $this->assertNotCount(0, $streamers);
         
         // UPDATE
-        $username = $this->uniqid();
-        $password = $this->uniqid();
+        $username = $faker->userName;
+        $password = $faker->password;
 
         $streamerUpdate = $streamersApi->update(
             $streamerDto->getId(),
@@ -481,13 +492,5 @@ class AzuraCastApiClientTest extends TestCase
     private function getStationId(): int
     {
         return (int)getenv('AZURACAST_STATION_ID') ?? 1;
-    }
-
-    /**
-     * @return string
-     */
-    private function uniqid(): string
-    {
-        return uniqid('', false);
     }
 }
