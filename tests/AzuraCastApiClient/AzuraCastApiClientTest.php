@@ -96,48 +96,26 @@ class AzuraCastApiClientTest extends TestCase
     /**
      * @return void
      */
-    public function testMediaAlbumArtSuccessful(): void
-    {
-        $api = $this->createApiClient();
-        $mediaApi = $api->station($this->getStationId())->media();
-
-        $mediaFiles = $mediaApi->list();
-
-        $albumArtResource = $mediaApi->art(
-            $mediaFiles[0]->getUniqueId()
-        );
-
-        $this->assertTrue(is_resource($albumArtResource));
-    }
-
-    /**
-     * @return void
-     */
-    public function testMediaFilesSuccessful(): void
-    {
-        $api = $this->createApiClient();
-        $mediaApi = $api->station($this->getStationId())->media();
-
-        $mediaFiles = $mediaApi->list();
-
-        $this->assertNotCount(0, $mediaFiles);
-    }
-
-    /**
-     * @return void
-     */
     public function testUploadMediaFileSuccessful(): void
     {
         $api = $this->createApiClient();
+        $mediaApi = $api->station($this->getStationId())->media();
 
         $uploadFileDto = new UploadFileDto(
             'test.mp3',
             file_get_contents(__DIR__ . '/../resources/test.mp3')
         );
 
-        $api->station($this->getStationId())->media()->upload($uploadFileDto);
+        $mediaDto = $mediaApi->upload($uploadFileDto);
 
-        $this->assertTrue(true);
+        $mediaFiles = $mediaApi->list();
+        $this->assertNotCount(0, $mediaFiles);
+
+        $albumArtResource = $mediaApi->art(
+            $mediaDto->getUniqueId()
+        );
+
+        $this->assertTrue(is_resource($albumArtResource));
     }
 
     /**
