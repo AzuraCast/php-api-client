@@ -12,6 +12,9 @@ services:
       - composer_data:/tmp
     env_file: azuracast.env
     command: /bin/true
+  web:
+    volumes:
+      - ./tests/resources/:/var/azuracast/init_music
 
 volumes:
   composer_data: {}
