@@ -20,8 +20,9 @@ class RequestsClient extends AbstractStationClient
     public function list(int $page = 1, int $perPage = -1): Dto\RequestableSongsDto
     {
         $requestableSongsData = $this->request('GET', sprintf(
-            'station/%s/requests?per_page=50&page=%s',
+            'station/%s/requests?per_page=%d&page=%d',
             $this->stationId,
+            $perPage,
             $page
         ));
 
