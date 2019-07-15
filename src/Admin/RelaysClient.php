@@ -23,4 +23,15 @@ class RelaysClient extends AbstractClient
 
         return $return;
     }
+
+    /**
+     * @param Dto\AdminRelayUpdateDto $dto
+     */
+    public function update(Dto\AdminRelayUpdateDto $dto): void
+    {
+        $this->request('POST', 'admin/relays', [
+            'json' => $dto,
+        ]);
+    }
+
 }
