@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AzuraCast\Api\Dto;
 
-class AdminRelaysDto
+class AdminRelayDto
 {
     /**
      * @var int
@@ -48,7 +48,12 @@ class AdminRelaysDto
     /**
      * @var string|null
      */
-    protected $password;
+    protected $relayPassword;
+
+    /**
+     * @var string|null
+     */
+    protected $adminPassword;
 
     /**
      * @var MountDto[]
@@ -56,7 +61,7 @@ class AdminRelaysDto
     protected $mounts;
 
     /**
-     * AdminRelaysDto constructor.
+     * AdminRelayDto constructor.
      * @param int $id
      * @param string $name
      * @param string|null $description
@@ -65,7 +70,8 @@ class AdminRelaysDto
      * @param string $shortcode
      * @param string $type
      * @param int|null $port
-     * @param string|null $password
+     * @param string|null $relayPassword
+     * @param string|null $adminPassword
      * @param MountDto[] $mounts
      */
     public function __construct(
@@ -77,7 +83,8 @@ class AdminRelaysDto
         string $shortcode,
         string $type,
         ?int $port,
-        ?string $password,
+        ?string $relayPassword,
+        ?string $adminPassword,
         array $mounts
     ) {
         $this->id = $id;
@@ -88,7 +95,8 @@ class AdminRelaysDto
         $this->shortcode = $shortcode;
         $this->type = $type;
         $this->port = $port;
-        $this->password = $password;
+        $this->relayPassword = $relayPassword;
+        $this->adminPassword = $adminPassword;
         $this->mounts = $mounts;
     }
 
@@ -102,9 +110,9 @@ class AdminRelaysDto
 
     /**
      * @param int $id
-     * @return AdminRelaysDto
+     * @return AdminRelayDto
      */
-    public function setId(int $id): AdminRelaysDto
+    public function setId(int $id): AdminRelayDto
     {
         $this->id = $id;
         return $this;
@@ -120,9 +128,9 @@ class AdminRelaysDto
 
     /**
      * @param string $name
-     * @return AdminRelaysDto
+     * @return AdminRelayDto
      */
-    public function setName(string $name): AdminRelaysDto
+    public function setName(string $name): AdminRelayDto
     {
         $this->name = $name;
         return $this;
@@ -138,9 +146,9 @@ class AdminRelaysDto
 
     /**
      * @param string|null $description
-     * @return AdminRelaysDto
+     * @return AdminRelayDto
      */
-    public function setDescription(?string $description): AdminRelaysDto
+    public function setDescription(?string $description): AdminRelayDto
     {
         $this->description = $description;
         return $this;
@@ -156,9 +164,9 @@ class AdminRelaysDto
 
     /**
      * @param string|null $url
-     * @return AdminRelaysDto
+     * @return AdminRelayDto
      */
-    public function setUrl(?string $url): AdminRelaysDto
+    public function setUrl(?string $url): AdminRelayDto
     {
         $this->url = $url;
         return $this;
@@ -174,9 +182,9 @@ class AdminRelaysDto
 
     /**
      * @param string|null $genre
-     * @return AdminRelaysDto
+     * @return AdminRelayDto
      */
-    public function setGenre(?string $genre): AdminRelaysDto
+    public function setGenre(?string $genre): AdminRelayDto
     {
         $this->genre = $genre;
         return $this;
@@ -192,9 +200,9 @@ class AdminRelaysDto
 
     /**
      * @param string $shortcode
-     * @return AdminRelaysDto
+     * @return AdminRelayDto
      */
-    public function setShortcode(string $shortcode): AdminRelaysDto
+    public function setShortcode(string $shortcode): AdminRelayDto
     {
         $this->shortcode = $shortcode;
         return $this;
@@ -210,9 +218,9 @@ class AdminRelaysDto
 
     /**
      * @param string $type
-     * @return AdminRelaysDto
+     * @return AdminRelayDto
      */
-    public function setType(string $type): AdminRelaysDto
+    public function setType(string $type): AdminRelayDto
     {
         $this->type = $type;
         return $this;
@@ -228,9 +236,9 @@ class AdminRelaysDto
 
     /**
      * @param int|null $port
-     * @return AdminRelaysDto
+     * @return AdminRelayDto
      */
-    public function setPort(?int $port): AdminRelaysDto
+    public function setPort(?int $port): AdminRelayDto
     {
         $this->port = $port;
         return $this;
@@ -239,18 +247,36 @@ class AdminRelaysDto
     /**
      * @return string|null
      */
-    public function getPassword(): ?string
+    public function getRelayPassword(): ?string
     {
-        return $this->password;
+        return $this->relayPassword;
     }
 
     /**
-     * @param string|null $password
-     * @return AdminRelaysDto
+     * @param string|null $relayPassword
+     * @return AdminRelayDto
      */
-    public function setPassword(?string $password): AdminRelaysDto
+    public function setRelayPassword(?string $relayPassword): AdminRelayDto
     {
-        $this->password = $password;
+        $this->relayPassword = $relayPassword;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAdminPassword(): ?string
+    {
+        return $this->adminPassword;
+    }
+
+    /**
+     * @param string|null $adminPassword
+     * @return AdminRelayDto
+     */
+    public function setAdminPassword(?string $adminPassword): AdminRelayDto
+    {
+        $this->adminPassword = $adminPassword;
         return $this;
     }
 
@@ -264,9 +290,9 @@ class AdminRelaysDto
 
     /**
      * @param MountDto[] $mounts
-     * @return AdminRelaysDto
+     * @return AdminRelayDto
      */
-    public function setMounts(array $mounts): AdminRelaysDto
+    public function setMounts(array $mounts): AdminRelayDto
     {
         $this->mounts = $mounts;
         return $this;
@@ -275,13 +301,20 @@ class AdminRelaysDto
     /**
      * @param array $stationData
      *
-     * @return AdminRelaysDto
+     * @return AdminRelayDto
      */
     public static function fromArray(array $stationData): self
     {
         $mounts = [];
         foreach ($stationData['mounts'] as $mountData) {
             $mounts[] = MountDto::fromArray($mountData);
+        }
+
+        if (!empty($stationData['password'])) {
+            $relayPw = $adminPw = $stationData['password'];
+        } else {
+            $relayPw = $stationData['relay_pw'];
+            $adminPw = $stationData['admin_pw'];
         }
 
         return new self(
@@ -293,7 +326,8 @@ class AdminRelaysDto
             $stationData['shortcode'],
             $stationData['type'],
             (int)$stationData['port'],
-            $stationData['password'],
+            $relayPw,
+            $adminPw,
             $mounts
         );
     }

@@ -10,7 +10,7 @@ use AzuraCast\Api\Exception;
 class RelaysClient extends AbstractClient
 {
     /**
-     * @return Dto\AdminRelaysDto[]
+     * @return Dto\AdminRelayDto[]
      */
     public function list(): array
     {
@@ -18,7 +18,7 @@ class RelaysClient extends AbstractClient
 
         $return = [];
         foreach ($relays as $relay) {
-            $return[] = Dto\AdminRelaysDto::fromArray($relay);
+            $return[] = Dto\AdminRelayDto::fromArray($relay);
         }
 
         return $return;
