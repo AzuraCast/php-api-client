@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AzuraCast\Api\Dto;
 
-class MountDto
+class MountDto implements \JsonSerializable
 {
     /**
      * @var string
@@ -160,6 +160,18 @@ class MountDto
     {
         $this->format = $format;
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'name'      => $this->name,
+            'path'      => $this->path,
+            'is_default' => $this->isDefault,
+            'url'       => $this->url,
+            'bitrate'   => $this->bitrate,
+            'format'    => $this->format,
+        ];
     }
 
     /**

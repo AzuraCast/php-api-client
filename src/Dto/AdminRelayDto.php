@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AzuraCast\Api\Dto;
 
-class AdminRelayDto
+class AdminRelayDto implements \JsonSerializable
 {
     /**
      * @var int
@@ -296,6 +296,22 @@ class AdminRelayDto
     {
         $this->mounts = $mounts;
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id'        => $this->id,
+            'name'      => $this->description,
+            'url'       => $this->url,
+            'genre'     => $this->genre,
+            'shortcode' => $this->shortcode,
+            'type'      => $this->type,
+            'port'      => (int)$this->port,
+            'relay_pw'  => $this->relayPassword,
+            'admin_pw'  => $this->adminPassword,
+            'mounts'    => $this->mounts,
+        ];
     }
 
     /**
