@@ -11,6 +11,9 @@ class RelaysClient extends AbstractClient
 {
     /**
      * @return Dto\AdminRelayDto[]
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function list(): array
     {
@@ -26,6 +29,9 @@ class RelaysClient extends AbstractClient
 
     /**
      * @param Dto\AdminRelayUpdateDto $dto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function update(Dto\AdminRelayUpdateDto $dto): void
     {

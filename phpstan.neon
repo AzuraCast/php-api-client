@@ -1,5 +1,5 @@
 parameters:
-    level: 2
+    level: 7
 
     paths:
         - src
@@ -7,3 +7,11 @@ parameters:
     universalObjectCratesClasses:
         - Azura\Session\NamespaceInterface
         - Azura\View
+
+    ignoreErrors:
+        # Caused by the string[] annotation being misinterpreted as the variable being just a string.
+        # Does not happen when the annotation is changed to just array.
+        -
+            message: '#Cannot assign new offset to string.#'
+            path: src/Dto/PermissionsDto.php
+

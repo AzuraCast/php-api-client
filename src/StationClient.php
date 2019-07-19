@@ -12,6 +12,9 @@ class StationClient extends AbstractStationClient
 {
     /**
      * @return Dto\StationDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function get(): Dto\StationDto
     {
@@ -25,6 +28,9 @@ class StationClient extends AbstractStationClient
 
     /**
      * @return Dto\NowPlayingDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function nowPlaying(): Dto\NowPlayingDto
     {
@@ -46,6 +52,9 @@ class StationClient extends AbstractStationClient
 
     /**
      * @return Dto\StationStatusDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function status(): Dto\StationStatusDto
     {
@@ -59,6 +68,9 @@ class StationClient extends AbstractStationClient
 
     /**
      * @return void
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function restart(): void
     {
@@ -70,7 +82,11 @@ class StationClient extends AbstractStationClient
 
     /**
      * @param string $action
+     *
      * @return void
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function frontend(string $action): void
     {
@@ -83,7 +99,11 @@ class StationClient extends AbstractStationClient
 
     /**
      * @param string $action
+     *
      * @return void
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function backend(string $action): void
     {
@@ -99,6 +119,9 @@ class StationClient extends AbstractStationClient
      * @param DateTime|null $end
      *
      * @return Dto\SongHistoryDto[]
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function history(?DateTime $start = null, ?DateTime $end = null): array
     {
@@ -116,6 +139,9 @@ class StationClient extends AbstractStationClient
 
     /**
      * @return Dto\ListenerDto[]
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function listeners(): array
     {
@@ -141,6 +167,9 @@ class StationClient extends AbstractStationClient
 
     /**
      * @return Dto\MountpointDto[]
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function mounts(): array
     {

@@ -23,12 +23,13 @@
         "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
+        "fzaninotto/faker": "^1.8",
         "overtrue/phplint": "^1.1",
         "phpstan/phpstan": "^0.11.1",
         "phpstan/phpstan-strict-rules": "^0.11.0",
         "phpunit/phpunit": "^7.5",
         "roave/security-advisories": "dev-master",
-        "fzaninotto/faker": "^1.8"
+        "vlucas/phpdotenv": "^3.4"
     },
     "autoload": {
         "psr-4": {

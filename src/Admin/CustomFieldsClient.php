@@ -11,6 +11,9 @@ class CustomFieldsClient extends AbstractClient
 {
     /**
      * @return Dto\CustomFieldDto[]
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function list(): array
     {
@@ -30,6 +33,9 @@ class CustomFieldsClient extends AbstractClient
      * @param int $customFieldId
      *
      * @return Dto\CustomFieldDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function get(int $customFieldId): Dto\CustomFieldDto
     {
@@ -46,6 +52,9 @@ class CustomFieldsClient extends AbstractClient
      * @param string $shortName
      *
      * @return Dto\CustomFieldDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function create(
         string $name,
@@ -67,6 +76,9 @@ class CustomFieldsClient extends AbstractClient
      * @param string $shortName
      *
      * @return Dto\CustomFieldDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function update(
         int $customFieldId,
@@ -92,6 +104,9 @@ class CustomFieldsClient extends AbstractClient
      * @param int $customFieldId
      *
      * @return void
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function delete(int $customFieldId): void
     {

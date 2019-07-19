@@ -49,11 +49,13 @@ class AdminRelayUpdateDto implements \JsonSerializable
 
     /**
      * @param string|null $baseUrl
+     *
      * @return AdminRelayUpdateDto
      */
     public function setBaseUrl(?string $baseUrl): AdminRelayUpdateDto
     {
         $this->baseUrl = $baseUrl;
+
         return $this;
     }
 
@@ -67,11 +69,13 @@ class AdminRelayUpdateDto implements \JsonSerializable
 
     /**
      * @param string|null $name
+     *
      * @return AdminRelayUpdateDto
      */
     public function setName(?string $name): AdminRelayUpdateDto
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -85,11 +89,13 @@ class AdminRelayUpdateDto implements \JsonSerializable
 
     /**
      * @param bool|null $isVisibleOnPublicPages
+     *
      * @return AdminRelayUpdateDto
      */
     public function setIsVisibleOnPublicPages(?bool $isVisibleOnPublicPages): AdminRelayUpdateDto
     {
         $this->isVisibleOnPublicPages = $isVisibleOnPublicPages;
+
         return $this;
     }
 
@@ -103,11 +109,13 @@ class AdminRelayUpdateDto implements \JsonSerializable
 
     /**
      * @param array|null $nowplaying
+     *
      * @return AdminRelayUpdateDto
      */
     public function setNowplaying(?array $nowplaying): AdminRelayUpdateDto
     {
         $this->nowplaying = $nowplaying;
+
         return $this;
     }
 

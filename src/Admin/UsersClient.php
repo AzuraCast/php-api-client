@@ -11,6 +11,9 @@ class UsersClient extends AbstractClient
 {
     /**
      * @return Dto\UserDto[]
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function list(): array
     {
@@ -27,6 +30,9 @@ class UsersClient extends AbstractClient
      * @param int $userId
      *
      * @return Dto\UserDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function get(int $userId): Dto\UserDto
     {
@@ -48,6 +54,9 @@ class UsersClient extends AbstractClient
      * @param array $apiKeys
      *
      * @return Dto\UserDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function create(
         string $email,
@@ -92,6 +101,9 @@ class UsersClient extends AbstractClient
      * @param array $apiKeys
      *
      * @return Dto\UserDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function update(
         int $userId,
@@ -133,6 +145,9 @@ class UsersClient extends AbstractClient
      * @param int $userId
      *
      * @return void
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function delete(int $userId): void
     {

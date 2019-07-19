@@ -13,6 +13,8 @@ class MediaClient extends AbstractStationClient
      * @param string $uniqueId
      *
      * @return resource|bool
+     *
+     * @throws Exception\ClientRequestException
      */
     public function art(string $uniqueId)
     {
@@ -35,6 +37,9 @@ class MediaClient extends AbstractStationClient
 
     /**
      * @return Dto\MediaFileDto[]
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function list(): array
     {
@@ -54,6 +59,9 @@ class MediaClient extends AbstractStationClient
      * @param Dto\UploadFileDto $uploadFile
      *
      * @return Dto\MediaFileDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function upload(Dto\UploadFileDto $uploadFile): Dto\MediaFileDto
     {

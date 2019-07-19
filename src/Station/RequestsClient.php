@@ -16,6 +16,9 @@ class RequestsClient extends AbstractStationClient
      * @param int $perPage
      *
      * @return Dto\RequestableSongsDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function list(int $page = 1, int $perPage = -1): Dto\RequestableSongsDto
     {
@@ -31,7 +34,11 @@ class RequestsClient extends AbstractStationClient
 
     /**
      * @param string $uniqueId
+     *
      * @return void
+     *
+     * @throws Exception\ClientRequestException
+     * @throws Exception\RequestsDisabledException
      */
     public function submit(string $uniqueId): void
     {
