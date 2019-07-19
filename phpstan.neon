@@ -12,9 +12,6 @@ parameters:
         # Caused by the string[] annotation being misinterpreted as the variable being just a string.
         # Does not happen when the annotation is changed to just array.
         -
-            message: '#Array (array<string>) does not accept array.#'
-            path: src/Dto/PermissionsDto.php
-        -
             message: '#Cannot assign new offset to array|string.#'
             path: src/Dto/PermissionsDto.php
 
