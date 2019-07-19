@@ -13,6 +13,9 @@ class StreamersClient extends AbstractStationClient
 {
     /**
      * @return Dto\StreamerDto[]
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function list(): array
     {
@@ -32,6 +35,9 @@ class StreamersClient extends AbstractStationClient
      * @param int $streamerId
      *
      * @return Dto\StreamerDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function get(int $streamerId): Dto\StreamerDto
     {
@@ -51,6 +57,9 @@ class StreamersClient extends AbstractStationClient
      * @param bool $isActive
      *
      * @return Dto\StreamerDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function create(
         string $username,
@@ -88,6 +97,9 @@ class StreamersClient extends AbstractStationClient
      * @param bool $isActive
      *
      * @return Dto\StreamerDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function update(
         int $streamerId,
@@ -121,6 +133,9 @@ class StreamersClient extends AbstractStationClient
      * @param int $streamerId
      *
      * @return void
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function delete(int $streamerId): void
     {

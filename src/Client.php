@@ -15,6 +15,9 @@ class Client extends AbstractClient
 
     /**
      * @return Dto\NowPlayingDto[]
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function nowPlaying(): array
     {
@@ -29,6 +32,9 @@ class Client extends AbstractClient
 
     /**
      * @return Dto\StationDto[]
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function stations(): array
     {
@@ -43,6 +49,7 @@ class Client extends AbstractClient
 
     /**
      * @param string|int $stationId
+     *
      * @return StationClient
      */
     public function station($stationId): StationClient
@@ -54,6 +61,7 @@ class Client extends AbstractClient
      * @param string $host
      * @param string|null $apiKey
      * @param \GuzzleHttp\Client|null $existingClient An existing HTTP client to pull configuration from.
+     *
      * @return Client
      */
     public static function create(

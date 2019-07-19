@@ -43,6 +43,9 @@ abstract class AbstractClient
      * @param array $options
      *
      * @return mixed
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function request(
         string $method = 'GET',

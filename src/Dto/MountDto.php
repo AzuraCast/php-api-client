@@ -36,7 +36,6 @@ class MountDto implements \JsonSerializable
     protected $format;
 
     /**
-     * MountDto constructor.
      * @param string $name
      * @param string|null $path
      * @param bool $isDefault
@@ -64,11 +63,13 @@ class MountDto implements \JsonSerializable
 
     /**
      * @param string $name
+     *
      * @return MountDto
      */
     public function setName(string $name): MountDto
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -82,11 +83,13 @@ class MountDto implements \JsonSerializable
 
     /**
      * @param string|null $path
+     *
      * @return MountDto
      */
     public function setPath(?string $path): MountDto
     {
         $this->path = $path;
+
         return $this;
     }
 
@@ -100,11 +103,13 @@ class MountDto implements \JsonSerializable
 
     /**
      * @param bool $isDefault
+     *
      * @return MountDto
      */
     public function setIsDefault(bool $isDefault): MountDto
     {
         $this->isDefault = $isDefault;
+
         return $this;
     }
 
@@ -118,11 +123,13 @@ class MountDto implements \JsonSerializable
 
     /**
      * @param string $url
+     *
      * @return MountDto
      */
     public function setUrl(string $url): MountDto
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -136,11 +143,13 @@ class MountDto implements \JsonSerializable
 
     /**
      * @param int $bitrate
+     *
      * @return MountDto
      */
     public function setBitrate(int $bitrate): MountDto
     {
         $this->bitrate = $bitrate;
+
         return $this;
     }
 
@@ -154,23 +163,25 @@ class MountDto implements \JsonSerializable
 
     /**
      * @param string $format
+     *
      * @return MountDto
      */
     public function setFormat(string $format): MountDto
     {
         $this->format = $format;
+
         return $this;
     }
 
     public function jsonSerialize()
     {
         return [
-            'name'      => $this->name,
-            'path'      => $this->path,
+            'name'       => $this->name,
+            'path'       => $this->path,
             'is_default' => $this->isDefault,
-            'url'       => $this->url,
-            'bitrate'   => $this->bitrate,
-            'format'    => $this->format,
+            'url'        => $this->url,
+            'bitrate'    => $this->bitrate,
+            'format'     => $this->format,
         ];
     }
 
@@ -183,7 +194,7 @@ class MountDto implements \JsonSerializable
     {
         return new self(
             $mountData['name'],
-            $mountData['path'],
+            $mountData['path'] ?? null,
             $mountData['is_default'],
             $mountData['url'],
             $mountData['bitrate'],

@@ -11,6 +11,9 @@ class RolesClient extends AbstractClient
 {
     /**
      * @return Dto\RoleDto[]
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function list(): array
     {
@@ -27,6 +30,9 @@ class RolesClient extends AbstractClient
      * @param int $roleId
      *
      * @return Dto\RoleDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function get(int $roleId): Dto\RoleDto
     {
@@ -44,6 +50,9 @@ class RolesClient extends AbstractClient
      * @param string[] $permissionsStation
      *
      * @return Dto\RoleDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function create(string $name, array $permissionsGlobal, array $permissionsStation): Dto\RoleDto
     {
@@ -66,6 +75,9 @@ class RolesClient extends AbstractClient
      * @param string[] $permissionsStation
      *
      * @return Dto\RoleDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function update(
         int $roleId,
@@ -89,6 +101,9 @@ class RolesClient extends AbstractClient
      * @param int $roleId
      *
      * @return void
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function delete(int $roleId): void
     {

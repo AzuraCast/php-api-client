@@ -11,6 +11,9 @@ class SettingsClient extends AbstractClient
 {
     /**
      * @return Dto\SettingsDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function list(): Dto\SettingsDto
     {
@@ -40,6 +43,9 @@ class SettingsClient extends AbstractClient
      * @param string $customCssInternal
      *
      * @return Dto\SettingsDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function update(
         string $baseUrl,

@@ -25,6 +25,9 @@ class AdminClient extends AbstractClient
 
     /**
      * @return Dto\PermissionsDto
+     *
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\ClientRequestException
      */
     public function permissions(): Dto\PermissionsDto
     {

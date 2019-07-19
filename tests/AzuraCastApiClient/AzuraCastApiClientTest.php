@@ -3,15 +3,30 @@ declare(strict_types=1);
 
 namespace AzuraCast\Api;
 
-use Faker\Factory as Faker;
 use AzuraCast\Api\Dto\UploadFileDto;
 use AzuraCast\Api\Exception\ClientRequestException;
+use Dotenv\Dotenv;
+use Faker\Factory as Faker;
 use PHPUnit\Framework\TestCase;
 
 class AzuraCastApiClientTest extends TestCase
 {
     /**
      * @return void
+     */
+    public static function setUpBeforeClass(): void
+    {
+        if (getenv('AZURACAST_HOST') === false) {
+            $dotenv = Dotenv::create(__DIR__ . '/../..');
+            $dotenv->load();
+        }
+    }
+
+    /**
+     * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testNowPlayingSuccessful(): void
     {
@@ -24,6 +39,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testNowPlayingOnStationSuccessful(): void
     {
@@ -36,6 +54,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testStationsSuccessful(): void
     {
@@ -48,6 +69,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testStationSuccessful(): void
     {
@@ -60,6 +84,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testStationStatusSuccessful(): void
     {
@@ -72,6 +99,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testStationHistorySuccessful(): void
     {
@@ -84,6 +114,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testRequestableSongsSuccessful(): void
     {
@@ -96,6 +129,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testUploadMediaFileSuccessful(): void
     {
@@ -121,6 +157,10 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
+     * @throws Exception\RequestsDisabledException
      */
     public function testRequestSongSuccessful(): void
     {
@@ -145,6 +185,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testListenerDetailsSuccessful(): void
     {
@@ -157,6 +200,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testRestartStationSuccessful(): void
     {
@@ -169,6 +215,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testPerformFrontendActionSuccessful(): void
     {
@@ -181,6 +230,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testPerformBackendActionSuccessful(): void
     {
@@ -193,6 +245,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testCustomFieldsSuccessful(): void
     {
@@ -240,6 +295,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testUsersSuccessful(): void
     {
@@ -305,6 +363,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testPermissionsSuccessful(): void
     {
@@ -317,6 +378,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testRolesSuccessful(): void
     {
@@ -362,6 +426,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testSettingsSuccessful(): void
     {
@@ -396,6 +463,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testStreamersSuccessful(): void
     {
@@ -406,7 +476,7 @@ class AzuraCastApiClientTest extends TestCase
         $faker = Faker::create();
 
         $username = $faker->userName;
-        $password = $faker->password;
+        $password = $faker->word;
         $name = $faker->name;
         $comments = $faker->words(5, true);
         
@@ -431,7 +501,7 @@ class AzuraCastApiClientTest extends TestCase
         
         // UPDATE
         $username = $faker->userName;
-        $password = $faker->password;
+        $password = $faker->word;
 
         $streamerUpdate = $streamersApi->update(
             $streamerDto->getId(),
@@ -452,6 +522,9 @@ class AzuraCastApiClientTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws ClientRequestException
+     * @throws Exception\AccessDeniedException
      */
     public function testMountpointsSuccessful(): void
     {
@@ -475,7 +548,13 @@ class AzuraCastApiClientTest extends TestCase
      */
     private function getHost(): string
     {
-        return getenv('AZURACAST_HOST') ?? '';
+        $azuracastHost = getenv('AZURACAST_HOST');
+
+        if ($azuracastHost === false) {
+            return '';
+        }
+
+        return $azuracastHost;
     }
 
     /**
@@ -483,7 +562,13 @@ class AzuraCastApiClientTest extends TestCase
      */
     private function getApiKey(): string
     {
-        return getenv('AZURACAST_API_KEY') ?? '';
+        $azuracastApiKey = getenv('AZURACAST_API_KEY');
+
+        if ($azuracastApiKey === false) {
+            return '';
+        }
+
+        return $azuracastApiKey;
     }
 
     /**
@@ -491,6 +576,12 @@ class AzuraCastApiClientTest extends TestCase
      */
     private function getStationId(): int
     {
-        return (int)getenv('AZURACAST_STATION_ID') ?? 1;
+        $azuracastStationId = getenv('AZURACAST_STATION_ID');
+
+        if ($azuracastStationId === false) {
+            return 1;
+        }
+
+        return (int)$azuracastStationId;
     }
 }

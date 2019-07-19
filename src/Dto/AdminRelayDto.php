@@ -61,7 +61,6 @@ class AdminRelayDto implements \JsonSerializable
     protected $mounts;
 
     /**
-     * AdminRelayDto constructor.
      * @param int $id
      * @param string $name
      * @param string|null $description
@@ -110,11 +109,13 @@ class AdminRelayDto implements \JsonSerializable
 
     /**
      * @param int $id
+     *
      * @return AdminRelayDto
      */
     public function setId(int $id): AdminRelayDto
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -128,11 +129,13 @@ class AdminRelayDto implements \JsonSerializable
 
     /**
      * @param string $name
+     *
      * @return AdminRelayDto
      */
     public function setName(string $name): AdminRelayDto
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -146,11 +149,13 @@ class AdminRelayDto implements \JsonSerializable
 
     /**
      * @param string|null $description
+     *
      * @return AdminRelayDto
      */
     public function setDescription(?string $description): AdminRelayDto
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -164,11 +169,13 @@ class AdminRelayDto implements \JsonSerializable
 
     /**
      * @param string|null $url
+     *
      * @return AdminRelayDto
      */
     public function setUrl(?string $url): AdminRelayDto
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -182,11 +189,13 @@ class AdminRelayDto implements \JsonSerializable
 
     /**
      * @param string|null $genre
+     *
      * @return AdminRelayDto
      */
     public function setGenre(?string $genre): AdminRelayDto
     {
         $this->genre = $genre;
+
         return $this;
     }
 
@@ -200,11 +209,13 @@ class AdminRelayDto implements \JsonSerializable
 
     /**
      * @param string $shortcode
+     *
      * @return AdminRelayDto
      */
     public function setShortcode(string $shortcode): AdminRelayDto
     {
         $this->shortcode = $shortcode;
+
         return $this;
     }
 
@@ -218,11 +229,13 @@ class AdminRelayDto implements \JsonSerializable
 
     /**
      * @param string $type
+     *
      * @return AdminRelayDto
      */
     public function setType(string $type): AdminRelayDto
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -236,11 +249,13 @@ class AdminRelayDto implements \JsonSerializable
 
     /**
      * @param int|null $port
+     *
      * @return AdminRelayDto
      */
     public function setPort(?int $port): AdminRelayDto
     {
         $this->port = $port;
+
         return $this;
     }
 
@@ -254,11 +269,13 @@ class AdminRelayDto implements \JsonSerializable
 
     /**
      * @param string|null $relayPassword
+     *
      * @return AdminRelayDto
      */
     public function setRelayPassword(?string $relayPassword): AdminRelayDto
     {
         $this->relayPassword = $relayPassword;
+
         return $this;
     }
 
@@ -272,11 +289,13 @@ class AdminRelayDto implements \JsonSerializable
 
     /**
      * @param string|null $adminPassword
+     *
      * @return AdminRelayDto
      */
     public function setAdminPassword(?string $adminPassword): AdminRelayDto
     {
         $this->adminPassword = $adminPassword;
+
         return $this;
     }
 
@@ -290,11 +309,13 @@ class AdminRelayDto implements \JsonSerializable
 
     /**
      * @param MountDto[] $mounts
+     *
      * @return AdminRelayDto
      */
     public function setMounts(array $mounts): AdminRelayDto
     {
         $this->mounts = $mounts;
+
         return $this;
     }
 

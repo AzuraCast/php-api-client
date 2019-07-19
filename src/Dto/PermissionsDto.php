@@ -17,6 +17,10 @@ class PermissionsDto implements JsonSerializable
      */
     protected $station;
 
+    /**
+     * @param array $global
+     * @param array $station
+     */
     public function __construct(array $global, array $station)
     {
         $this->setGlobal($global)
@@ -71,6 +75,10 @@ class PermissionsDto implements JsonSerializable
      */
     public function addStation(int $stationId, string $permission): PermissionsDto
     {
+        if (!isset($this->station[$stationId])) {
+            $this->station[$stationId] = [];
+        }
+
         $this->station[$stationId][] = $permission;
     }
 

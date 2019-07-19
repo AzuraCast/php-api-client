@@ -606,9 +606,9 @@ class MediaFileDto implements JsonSerializable
             $mediaFileData['fade_out'] ?? 0.0,
             $mediaFileData['cue_in'] ?? 0.0,
             $mediaFileData['cue_out'] ?? 0.0,
-            $customFields,
+            $playlists,
             $mediaFileData['unique_id'],
-            $playlists
+            $customFields
         );
     }
 }
