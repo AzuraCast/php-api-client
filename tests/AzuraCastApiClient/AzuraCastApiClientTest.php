@@ -476,7 +476,7 @@ class AzuraCastApiClientTest extends TestCase
         $faker = Faker::create();
 
         $username = $faker->userName;
-        $password = $faker->password;
+        $password = $faker->word;
         $name = $faker->name;
         $comments = $faker->words(5, true);
         
@@ -501,7 +501,7 @@ class AzuraCastApiClientTest extends TestCase
         
         // UPDATE
         $username = $faker->userName;
-        $password = $faker->password;
+        $password = $faker->word;
 
         $streamerUpdate = $streamersApi->update(
             $streamerDto->getId(),
