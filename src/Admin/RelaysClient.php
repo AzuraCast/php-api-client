@@ -17,7 +17,7 @@ class RelaysClient extends AbstractClient
      */
     public function list(): array
     {
-        $relays = $this->request('GET', 'admin/relays');
+        $relays = $this->request('GET', 'internal/relays');
 
         $return = [];
         foreach ($relays as $relay) {
@@ -35,7 +35,7 @@ class RelaysClient extends AbstractClient
      */
     public function update(Dto\AdminRelayUpdateDto $dto): void
     {
-        $this->request('POST', 'admin/relays', [
+        $this->request('POST', 'internal/relays', [
             'json' => $dto,
         ]);
     }
