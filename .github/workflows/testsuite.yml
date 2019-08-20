@@ -18,3 +18,4 @@ jobs:
         docker-compose run -e APPLICATION_ENV=production --rm --user="azuracast" web azuracast_install --load-fixtures
         docker-compose up -d web
         docker-compose run --rm cli composer test
+        docker-compose down -v
