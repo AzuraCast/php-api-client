@@ -26,12 +26,12 @@ class MountDto implements \JsonSerializable
     protected $url;
 
     /**
-     * @var int
+     * @var int|null
      */
     protected $bitrate;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $format;
 
@@ -40,10 +40,10 @@ class MountDto implements \JsonSerializable
      * @param string|null $path
      * @param bool $isDefault
      * @param string $url
-     * @param int $bitrate
-     * @param string $format
+     * @param int|null $bitrate
+     * @param string|null $format
      */
-    public function __construct(string $name, ?string $path, bool $isDefault, string $url, int $bitrate, string $format)
+    public function __construct(string $name, ?string $path, bool $isDefault, string $url, ?int $bitrate, ?string $format)
     {
         $this->name = $name;
         $this->path = $path;
@@ -134,19 +134,19 @@ class MountDto implements \JsonSerializable
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getBitrate(): int
+    public function getBitrate(): ?int
     {
         return $this->bitrate;
     }
 
     /**
-     * @param int $bitrate
+     * @param int|null $bitrate
      *
      * @return MountDto
      */
-    public function setBitrate(int $bitrate): MountDto
+    public function setBitrate(?int $bitrate): MountDto
     {
         $this->bitrate = $bitrate;
 
@@ -154,19 +154,19 @@ class MountDto implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFormat(): string
+    public function getFormat(): ?string
     {
         return $this->format;
     }
 
     /**
-     * @param string $format
+     * @param string|null $format
      *
      * @return MountDto
      */
-    public function setFormat(string $format): MountDto
+    public function setFormat(?string $format): MountDto
     {
         $this->format = $format;
 
