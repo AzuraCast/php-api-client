@@ -140,6 +140,7 @@ $api->station($stationId)->streamers()->create(
 `PUT` `/station/{station_id}/streamer/{id}`
 ```
 $api->station($stationId)->streamers()->update(
+	int $streamerId,
 	string $username,
 	string $password,
 	string $displayName,
