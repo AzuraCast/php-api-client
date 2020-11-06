@@ -180,7 +180,7 @@ class ListenerDto
     }
 
     /**
-     * @param array $listenerData
+     * @param mixed[] $listenerData
      *
      * @return ListenerDto
      */

@@ -120,7 +120,7 @@ class PaginationLinksDto
     }
 
     /**
-     * @param array $paginationLinksData
+     * @param mixed[] $paginationLinksData
      *
      * @return PaginationLinksDto
      */

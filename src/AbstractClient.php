@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace AzuraCast\Api;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 
 abstract class AbstractClient
 {
@@ -40,7 +39,7 @@ abstract class AbstractClient
     /**
      * @param string $method
      * @param string $uri
-     * @param array $options
+     * @param mixed[] $options
      *
      * @return mixed
      *

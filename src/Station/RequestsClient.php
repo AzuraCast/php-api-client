@@ -6,8 +6,6 @@ namespace AzuraCast\Api\Station;
 use AzuraCast\Api\AbstractStationClient;
 use AzuraCast\Api\Dto;
 use AzuraCast\Api\Exception;
-use GuzzleHttp\Pool;
-use GuzzleHttp\Psr7\Request;
 
 class RequestsClient extends AbstractStationClient
 {

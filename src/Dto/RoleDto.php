@@ -107,7 +107,7 @@ class RoleDto implements JsonSerializable
     }
 
     /**
-     * @param array $roleData
+     * @param mixed[] $roleData
      *
      * @return RoleDto
      */

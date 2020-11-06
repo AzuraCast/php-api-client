@@ -31,7 +31,7 @@ class CurrentSongDto
     protected $duration;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $playlist;
 
@@ -51,7 +51,7 @@ class CurrentSongDto
      * @param int $songHistoryId
      * @param int $playedAt
      * @param int $duration
-     * @param string $playlist
+     * @param string|null $playlist
      * @param bool $isRequest
      * @param SongDto $song
      */
@@ -61,7 +61,7 @@ class CurrentSongDto
         int $songHistoryId,
         int $playedAt,
         int $duration,
-        string $playlist,
+        ?string $playlist,
         bool $isRequest,
         SongDto $song
     ) {
@@ -176,19 +176,19 @@ class CurrentSongDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPlaylist(): string
+    public function getPlaylist(): ?string
     {
         return $this->playlist;
     }
 
     /**
-     * @param string $playlist
+     * @param string|null $playlist
      *
      * @return CurrentSongDto
      */
-    public function setPlaylist(string $playlist): CurrentSongDto
+    public function setPlaylist(?string $playlist): CurrentSongDto
     {
         $this->playlist = $playlist;
 
@@ -236,7 +236,8 @@ class CurrentSongDto
     }
 
     /**
-     * @param array $currentSongData
+     * @param mixed[] $currentSongData
+     *
      * @return CurrentSongDto
      */
     public static function fromArray(array $currentSongData): self

@@ -107,7 +107,7 @@ class MediaFilePlaylistDto implements JsonSerializable
     }
 
     /**
-     * @param array $mediaFilePlaylistData
+     * @param mixed[] $mediaFilePlaylistData
      *
      * @return MediaFilePlaylistDto
      */

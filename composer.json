@@ -20,16 +20,16 @@
         "ext-json": "*",
         "ext-gd": "*",
 
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^7.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.8",
-        "overtrue/phplint": "^1.1",
-        "phpstan/phpstan": "^0.11.1",
-        "phpstan/phpstan-strict-rules": "^0.11.0",
-        "phpunit/phpunit": "^7.5",
+        "overtrue/phplint": "^2.2",
+        "phpstan/phpstan": "^0.12.54",
+        "phpstan/phpstan-strict-rules": "^0.12.5",
+        "phpunit/phpunit": "^9.4",
         "roave/security-advisories": "dev-master",
-        "vlucas/phpdotenv": "^3.4"
+        "vlucas/phpdotenv": "^5.2"
     },
     "autoload": {
         "psr-4": {

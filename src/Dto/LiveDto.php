@@ -66,7 +66,7 @@ class LiveDto
     }
 
     /**
-     * @param array $liveData
+     * @param mixed[] $liveData
      *
      * @return LiveDto
      */

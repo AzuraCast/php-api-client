@@ -41,7 +41,7 @@ class SongDto
     protected $art;
 
     /**
-     * @var array
+     * @var mixed[]
      */
     protected $customFields;
 
@@ -53,7 +53,7 @@ class SongDto
      * @param string $album
      * @param string $lyrics
      * @param string $art
-     * @param array $customFields
+     * @param mixed[] $customFields
      */
     public function __construct(
         string $id,
@@ -216,7 +216,7 @@ class SongDto
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getCustomFields(): array
     {
@@ -224,7 +224,7 @@ class SongDto
     }
 
     /**
-     * @param array $customFields
+     * @param mixed[] $customFields
      *
      * @return SongDto
      */
@@ -236,7 +236,7 @@ class SongDto
     }
 
     /**
-     * @param array $songData
+     * @param mixed[] $songData
      *
      * @return SongDto
      */

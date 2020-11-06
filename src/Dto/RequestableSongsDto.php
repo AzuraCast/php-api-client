@@ -180,7 +180,7 @@ class RequestableSongsDto
     }
 
     /**
-     * @param array $requestableSongsData
+     * @param mixed[] $requestableSongsData
      *
      * @return RequestableSongsDto
      */

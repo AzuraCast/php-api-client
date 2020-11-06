@@ -18,7 +18,7 @@ class StreamerDto implements JsonSerializable
     protected $username;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $password;
 
@@ -28,7 +28,7 @@ class StreamerDto implements JsonSerializable
     protected $displayName;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $comments;
 
@@ -45,18 +45,18 @@ class StreamerDto implements JsonSerializable
     /**
      * @param int $id
      * @param string $username
-     * @param string $password
+     * @param string|null $password
      * @param string $displayName
-     * @param string $comments
+     * @param string|null $comments
      * @param bool $isActive
      * @param LinksDto $links
      */
     public function __construct(
         int $id,
         string $username,
-        string $password,
+        ?string $password,
         string $displayName,
-        string $comments,
+        ?string $comments,
         bool $isActive,
         LinksDto $links
     ) {
@@ -110,19 +110,19 @@ class StreamerDto implements JsonSerializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    function getPassword(): string
+    function getPassword(): ?string
     {
         return $this->password;
     }
 
     /**
-     * @param string $password
+     * @param string|null $password
      *
      * @return StreamerDto
      */
-    function setPassword(string $password): StreamerDto
+    function setPassword(?string $password): StreamerDto
     {
         $this->password = $password;
 
@@ -150,19 +150,19 @@ class StreamerDto implements JsonSerializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    function getComments(): string
+    function getComments(): ?string
     {
         return $this->comments;
     }
 
     /**
-     * @param string $comments
+     * @param string|null $comments
      *
      * @return StreamerDto
      */
-    function setComments(string $comments): StreamerDto
+    function setComments(?string $comments): StreamerDto
     {
         $this->comments = $comments;
 
@@ -226,7 +226,7 @@ class StreamerDto implements JsonSerializable
     }
 
     /**
-     * @param array $streamerData
+     * @param mixed[] $streamerData
      *
      * @return StreamerDto
      */
@@ -237,7 +237,7 @@ class StreamerDto implements JsonSerializable
             $streamerData['streamer_username'],
             $streamerData['streamer_password'],
             $streamerData['display_name'],
-            $streamerData['comments'],
+            $streamerData['comments'] ?? '',
             $streamerData['is_active'],
             LinksDto::fromArray($streamerData['links'])
         );

@@ -79,7 +79,8 @@ class ApiKeyDto implements JsonSerializable
     }
 
     /**
-     * @param array $apiKeyData
+     * @param mixed[] $apiKeyData
+     *
      * @return ApiKeyDto
      */
     public static function fromArray(array $apiKeyData): self

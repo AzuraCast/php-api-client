@@ -336,7 +336,7 @@ class AdminRelayDto implements \JsonSerializable
     }
 
     /**
-     * @param array $stationData
+     * @param mixed[] $stationData
      *
      * @return AdminRelayDto
      */

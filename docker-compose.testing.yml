@@ -11,6 +11,8 @@ services:
       - ./:/app
       - composer_data:/tmp
     env_file: azuracast.env
+    networks:
+      - frontend
     command: /bin/true
   web:
     volumes:

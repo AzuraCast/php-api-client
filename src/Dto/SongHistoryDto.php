@@ -180,7 +180,7 @@ class SongHistoryDto
     }
 
     /**
-     * @param array $songHistoryData
+     * @param mixed[] $songHistoryData
      *
      * @return SongHistoryDto
      */

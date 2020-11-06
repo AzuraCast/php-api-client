@@ -186,7 +186,7 @@ class MountDto implements \JsonSerializable
     }
 
     /**
-     * @param array $mountData
+     * @param mixed[] $mountData
      *
      * @return MountDto
      */
