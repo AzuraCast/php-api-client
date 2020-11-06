@@ -236,7 +236,8 @@ class CurrentSongDto
     }
 
     /**
-     * @param array $currentSongData
+     * @param mixed[] $currentSongData
+     *
      * @return CurrentSongDto
      */
     public static function fromArray(array $currentSongData): self

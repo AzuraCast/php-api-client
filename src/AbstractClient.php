@@ -40,7 +40,7 @@ abstract class AbstractClient
     /**
      * @param string $method
      * @param string $uri
-     * @param array $options
+     * @param mixed[] $options
      *
      * @return mixed
      *

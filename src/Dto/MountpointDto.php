@@ -313,7 +313,7 @@ class MountpointDto implements JsonSerializable
     }
 
     /**
-     * @param array $mountpointData
+     * @param mixed[] $mountpointData
      *
      * @return MountpointDto
      */

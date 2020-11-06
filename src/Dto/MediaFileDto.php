@@ -43,7 +43,7 @@ class MediaFileDto implements JsonSerializable
     protected $isrc;
 
     /**
-     * @var int
+     * @var float
      */
     protected $length;
 
@@ -110,7 +110,7 @@ class MediaFileDto implements JsonSerializable
      * @param string $album
      * @param string $lyrics
      * @param string $isrc
-     * @param int $length
+     * @param float $length
      * @param string $lengthText
      * @param string $path
      * @param int $mtime
@@ -131,7 +131,7 @@ class MediaFileDto implements JsonSerializable
         string $album,
         string $lyrics,
         string $isrc,
-        int $length,
+        float $length,
         string $lengthText,
         string $path,
         int $mtime,
@@ -306,19 +306,19 @@ class MediaFileDto implements JsonSerializable
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getLength(): int
+    public function getLength(): float
     {
         return $this->length;
     }
 
     /**
-     * @param int $length
+     * @param float $length
      *
      * @return MediaFileDto
      */
-    public function setLength(int $length): MediaFileDto
+    public function setLength(float $length): MediaFileDto
     {
         $this->length = $length;
 
@@ -573,7 +573,7 @@ class MediaFileDto implements JsonSerializable
     }
 
     /**
-     * @param array $mediaFileData
+     * @param mixed[] $mediaFileData
      *
      * @return self
      */
@@ -597,7 +597,7 @@ class MediaFileDto implements JsonSerializable
             $mediaFileData['album'] ?? '',
             $mediaFileData['lyrics'] ?? '',
             $mediaFileData['isrc'] ?? '',
-            $mediaFileData['length'] ?? 0,
+            $mediaFileData['length'] ?? 0.0,
             $mediaFileData['length_text'] ?? '',
             $mediaFileData['path'],
             $mediaFileData['mtime'],

@@ -236,7 +236,7 @@ class LocationDto
     }
 
     /**
-     * @param array $locationData
+     * @param mixed[] $locationData
      *
      * @return LocationDto
      */

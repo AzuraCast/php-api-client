@@ -96,7 +96,7 @@ class RemoteDto
     }
 
     /**
-     * @param array $remoteData
+     * @param mixed[] $remoteData
      *
      * @return RemoteDto
      */

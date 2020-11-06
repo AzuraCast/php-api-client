@@ -107,7 +107,8 @@ class CustomFieldDto implements JsonSerializable
     }
 
     /**
-     * @param array $customFieldData
+     * @param mixed[] $customFieldData
+     *
      * @return CustomFieldDto
      */
     public static function fromArray(array $customFieldData): self

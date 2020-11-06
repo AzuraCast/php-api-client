@@ -51,7 +51,7 @@ class LinksDto implements JsonSerializable
     }
 
     /**
-     * @param array $linksData
+     * @param mixed[] $linksData
      *
      * @return LinksDto
      */

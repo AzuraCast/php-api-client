@@ -17,7 +17,7 @@ class AzuraCastApiClientTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         if (getenv('AZURACAST_HOST') === false) {
-            $dotenv = Dotenv::create(__DIR__ . '/../..');
+            $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
             $dotenv->load();
         }
     }
@@ -479,7 +479,7 @@ class AzuraCastApiClientTest extends TestCase
         $password = $faker->word;
         $name = $faker->name;
         $comments = $faker->words(5, true);
-        
+
         $streamerDto = $streamersApi->create(
             $username,
             $password,
@@ -488,17 +488,17 @@ class AzuraCastApiClientTest extends TestCase
             true
         );
         $this->assertSame($streamerDto->getUsername(), $username);
-        
+
         // GET
         $streamerGet = $streamersApi->get($streamerDto->getId());
-        
+
         $this->assertSame($streamerDto->getUsername(), $streamerGet->getUsername());
-        
+
         // LIST ALL
         $streamers = $streamersApi->list();
-        
+
         $this->assertNotCount(0, $streamers);
-        
+
         // UPDATE
         $username = $faker->userName;
         $password = $faker->word;
@@ -511,9 +511,9 @@ class AzuraCastApiClientTest extends TestCase
             $streamerDto->getComments(),
             $streamerDto->getIsActive()
         );
-        
+
         $this->assertSame($streamerUpdate->getUsername(), $username);
-        
+
         // DELETE
         $streamersApi->delete($streamerDto->getId());
 

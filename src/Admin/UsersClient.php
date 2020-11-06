@@ -5,6 +5,8 @@ namespace AzuraCast\Api\Admin;
 
 use AzuraCast\Api\AbstractClient;
 use AzuraCast\Api\Dto;
+use AzuraCast\Api\Dto\ApiKeyDto;
+use AzuraCast\Api\Dto\RoleDto;
 use AzuraCast\Api\Exception;
 
 class UsersClient extends AbstractClient
@@ -50,8 +52,8 @@ class UsersClient extends AbstractClient
      * @param string $name
      * @param string $locale
      * @param string $theme
-     * @param array $roles
-     * @param array $apiKeys
+     * @param RoleDto[] $roles
+     * @param ApiKeyDto[] $apiKeys
      *
      * @return Dto\UserDto
      *
@@ -97,8 +99,8 @@ class UsersClient extends AbstractClient
      * @param string $name
      * @param string $locale
      * @param string $theme
-     * @param array $roles
-     * @param array $apiKeys
+     * @param RoleDto[] $roles
+     * @param ApiKeyDto[] $apiKeys
      *
      * @return Dto\UserDto
      *

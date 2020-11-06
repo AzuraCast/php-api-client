@@ -292,7 +292,7 @@ class StationDto
     }
 
     /**
-     * @param array $stationData
+     * @param mixed[] $stationData
      *
      * @return StationDto
      */

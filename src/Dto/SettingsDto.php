@@ -545,7 +545,7 @@ class SettingsDto implements JsonSerializable
     }
 
     /**
-     * @param array $settingsData
+     * @param mixed[] $settingsData
      *
      * @return SettingsDto
      */

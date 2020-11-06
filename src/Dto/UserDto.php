@@ -70,8 +70,8 @@ class UserDto implements JsonSerializable
      * @param string $theme
      * @param int $createdAt
      * @param int $updatedAt
-     * @param array $roles
-     * @param array $apiKeys
+     * @param RoleDto[] $roles
+     * @param ApiKeyDto[] $apiKeys
      * @param LinksDto $links
      */
     public function __construct(
@@ -364,7 +364,7 @@ class UserDto implements JsonSerializable
     }
 
     /**
-     * @param array $userData
+     * @param mixed[] $userData
      *
      * @return UserDto
      */

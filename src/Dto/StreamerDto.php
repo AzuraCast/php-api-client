@@ -226,7 +226,7 @@ class StreamerDto implements JsonSerializable
     }
 
     /**
-     * @param array $streamerData
+     * @param mixed[] $streamerData
      *
      * @return StreamerDto
      */
@@ -237,7 +237,7 @@ class StreamerDto implements JsonSerializable
             $streamerData['streamer_username'],
             $streamerData['streamer_password'],
             $streamerData['display_name'],
-            $streamerData['comments'],
+            $streamerData['comments'] ?? '',
             $streamerData['is_active'],
             LinksDto::fromArray($streamerData['links'])
         );

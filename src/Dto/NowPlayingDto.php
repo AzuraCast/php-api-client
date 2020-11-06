@@ -180,7 +180,7 @@ class NowPlayingDto
     }
 
     /**
-     * @param array $nowPlayingData
+     * @param mixed[] $nowPlayingData
      *
      * @return NowPlayingDto
      */

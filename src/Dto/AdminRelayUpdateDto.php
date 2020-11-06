@@ -21,7 +21,7 @@ class AdminRelayUpdateDto implements \JsonSerializable
     protected $isVisibleOnPublicPages;
 
     /**
-     * @var array|null
+     * @var mixed[]|null
      */
     protected $nowplaying;
 
@@ -29,7 +29,7 @@ class AdminRelayUpdateDto implements \JsonSerializable
      * @param string|null $baseUrl
      * @param string|null $name
      * @param bool|null $isVisibleOnPublicPages
-     * @param array|null $nowplaying
+     * @param mixed[]|null $nowplaying
      */
     public function __construct(?string $baseUrl, ?string $name, ?bool $isVisibleOnPublicPages, ?array $nowplaying)
     {
@@ -100,7 +100,7 @@ class AdminRelayUpdateDto implements \JsonSerializable
     }
 
     /**
-     * @return array|null
+     * @return mixed[]|null
      */
     public function getNowplaying(): ?array
     {
@@ -108,7 +108,7 @@ class AdminRelayUpdateDto implements \JsonSerializable
     }
 
     /**
-     * @param array|null $nowplaying
+     * @param mixed[]|null $nowplaying
      *
      * @return AdminRelayUpdateDto
      */

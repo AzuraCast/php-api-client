@@ -18,8 +18,8 @@ class PermissionsDto implements JsonSerializable
     protected $station;
 
     /**
-     * @param array $global
-     * @param array $station
+     * @param string[] $global
+     * @param string[] $station
      */
     public function __construct(array $global, array $station)
     {
@@ -28,7 +28,7 @@ class PermissionsDto implements JsonSerializable
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getGlobal(): array
     {
@@ -36,7 +36,7 @@ class PermissionsDto implements JsonSerializable
     }
 
     /**
-     * @param array $global
+     * @param string[] $global
      *
      * @return PermissionsDto
      */
@@ -48,7 +48,7 @@ class PermissionsDto implements JsonSerializable
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getStation(): array
     {
@@ -56,7 +56,7 @@ class PermissionsDto implements JsonSerializable
     }
 
     /**
-     * @param array $station
+     * @param string[] $station
      *
      * @return PermissionsDto
      */
@@ -80,6 +80,8 @@ class PermissionsDto implements JsonSerializable
         }
 
         $this->station[$stationId][] = $permission;
+
+        return $this;
     }
 
     /**
@@ -94,7 +96,7 @@ class PermissionsDto implements JsonSerializable
     }
 
     /**
-     * @param array $permissionsData
+     * @param mixed[] $permissionsData
      *
      * @return PermissionsDto
      */
