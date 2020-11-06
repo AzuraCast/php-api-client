@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace AzuraCast\Api;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 
 abstract class AbstractClient
 {
