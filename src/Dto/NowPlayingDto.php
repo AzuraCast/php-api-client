@@ -31,7 +31,7 @@ class NowPlayingDto
     protected $songHistory;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $cache;
 
@@ -41,7 +41,7 @@ class NowPlayingDto
      * @param LiveDto $live
      * @param CurrentSongDto $currentSong
      * @param SongHistoryDto[] $songHistory
-     * @param string $cache
+     * @param string|null $cache
      */
     public function __construct(
         StationDto $station,
@@ -49,7 +49,7 @@ class NowPlayingDto
         LiveDto $live,
         CurrentSongDto $currentSong,
         array $songHistory,
-        string $cache
+        ?string $cache
     ) {
         $this->setStation($station)
             ->setListeners($listeners)
@@ -160,19 +160,19 @@ class NowPlayingDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCache(): string
+    public function getCache(): ?string
     {
         return $this->cache;
     }
 
     /**
-     * @param string $cache
+     * @param string|null $cache
      *
      * @return NowPlayingDto
      */
-    public function setCache(string $cache): NowPlayingDto
+    public function setCache(?string $cache): NowPlayingDto
     {
         $this->cache = $cache;
 
