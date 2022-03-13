@@ -11,32 +11,32 @@ class LocationDto
     protected $status;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $latitude;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $longitude;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $timezone;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $region;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $country;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $city;
 
@@ -47,22 +47,22 @@ class LocationDto
 
     /**
      * @param string $status
-     * @param string $latitude
-     * @param string $longitude
-     * @param string $timezone
-     * @param string $region
-     * @param string $country
-     * @param string $city
+     * @param string|null $latitude
+     * @param string|null $longitude
+     * @param string|null $timezone
+     * @param string|null $region
+     * @param string|null $country
+     * @param string|null $city
      * @param string $message
      */
     public function __construct(
         string $status,
-        string $latitude,
-        string $longitude,
-        string $timezone,
-        string $region,
-        string $country,
-        string $city,
+        ?string $latitude,
+        ?string $longitude,
+        ?string $timezone,
+        ?string $region,
+        ?string $country,
+        ?string $city,
         string $message
     ) {
         $this->setStatus($status)
@@ -96,19 +96,19 @@ class LocationDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLatitude(): string
+    public function getLatitude(): ?string
     {
         return $this->latitude;
     }
 
     /**
-     * @param string $latitude
+     * @param string|null $latitude
      *
      * @return LocationDto
      */
-    public function setLatitude(string $latitude): LocationDto
+    public function setLatitude(?string $latitude): LocationDto
     {
         $this->latitude = $latitude;
 
@@ -116,19 +116,19 @@ class LocationDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLongitude(): string
+    public function getLongitude(): ?string
     {
         return $this->longitude;
     }
 
     /**
-     * @param string $longitude
+     * @param string|null $longitude
      *
      * @return LocationDto
      */
-    public function setLongitude(string $longitude): LocationDto
+    public function setLongitude(?string $longitude): LocationDto
     {
         $this->longitude = $longitude;
 
@@ -136,19 +136,19 @@ class LocationDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTimezone(): string
+    public function getTimezone(): ?string
     {
         return $this->timezone;
     }
 
     /**
-     * @param string $timezone
+     * @param string|null $timezone
      *
      * @return LocationDto
      */
-    public function setTimezone(string $timezone): LocationDto
+    public function setTimezone(?string $timezone): LocationDto
     {
         $this->timezone = $timezone;
 
@@ -156,19 +156,19 @@ class LocationDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRegion(): string
+    public function getRegion(): ?string
     {
         return $this->region;
     }
 
     /**
-     * @param string $region
+     * @param string|null $region
      *
      * @return LocationDto
      */
-    public function setRegion(string $region): LocationDto
+    public function setRegion(?string $region): LocationDto
     {
         $this->region = $region;
 
@@ -176,19 +176,19 @@ class LocationDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCountry(): string
+    public function getCountry(): ?string
     {
         return $this->country;
     }
 
     /**
-     * @param string $country
+     * @param string|null $country
      *
      * @return LocationDto
      */
-    public function setCountry(string $country): LocationDto
+    public function setCountry(?string $country): LocationDto
     {
         $this->country = $country;
 
@@ -196,19 +196,19 @@ class LocationDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->city;
     }
 
     /**
-     * @param string $city
+     * @param string|null $city
      *
      * @return LocationDto
      */
-    public function setCity(string $city): LocationDto
+    public function setCity(?string $city): LocationDto
     {
         $this->city = $city;
 
@@ -244,12 +244,12 @@ class LocationDto
     {
         return new self(
             $locationData['status'],
-            (string)$locationData['lat'],
-            (string)$locationData['lon'],
-            $locationData['timezone'],
-            $locationData['region'],
-            $locationData['country'],
-            $locationData['city'],
+            (string)$locationData['lat'] ?? null,
+            (string)$locationData['lon'] ?? null,
+            $locationData['timezone'] ?? null,
+            $locationData['region'] ?? null,
+            $locationData['country'] ?? null,
+            $locationData['city'] ?? null,
             $locationData['message']
         );
     }
