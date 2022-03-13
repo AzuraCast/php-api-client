@@ -242,10 +242,13 @@ class LocationDto
      */
     public static function fromArray(array $locationData): self
     {
+        $lat = $locationData['lat'] ?? null;
+        $lon = $locationData['lon'] ?? null;
+
         return new self(
             $locationData['status'],
-            (string)$locationData['lat'] ?? null,
-            (string)$locationData['lon'] ?? null,
+            ($lat !== null) ? (string)$lat : $lat,
+            ($lon !== null) ? (string)$lon : $lon,
             $locationData['timezone'] ?? null,
             $locationData['region'] ?? null,
             $locationData['country'] ?? null,
