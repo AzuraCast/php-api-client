@@ -16,9 +16,9 @@ class ListenerDto
     protected $userAgent;
 
     /**
-     * @var bool
+     * @var string
      */
-    protected $isMobile;
+    protected $hash;
 
     /**
      * @var int
@@ -28,7 +28,17 @@ class ListenerDto
     /**
      * @var int
      */
+    protected $connectedUntil;
+
+    /**
+     * @var int
+     */
     protected $connectionDuration;
+
+    /**
+     * @var DeviceDto
+     */
+    protected $device;
 
     /**
      * @var LocationDto
@@ -38,24 +48,29 @@ class ListenerDto
     /**
      * @param string $ipAddress
      * @param string $userAgent
-     * @param bool $isMobile
      * @param int $connectedAt
+     * @param int $connectedUntil
      * @param int $connectionDuration
+     * @param DeviceDto $device
      * @param LocationDto $location
      */
     public function __construct(
         string $ipAddress,
         string $userAgent,
-        bool $isMobile,
+        string $hash,
         int $connectedAt,
+        int $connectedUntil,
         int $connectionDuration,
+        DeviceDto $deviceDto,
         LocationDto $location
     ) {
         $this->setIpAddress($ipAddress)
             ->setUserAgent($userAgent)
-            ->setIsMobile($isMobile)
+            ->setHash($hash)
             ->setConnectedAt($connectedAt)
+            ->setConnectedUntil($connectedUntil)
             ->setConnectionDuration($connectionDuration)
+            ->setDevice($deviceDto)
             ->setLocation($location);
     }
 
@@ -100,21 +115,21 @@ class ListenerDto
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function getIsMobile(): bool
+    public function getHash(): string
     {
-        return $this->isMobile;
+        return $this->hash;
     }
 
     /**
-     * @param bool $isMobile
+     * @param string $hash
      *
      * @return ListenerDto
      */
-    public function setIsMobile(bool $isMobile): ListenerDto
+    public function setHash(string $hash): ListenerDto
     {
-        $this->isMobile = $isMobile;
+        $this->hash = $hash;
 
         return $this;
     }
@@ -142,6 +157,26 @@ class ListenerDto
     /**
      * @return int
      */
+    public function getConnectedUntil(): int
+    {
+        return $this->connectedUntil;
+    }
+
+    /**
+     * @param int $connectedUntil
+     *
+     * @return ListenerDto
+     */
+    public function setConnectedUntil(int $connectedUntil): ListenerDto
+    {
+        $this->connectedUntil = $connectedUntil;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
     public function getConnectionDuration(): int
     {
         return $this->connectionDuration;
@@ -155,6 +190,26 @@ class ListenerDto
     public function setConnectionDuration(int $connectionDuration): ListenerDto
     {
         $this->connectionDuration = $connectionDuration;
+
+        return $this;
+    }
+
+    /**
+     * @return DeviceDto
+     */
+    public function getDevice(): DeviceDto
+    {
+        return $this->device;
+    }
+
+    /**
+     * @param DeviceDto $device
+     *
+     * @return ListenerDto
+     */
+    public function setDevice(DeviceDto $device): ListenerDto
+    {
+        $this->device = $device;
 
         return $this;
     }
@@ -189,9 +244,11 @@ class ListenerDto
         return new self(
             $listenerData['ip'],
             $listenerData['user_agent'],
-            $listenerData['is_mobile'],
+            $listenerData['hash'],
             $listenerData['connected_on'],
+            $listenerData['connected_until'],
             $listenerData['connected_time'],
+            DeviceDto::fromArray($listenerData['device']),
             LocationDto::fromArray($listenerData['location'])
         );
     }
