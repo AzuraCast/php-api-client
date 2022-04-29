@@ -6,11 +6,6 @@ namespace AzuraCast\Api\Dto;
 class LocationDto
 {
     /**
-     * @var string
-     */
-    protected $status;
-
-    /**
      * @var string|null
      */
     protected $latitude;
@@ -19,11 +14,6 @@ class LocationDto
      * @var string|null
      */
     protected $longitude;
-
-    /**
-     * @var string|null
-     */
-    protected $timezone;
 
     /**
      * @var string|null
@@ -41,58 +31,32 @@ class LocationDto
     protected $city;
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected $message;
+    protected $description;
 
     /**
-     * @param string $status
      * @param string|null $latitude
      * @param string|null $longitude
-     * @param string|null $timezone
      * @param string|null $region
      * @param string|null $country
      * @param string|null $city
-     * @param string $message
+     * @param string|null $description
      */
     public function __construct(
-        string $status,
         ?string $latitude,
         ?string $longitude,
-        ?string $timezone,
         ?string $region,
         ?string $country,
         ?string $city,
-        string $message
+        ?string $description
     ) {
-        $this->setStatus($status)
-            ->setLatitude($latitude)
+        $this->setLatitude($latitude)
             ->setLongitude($longitude)
-            ->setTimezone($timezone)
             ->setRegion($region)
             ->setCountry($country)
             ->setCity($city)
-            ->setMessage($message);
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatus(): string
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param string $status
-     *
-     * @return LocationDto
-     */
-    public function setStatus(string $status): LocationDto
-    {
-        $this->status = $status;
-
-        return $this;
+            ->setDescription($description);
     }
 
     /**
@@ -131,26 +95,6 @@ class LocationDto
     public function setLongitude(?string $longitude): LocationDto
     {
         $this->longitude = $longitude;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getTimezone(): ?string
-    {
-        return $this->timezone;
-    }
-
-    /**
-     * @param string|null $timezone
-     *
-     * @return LocationDto
-     */
-    public function setTimezone(?string $timezone): LocationDto
-    {
-        $this->timezone = $timezone;
 
         return $this;
     }
@@ -216,21 +160,21 @@ class LocationDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMessage(): string
+    public function getDescription(): ?string
     {
-        return $this->message;
+        return $this->description;
     }
 
     /**
-     * @param string $message
+     * @param string|null $description
      *
      * @return LocationDto
      */
-    public function setMessage(string $message): LocationDto
+    public function setDescription(?string $description): LocationDto
     {
-        $this->message = $message;
+        $this->description = $description;
 
         return $this;
     }
@@ -246,14 +190,12 @@ class LocationDto
         $lon = $locationData['lon'] ?? null;
 
         return new self(
-            $locationData['status'],
             ($lat !== null) ? (string)$lat : $lat,
             ($lon !== null) ? (string)$lon : $lon,
-            $locationData['timezone'] ?? null,
             $locationData['region'] ?? null,
             $locationData['country'] ?? null,
             $locationData['city'] ?? null,
-            $locationData['message']
+            $locationData['description'] ?? null
         );
     }
 }
