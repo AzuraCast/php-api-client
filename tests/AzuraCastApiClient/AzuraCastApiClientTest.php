@@ -16,7 +16,7 @@ class AzuraCastApiClientTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        if (getenv('AZURACAST_HOST') === false) {
+        if (!isset($_ENV['AZURACAST_HOST'])) {
             $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
             $dotenv->load();
         }
@@ -440,7 +440,6 @@ class AzuraCastApiClientTest extends TestCase
         $settingsApi->update(
             $settingsDto->getBaseUrl(),
             $settingsDto->getInstanceName(),
-            $settingsDto->getTimezone(),
             $settingsDto->getPreferBrowserUrl(),
             $settingsDto->getUseRadioProxy(),
             $settingsDto->getHistoryKeepDays(),
@@ -548,7 +547,7 @@ class AzuraCastApiClientTest extends TestCase
      */
     private function getHost(): string
     {
-        $azuracastHost = getenv('AZURACAST_HOST');
+        $azuracastHost = $_ENV['AZURACAST_HOST'];
 
         if ($azuracastHost === false) {
             return '';
@@ -562,7 +561,7 @@ class AzuraCastApiClientTest extends TestCase
      */
     private function getApiKey(): string
     {
-        $azuracastApiKey = getenv('AZURACAST_API_KEY');
+        $azuracastApiKey = $_ENV['AZURACAST_API_KEY'];
 
         if ($azuracastApiKey === false) {
             return '';
@@ -576,7 +575,7 @@ class AzuraCastApiClientTest extends TestCase
      */
     private function getStationId(): int
     {
-        $azuracastStationId = getenv('AZURACAST_STATION_ID');
+        $azuracastStationId = $_ENV['AZURACAST_STATION_ID'];
 
         if ($azuracastStationId === false) {
             return 1;

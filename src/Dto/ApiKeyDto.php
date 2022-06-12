@@ -70,7 +70,7 @@ class ApiKeyDto implements JsonSerializable
     /**
      * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->getId(),

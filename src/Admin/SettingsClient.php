@@ -50,7 +50,6 @@ class SettingsClient extends AbstractClient
     public function update(
         string $baseUrl,
         string $instanceName,
-        string $timezone,
         bool $preferBrowserUrl,
         bool $useRadioProxy,
         int $historyKeepDays,
@@ -70,7 +69,6 @@ class SettingsClient extends AbstractClient
         $settingsDto = new Dto\SettingsDto(
             $baseUrl,
             $instanceName,
-            $timezone,
             $preferBrowserUrl,
             $useRadioProxy,
             $historyKeepDays,

@@ -18,11 +18,6 @@ class SettingsDto implements JsonSerializable
     protected $instanceName;
 
     /**
-     * @var string
-     */
-    protected $timezone;
-
-    /**
      * @var bool
      */
     protected $preferBrowserUrl;
@@ -100,7 +95,6 @@ class SettingsDto implements JsonSerializable
     /**
      * @param string $baseUrl
      * @param string $instanceName
-     * @param string $timezone
      * @param bool $preferBrowserUrl
      * @param bool $useRadioProxy
      * @param int $historyKeepDays
@@ -120,7 +114,6 @@ class SettingsDto implements JsonSerializable
     public function __construct(
         string $baseUrl,
         string $instanceName,
-        string $timezone,
         bool $preferBrowserUrl,
         bool $useRadioProxy,
         int $historyKeepDays,
@@ -139,7 +132,6 @@ class SettingsDto implements JsonSerializable
     ) {
         $this->setBaseUrl($baseUrl)
             ->setInstanceName($instanceName)
-            ->setTimezone($timezone)
             ->setPreferBrowserUrl($preferBrowserUrl)
             ->setUseRadioProxy($useRadioProxy)
             ->setHistoryKeepDays($historyKeepDays)
@@ -193,26 +185,6 @@ class SettingsDto implements JsonSerializable
     public function setInstanceName(string $instanceName): SettingsDto
     {
         $this->instanceName = $instanceName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTimezone(): string
-    {
-        return $this->timezone;
-    }
-
-    /**
-     * @param string $timezone
-     *
-     * @return SettingsDto
-     */
-    public function setTimezone(string $timezone): SettingsDto
-    {
-        $this->timezone = $timezone;
 
         return $this;
     }
@@ -520,12 +492,11 @@ class SettingsDto implements JsonSerializable
     /**
      * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'base_url' => $this->baseUrl,
             'instance_name' => $this->instanceName,
-            'timezone' => $this->timezone,
             'prefer_browser_url' => $this->preferBrowserUrl,
             'use_radio_proxy' => $this->useRadioProxy,
             'history_keep_days' => $this->historyKeepDays,
@@ -554,7 +525,6 @@ class SettingsDto implements JsonSerializable
         return new self(
             $settingsData['base_url'],
             $settingsData['instance_name'],
-            $settingsData['timezone'],
             (bool)$settingsData['prefer_browser_url'],
             (bool)$settingsData['use_radio_proxy'],
             $settingsData['history_keep_days'],
