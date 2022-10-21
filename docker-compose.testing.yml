@@ -2,8 +2,6 @@
 # This file will be renamed docker-compose.override.yml
 # it will override a standard AzuraCast installation.
 
-version: '2.2'
-
 services:
   cli:
     image: azuracast/azuracast_testing:latest
@@ -11,8 +9,6 @@ services:
       - ./:/app
       - composer_data:/tmp
     env_file: azuracast.env
-    networks:
-      - frontend
     command: /bin/true
   web:
     volumes:
