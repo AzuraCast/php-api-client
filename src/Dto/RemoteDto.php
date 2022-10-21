@@ -11,7 +11,7 @@ class RemoteDto
     protected $url;
 
     /**
-     * @var int
+     * @var int|null
      */
     protected $bitrate;
 
@@ -22,12 +22,12 @@ class RemoteDto
 
     /**
      * @param string $url
-     * @param int $bitrate
+     * @param int|null $bitrate
      * @param string $format
      */
     public function __construct(
         string $url,
-        int $bitrate,
+        ?int $bitrate,
         string $format
     ) {
         $this->setUrl($url)
