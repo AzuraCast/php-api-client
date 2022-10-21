@@ -51,7 +51,7 @@ class ListenerDto
      * @param int $connectedAt
      * @param int $connectedUntil
      * @param int $connectionDuration
-     * @param DeviceDto $device
+     * @param DeviceDto $deviceDto
      * @param LocationDto $location
      */
     public function __construct(

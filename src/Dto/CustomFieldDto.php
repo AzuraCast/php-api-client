@@ -95,7 +95,7 @@ class CustomFieldDto implements JsonSerializable
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function jsonSerialize(): array
     {

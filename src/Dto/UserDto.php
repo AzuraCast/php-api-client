@@ -344,7 +344,7 @@ class UserDto implements JsonSerializable
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function jsonSerialize(): array
     {

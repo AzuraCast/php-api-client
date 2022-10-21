@@ -68,7 +68,7 @@ class UploadFileDto implements JsonSerializable
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function jsonSerialize(): array
     {

@@ -1,17 +1,11 @@
 parameters:
-    level: 7
+    level: 6
 
     paths:
         - src
 
+    checkMissingIterableValueType: false
+
     universalObjectCratesClasses:
         - Azura\Session\NamespaceInterface
         - Azura\View
-
-    ignoreErrors:
-        # Caused by the string[] annotation being misinterpreted as the variable being just a string.
-        # Does not happen when the annotation is changed to just array.
-        -
-            message: '#Cannot assign new offset to array|string.#'
-            path: src/Dto/PermissionsDto.php
-

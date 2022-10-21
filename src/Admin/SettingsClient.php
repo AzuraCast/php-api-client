@@ -25,7 +25,6 @@ class SettingsClient extends AbstractClient
     /**
      * @param string $baseUrl
      * @param string $instanceName
-     * @param string $timezone
      * @param bool $preferBrowserUrl
      * @param bool $useRadioProxy
      * @param int $historyKeepDays
