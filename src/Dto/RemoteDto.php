@@ -16,19 +16,19 @@ class RemoteDto
     protected $bitrate;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $format;
 
     /**
      * @param string $url
      * @param int|null $bitrate
-     * @param string $format
+     * @param string|null $format
      */
     public function __construct(
         string $url,
         ?int $bitrate,
-        string $format
+        ?string $format
     ) {
         $this->setUrl($url)
             ->setBitrate($bitrate)
@@ -56,19 +56,19 @@ class RemoteDto
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getBitrate(): int
+    public function getBitrate(): ?int
     {
         return $this->bitrate;
     }
 
     /**
-     * @param int $bitrate
+     * @param int|null $bitrate
      *
      * @return RemoteDto
      */
-    public function setBitrate(int $bitrate): RemoteDto
+    public function setBitrate(?int $bitrate): RemoteDto
     {
         $this->bitrate = $bitrate;
 
@@ -76,19 +76,19 @@ class RemoteDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFormat(): string
+    public function getFormat(): ?string
     {
         return $this->format;
     }
 
     /**
-     * @param string $format
+     * @param string|null $format
      *
      * @return RemoteDto
      */
-    public function setFormat(string $format): RemoteDto
+    public function setFormat(?string $format): RemoteDto
     {
         $this->format = $format;
 
