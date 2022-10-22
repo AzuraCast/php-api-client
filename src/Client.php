@@ -60,18 +60,16 @@ class Client extends AbstractClient
     /**
      * @param string $host
      * @param string|null $apiKey
-     * @param \GuzzleHttp\Client|null $existingClient An existing HTTP client to pull configuration from.
+     * @param array|null $options Additional GuzzleHttp client options.
      *
      * @return Client
      */
     public static function create(
         string $host,
         ?string $apiKey = null,
-        ?\GuzzleHttp\Client $existingClient = null
+        ?array $options = null
     ): self {
-        if ($existingClient instanceof \GuzzleHttp\Client) {
-            $options = $existingClient->getConfig();
-        } else {
+        if (null === $options) {
             $options = [];
         }
 
