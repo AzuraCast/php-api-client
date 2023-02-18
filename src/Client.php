@@ -83,6 +83,8 @@ class Client extends AbstractClient
 
         $options['allow_redirects'] = true;
         $options['http_errors'] = false;
+        $options['headers']['accept'] = 'application/json';
+
 
         if (null !== $apiKey) {
             $options['headers']['Authorization'] = 'Bearer ' . $apiKey;
