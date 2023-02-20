@@ -20,7 +20,7 @@ class UserDto implements JsonSerializable
     /**
      * @var string
      */
-    protected $authPassword;
+    protected $newPassword;
 
     /**
      * @var string
@@ -88,7 +88,7 @@ class UserDto implements JsonSerializable
     ) {
         $this->setId($id)
             ->setEmail($email)
-            ->setAuthPassword('')
+            ->setNewPassword('')
             ->setName($name)
             ->setLocale($locale)
             ->setTheme($theme)
@@ -142,19 +142,19 @@ class UserDto implements JsonSerializable
     /**
      * @return string
      */
-    public function getAuthPassword(): string
+    public function getNewPassword(): string
     {
-        return $this->authPassword;
+        return $this->newPassword;
     }
 
     /**
-     * @param string $authPassword
+     * @param string $newPassword
      *
      * @return UserDto
      */
-    public function setAuthPassword(string $authPassword): UserDto
+    public function setNewPassword(string $newPassword): UserDto
     {
-        $this->authPassword = $authPassword;
+        $this->newPassword = $newPassword;
 
         return $this;
     }
@@ -351,7 +351,7 @@ class UserDto implements JsonSerializable
         return [
             'id' => $this->getId(),
             'email' => $this->getEmail(),
-            'auth_password' => $this->getAuthPassword(),
+            'auth_password' => $this->getNewPassword(),
             'name' => $this->getName(),
             'locale' => $this->getLocale(),
             'theme' => $this->getTheme(),

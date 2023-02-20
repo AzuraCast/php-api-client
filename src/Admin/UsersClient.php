@@ -48,7 +48,7 @@ class UsersClient extends AbstractClient
 
     /**
      * @param string $email
-     * @param string $authPassword
+     * @param string $newPassword
      * @param string $name
      * @param string $locale
      * @param string $theme
@@ -62,7 +62,7 @@ class UsersClient extends AbstractClient
      */
     public function create(
         string $email,
-        string $authPassword,
+        string $newPassword,
         string $name,
         string $locale,
         string $theme,
@@ -81,7 +81,7 @@ class UsersClient extends AbstractClient
             $apiKeys,
             new Dto\LinksDto('')
         );
-        $userDto->setAuthPassword($authPassword);
+        $userDto->setNewPassword($newPassword);
 
         $userData = $this->request(
             'POST',
@@ -95,7 +95,7 @@ class UsersClient extends AbstractClient
     /**
      * @param int $userId
      * @param string $email
-     * @param string $authPassword
+     * @param string $newPassword
      * @param string $name
      * @param string $locale
      * @param string $theme
@@ -110,7 +110,7 @@ class UsersClient extends AbstractClient
     public function update(
         int $userId,
         string $email,
-        string $authPassword,
+        string $newPassword,
         string $name,
         string $locale,
         string $theme,
@@ -129,8 +129,8 @@ class UsersClient extends AbstractClient
             $apiKeys,
             new Dto\LinksDto('')
         );
-        if ($authPassword !== '') {
-            $userDto->setAuthPassword($authPassword);
+        if ($newPassword !== '') {
+            $userDto->setNewPassword($newPassword);
         }
 
         $this->request(
@@ -139,7 +139,7 @@ class UsersClient extends AbstractClient
             ['json' => $userDto]
         );
 
-        $userDto->setAuthPassword('');
+        $userDto->setNewPassword('');
         return $userDto;
     }
 

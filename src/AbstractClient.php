@@ -51,6 +51,8 @@ abstract class AbstractClient
         string $uri = '',
         array $options = []
     ) {
+
+
         $response = $this->httpClient->request($method, $uri, $options);
 
         if (403 === $response->getStatusCode()) {
