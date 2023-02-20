@@ -47,7 +47,7 @@ class RolesClient extends AbstractClient
     /**
      * @param string $name
      * @param string[] $permissionsGlobal
-     * @param string[] $permissionsStation
+     * @param array<int, array<int, string>> $permissionsStation
      *
      * @return Dto\RoleDto
      *
@@ -72,7 +72,7 @@ class RolesClient extends AbstractClient
      * @param int $roleId
      * @param string $name
      * @param string[] $permissionsGlobal
-     * @param string[] $permissionsStation
+     * @param array<int, array<int, string>> $permissionsStation
      *
      * @return Dto\RoleDto
      *

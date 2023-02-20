@@ -13,13 +13,13 @@ class PermissionsDto implements JsonSerializable
     protected $global;
 
     /**
-     * @var string[]
+     * @var array<int, array<int, string>>
      */
     protected $station;
 
     /**
      * @param string[] $global
-     * @param string[] $station
+     * @param array<int, array<int, string>> $station
      */
     public function __construct(array $global, array $station)
     {
@@ -56,7 +56,7 @@ class PermissionsDto implements JsonSerializable
     }
 
     /**
-     * @param string[] $station
+     * @param array<int, array<int, string>> $station
      *
      * @return PermissionsDto
      */
