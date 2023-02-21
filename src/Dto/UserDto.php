@@ -351,7 +351,7 @@ class UserDto implements JsonSerializable
         return [
             'id' => $this->getId(),
             'email' => $this->getEmail(),
-            'auth_password' => $this->getNewPassword(),
+            'new_password' => $this->getNewPassword(),
             'name' => $this->getName(),
             'locale' => $this->getLocale(),
             'theme' => $this->getTheme(),
