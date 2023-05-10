@@ -36,7 +36,7 @@ class StationDto
     protected $backend;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $listenUrl;
 
@@ -62,7 +62,7 @@ class StationDto
      * @param string $description
      * @param string $frontend
      * @param string $backend
-     * @param string $listenUrl
+     * @param string|null $listenUrl
      * @param bool $isPublic
      * @param MountDto[] $mounts
      * @param RemoteDto[] $remotes
@@ -74,7 +74,7 @@ class StationDto
         string $description,
         string $frontend,
         string $backend,
-        string $listenUrl,
+        ?string $listenUrl,
         bool $isPublic,
         array $mounts,
         array $remotes
@@ -212,19 +212,19 @@ class StationDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getListenUrl(): string
+    public function getListenUrl(): ?string
     {
         return $this->listenUrl;
     }
 
     /**
-     * @param string $listenUrl
+     * @param string|null $listenUrl
      *
      * @return StationDto
      */
-    public function setListenUrl(string $listenUrl): StationDto
+    public function setListenUrl(?string $listenUrl): StationDto
     {
         $this->listenUrl = $listenUrl;
 
