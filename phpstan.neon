@@ -4,7 +4,9 @@ parameters:
     paths:
         - src
 
-    checkMissingIterableValueType: false
+    ignoreErrors:
+        -
+            identifier: missingType.iterableValue
 
     universalObjectCratesClasses:
         - Azura\Session\NamespaceInterface

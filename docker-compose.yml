@@ -1,14 +1,11 @@
 services:
   cli:
-    image: azuracast/azuracast_testing:latest
+    build:
+      context: .
     volumes:
-      - ./:/app
-      - composer_data:/tmp
+      - ./:/var/app/www
     environment:
       AZURACAST_HOST: "${AZURACAST_HOST:-https://demo.azuracast.com/}"
       AZURACAST_API_KEY: "${AZURACAST_API_KEY:-}"
       AZURACAST_STATION_ID: "${AZURACAST_STATION_ID:-1}"
     command: composer test
-
-volumes:
-  composer_data: {}
