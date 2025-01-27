@@ -114,7 +114,7 @@ class StationClient extends AbstractStationClient
         ));
     }
 
-    /**
+        /**
      * @param DateTime|null $start
      * @param DateTime|null $end
      *
@@ -123,17 +123,36 @@ class StationClient extends AbstractStationClient
      * @throws Exception\AccessDeniedException
      * @throws Exception\ClientRequestException
      */
+
     public function history(?DateTime $start = null, ?DateTime $end = null): array
     {
-        $songHistoryDataArray = $this->request('GET', sprintf(
-            'station/%s/history',
-            $this->stationId
-        ));
+        $queryParams = [];
+
+        // Only add "start" if we actually have a DateTime object
+        if ($start instanceof DateTime) {
+            // Adjust the format string to what your API expects
+            $queryParams['start'] = $start->format('Y-m-d H:i:s');
+        }
+
+        // Only add "end" if we actually have a DateTime object
+        if ($end instanceof DateTime) {
+            $queryParams['end'] = $end->format('Y-m-d H:i:s');
+        }
+
+        $queryString = http_build_query($queryParams);
+
+        $endpoint = sprintf('station/%s/history', $this->stationId);
+        if (!empty($queryString)) {
+            $endpoint .= '?' . $queryString;
+        }
+
+        $songHistoryDataArray = $this->request('GET', $endpoint);
 
         $songHistory = [];
         foreach ($songHistoryDataArray as $songHistoryData) {
             $songHistory[] = Dto\SongHistoryDto::fromArray($songHistoryData);
         }
+
         return $songHistory;
     }
 
